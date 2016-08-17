@@ -1,0 +1,48 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .small-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  .th
+                    = image_tag(@battle.owner.avatar.small.url)
+                  span.change-item-preview.th
+                    = battle_item_preview(@battle.first_item, 'small')
+              .large-6.columns.no-padding
+                center
+                  = image_tag('me_vs_you_logo.png')
+              .large-3.columns.mini-thumbs
+                .left
+                  .th
+                    = battle_item_preview(@battle.second_item, 'small')
+                .th
+                  = image_tag(@battle.opposing_user.avatar.small.url, class: 'left')
+      .hide-for-large-up
+        .row
+          .small-3.columns.mini-thumbs
+            .right
+              .th
+                = image_tag(@battle.owner.avatar.small.url)
+              .change-item-preview.th
+                = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.no-padding
+            center
+              = image_tag('me_vs_you_logo_stacked.png')
+          .small-3.columns.mini-thumbs
+            .left
+              .th
+                = image_tag(@battle.opposing_user.avatar.small.url, class: 'left')
+              .th
+                = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Select Your Item
+        = "Choose a photo, video or document to battle against #{@battle.opposing_user.first_name}."
+
+  = render partial: 'battles/this_vs_that/pick_items', locals: { item_id: :first_object_id, item_kind: :first_object_type, show_back_button: true, previous_item: 'rival_people' }

@@ -1,0 +1,89 @@
+#battle-preview
+  .row
+    .hide-for-medium-up
+      .small-12.text-center.columns
+        = image_tag('this_vs_that_logo.png')
+
+  .show-for-medium-up
+      .row.text-center
+        .medium-4.medium-offset-4.columns
+          = image_tag('this_vs_that_logo.png')
+
+
+        .medium-4.columns
+          .right
+            = link_to image_tag(battle.owner.avatar.small.url), battle.owner, class: 'th'
+            p= link_to battle.owner.name, battle.owner
+
+  .row.text-center
+    .small-12.columns
+      .left= render partial: 'shared/item_flagged_notice', locals: {item: battle, icon_size: :medium}
+
+      h3= battle.description
+
+  .row.text-center data-equalizer=true
+    .small-6.columns
+      .panel.clearfix id="#{win_or_lose_id(battle, battle.first_item)}" data-equalizer-watch=true
+        .row
+          .medium-2.columns.show-for-medium-up
+            / = link_to image_tag(battle.owner.avatar.small.url), battle
+            / = "+#{battle.first_item_vote_count.to_i}"
+            - if current_user.voted_on_first_item?(battle)
+              .voted
+                = fa_icon('check-square-o 3x')
+                p Voted
+
+          .medium-10.columns
+            .th
+              = battle_item_preview(battle.first_item).html_safe
+              h5.text-center.battle-item-name= battle.first_item_name
+            .hide-for-medium-up
+              - if current_user.voted_on_first_item?(battle)
+                .voted
+                  = fa_icon('check-square-o 3x')
+                  p Voted
+            = winner_panel(battle, battle.first_item)
+
+    .small-6.columns
+      .panel.clearfix id="#{win_or_lose_id(battle, battle.second_item)}" data-equalizer-watch=true
+        .row
+          .medium-10.columns
+            .th
+              = battle_item_preview(battle.second_item).html_safe
+              h5.text-center.battle-item-name= battle.second_item_name
+            .hide-for-medium-up
+              - if current_user.voted_on_second_item?(battle)
+                .voted
+                  = fa_icon('check-square-o 3x')
+                  p Voted
+            p= winner_panel(battle, battle.second_item)
+
+
+          .medium-2.columns.show-for-medium-up
+            / = link_to image_tag(battle.opposing_user.avatar.small.url), battle
+            / = "+#{battle.second_item_vote_count.to_i}"
+            - if current_user.voted_on_second_item?(battle)
+              .voted
+                = fa_icon('check-square-o 3x')
+                p Voted
+
+  = draw_panel(battle)
+  = render partial: '/battles/vote_meter', locals: { battle: battle }
+
+  .row
+    .small-6.columns
+      center#first_item
+        = render partial: 'battles/first_item_vote_button', locals: {battle: battle}
+
+    .small-6.columns 
+      center#second_item
+        = render partial: 'battles/second_item_vote_button', locals: {battle: battle}
+
+  - unless battle.ends_at.nil? || battle.ends_at < Time.current
+    .row
+      .small-12.columns
+        .text-center
+          = "#{distance_of_time_in_words battle.ends_at.in_time_zone, Time.current} and voting closes"
+          
+  = render partial: 'battles/carrot_dropdown', locals: { battle: battle }
+  hr

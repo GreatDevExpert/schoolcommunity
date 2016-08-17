@@ -1,0 +1,14 @@
+p Head up!
+
+p A new school has been added. Please take a look and approve or decline the new school
+
+table
+  tr
+    td Name
+    td= @school.name
+  tr
+    td Address
+    td= @school.address.city_state
+
+= link_to('View School', admin_schools_url)
+

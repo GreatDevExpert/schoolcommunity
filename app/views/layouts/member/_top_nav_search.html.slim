@@ -1,0 +1,8 @@
+.row
+  .small-12.columns
+    = form_tag search_everything_index_path, class: 'navbar-form', role: 'search', method: :get do
+      .row.collapse
+        .small-9.columns
+          = text_field_tag :site_query, params[:site_query], placeholder: 'Search'
+        .small-3columns
+          =link_to fa_icon('search 2x'), '#', class: 'postfix radius button', :onclick => "$('.navbar-form').submit()"

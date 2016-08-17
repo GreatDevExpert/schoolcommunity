@@ -1,0 +1,36 @@
+- search.each_hit_with_result.each do |hit, result|
+  .medium-12.columns
+    .search-result
+      / - if current_user.super_admin?
+      /   = "Result Score: #{hit.score}"
+      - if result.is_a? User
+        = render partial: 'users/profile_header', locals: { user: result }
+        / = render partial: '/search/user', locals: { user: result, hit: hit  }
+      - elsif result.is_a? School
+        = render partial: 'schools/profile_header', locals: {school: result}
+        / = render partial: '/search/school', locals: { school: result, hit: hit  }
+      - elsif result.is_a? Group
+        = render partial: 'groups/profile_header', locals: {group: result}
+        / = render partial: '/search/group', locals: { group: result, hit: hit  }
+      - elsif result.is_a? Document
+        .panel
+          = render partial: '/search/document', locals: { document: result, hit: hit  }
+      - elsif result.is_a? Photo
+        .panel
+          = render partial: '/search/photo', locals: { photo: result, hit: hit  }
+      - elsif result.is_a? Video
+        .panel
+          = render partial: '/search/video', locals: { video: result, hit: hit  }
+      - elsif result.is_a? Battle
+        .panel
+          = render partial: '/search/battle', locals: { battle: result, hit: hit  }
+      - else
+        h2 Class Not Accounted For In View
+        h3= hit
+        h4= result.class
+
+- if search.hits.total_pages > 1
+  .row
+    .medium-12.columns
+      .panel
+        = paginate search.hits

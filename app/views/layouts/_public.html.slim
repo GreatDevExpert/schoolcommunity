@@ -1,0 +1,6 @@
+nav.top-bar data-topbar="true" role="navigation"
+  = render 'layouts/public/top_nav'
+#main-container
+  = display_flash_messages
+  = yield
+= render 'layouts/public/footer'

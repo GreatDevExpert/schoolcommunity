@@ -1,0 +1,3 @@
+.upload-header
+  = retina_image(default: 'my-photos-logo.png', retina: 'my-photos-logo-retina.png', width: 137, height: 40)
+= render partial: 'posts/combined_post_form', locals: {active: 'photo', photo: @photo, hide_post: true, hide_video: true, hide_document: true, hide_top_tab: true, hide_bottom_tab: true, hide_choose_from_existing: true, title: 'Upload a Photo' }

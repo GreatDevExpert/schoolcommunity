@@ -1,0 +1,17 @@
+.flag-post id="flag-post-#{post.id}" class="reveal-modal" data-reveal=true
+  .row
+    .medium-6.columns
+      = simple_form_for [post, Flag.new] do |f|
+        = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this post?'
+        = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+        = f.button :submit, class: 'button radius tiny'
+    .medium-6.columns
+      h5
+        | You're about to flag a post created by 
+        = post.user.full_name
+      .row
+        .medium-2.columns.no-padding
+          = image_tag(post.user.avatar.url(:small))
+        .medium-10.columns.no-padding
+          = post.content
+  a.close-reveal-modal &#215;

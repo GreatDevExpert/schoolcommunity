@@ -1,0 +1,9 @@
+.row.profile-preview
+  .small-2.columns
+    = image_tag(request.user.avatar.url(:small))
+  .small-10.columns
+    .name
+      = link_to request.user.full_name, user_path(request.user)
+    .right
+      p coming soon
+      /* = link_to('Approve', approve_monitor_group_membership_path(@group, request), class: 'button tiny', method: :post) */

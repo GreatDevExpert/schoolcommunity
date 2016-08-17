@@ -1,0 +1,18 @@
+.row
+  .small-12.columns
+    .spirit-meter
+      span.meter style="width: #{battle.challenger_spirit_percentage}%"
+      .row
+        .small-3.columns
+          p.left= formatted_scrilla_balance(battle.challenger_battle_pass_total.to_f)
+        .small-6.columns
+          p.text-center Spirit Meter
+        .small-3.columns
+          p.right= formatted_scrilla_balance(battle.opponent_battle_pass_total.to_f)
+
+      - if battle.aasm == 'pregame'
+        p.text-center
+          - if current_user.already_purchased_battle_pass?(battle)
+            | Upgrade your Battle Pass to increase your school's spirit.
+          - else
+            | Buy a Battle Pass to increase your school's spirit.

@@ -1,0 +1,2 @@
+$('#friends-container').html( '<%= escape_javascript render "friends" %>');
+$('#friends-paginator').html('<%= escape_javascript(paginate(@friends, :remote => true).to_s) %>');

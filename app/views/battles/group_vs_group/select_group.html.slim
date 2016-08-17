@@ -1,0 +1,93 @@
+#battle_steps
+  = display_base_errors (@battle)
+
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .large-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  span.change-item-preview.th
+                    = image_tag("question-mark-box-small.png")
+                  .th
+                    = battle_item_preview(@battle.first_item, 'small')
+              .large-6.columns.no-padding
+                center
+                  = battle_logo(@battle.kind)
+              .large-3.columns.mini-thumbs
+                .left
+                  .th
+                    = battle_item_preview(@battle.second_item, 'small')
+                  .th
+                    = image_tag("question-mark-box-small.png")
+      .hide-for-large-up
+        .row
+          .small-3.columns.mini-thumbs
+            span.change-item-preview.th
+              = image_tag("question-mark-box-small.png")
+            .th
+              = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.text-center.no-padding
+            = link_to(image_tag('group_vs_group_logo_stacked.png'), @battle)
+          .small-3.columns.mini-thumbs
+            .right
+              .th
+                = image_tag("question-mark-box-small.png")
+              .th
+                = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Select Your Group
+        | This is the group you will represent in the battle.
+
+  .panel
+    .row
+      .medium-9.small-12.columns.show-for-medium-up
+        dl.sub-nav
+          = active_link_to 'My Groups', params.merge(items: 'groups', q: nil), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd
+      .medium-3.small-12.columns
+        = form_tag params.merge(page: ''), method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+          = hidden_field_tag :items, params[:items]
+
+    = simple_form_for @form, url: wizard_path, method: :put do |f|
+      .battle_thumbs
+        ul.medium-block-grid-5.small-block-grid-2
+          li= link_to(image_tag('new_group_logo.png'), new_battle_group_path(@battle, next_step: next_wizard_path, item_kind: 'challenger'), 'data-reveal-id' => 'myModal', 'data-reveal-ajax' => 'true')
+          li= link_to(image_tag('search_logo.png'), '#', 'data-reveal-id' => "newSearch", remote: true)
+          = f.collection_radio_buttons :group_object_id, @groups, :id, :id, :item_wrapper_tag => :li do |i|
+            = i.label(id: "group-id-#{i.object.id}", class: 'selectable-battle-thumb') { i.radio_button + image_tag(i.object.avatar.url(:medium)) + sanitize("<p>#{i.object.name}</p") }
+        = f.hidden_field :group_object_type, value: 'groups'
+      - if @groups.blank?
+          h4 You don't belong to any groups.
+
+      - if @groups.total_pages > 1
+        .row
+          .large-offset-4.large-4.columns.small-12.columns
+            = paginate @groups
+        
+      .row
+        .small-12.columns
+          .left
+            = link_to('< Cancel', new_battle_path, class: 'button button-blue radius tiny')
+          .right
+            = f.button :submit, 'Next Step >', class: 'button radius small'
+
+
+  div id="myModal" class="reveal-modal" data-reveal=true
+
+  .group-search id="newSearch" class="reveal-modal" data-reveal=true
+    .row
+      .medium-12.columns
+        h3 Search And Join A Group
+        = form_tag battle_group_vs_group_path(id: 'find_and_join_group'), method: :get do
+          = text_field_tag :q
+          = hidden_field_tag :show_find_and_join, 'true'
+          = submit_tag 'Search', class: 'button radius right'
+    a.close-reveal-modal &#215;
+
+

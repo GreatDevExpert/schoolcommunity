@@ -1,0 +1,38 @@
+.row
+  .small-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user}
+.panel
+  .row
+    .small-12.columns
+      .right
+        = retina_image(default: 'my-rivals-logo.png', retina: 'my-rivals-logo-retina.png', width: 117, height: 40)
+
+      - if current_user == @user
+        h3 My Rivals
+      - else
+        h3= "#{@user.first_name_possessive} Rivals"
+  .row
+    .small-12.columns
+      dl.sub-sub-nav.clearfix
+        = active_link_to 'Schools', rivals_user_path(@user, filter: 'school', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=school/
+        = active_link_to 'Groups', rivals_user_path(@user, filter: 'group', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=group/
+        = active_link_to 'People', rivals_user_path(@user, filter: 'people', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=people/
+        dd
+          = link_to fa_icon('search'), '#', class: 'search-icon'
+          .toggle
+            = form_tag params.merge(page: ''), method: :get do
+              = text_field_tag :q, @query, placeholder: 'Narrow Results'
+              = hidden_field_tag :filter, params[:filter]
+
+      - unless @query.blank?
+        .panel.callout
+          = "Your results have been filtered using the term: '#{@query}'"
+          |  
+          = link_to 'Reset Filters', params.merge(page: '', q: '')
+      - if @rivals.blank? && @query.present?
+        h3= "No results for '#{@query}'"
+
+      = render partial: 'rivals/thumbs', locals: {rivals: @rivals}
+
+= paginate @rivals

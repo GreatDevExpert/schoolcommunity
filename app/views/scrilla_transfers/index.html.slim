@@ -1,0 +1,64 @@
+.panel
+  - if @user == current_user
+    .row.clearfix
+      .medium-6.columns
+        h3= retina_image(default: 'my-scrilla-logo.png', retina: 'my-scrilla-logo-retina.png', width: 128, height: 40)
+      .medium-6.columns
+        .right
+          h4
+            | Current Balance:  
+            = formatted_scrilla_balance(@user.scrilla_balance.balance)
+
+          ul.button-group.radius
+            li= link_to "Purchase Scrilla", new_facebook_payment_path, class: 'button button-default tiny radius'
+            li= link_to "Send Scrilla", new_scrilla_transfer_path, class: 'button button-default radius tiny'
+            li= link_to "Request Scrilla", new_scrilla_request_path, class: 'button button-default radius tiny'
+  - else
+    .row.clearfix
+      .medium-12.columns
+        .right
+          = link_to image_tag(@user.avatar.url(:small)), @user, class: 'th'
+        h3= "#{@user.full_name} Scrilla Transfers"
+
+  br
+  .responsive-table
+    .row.header.hide-for-small-only
+      .medium-2.columns When
+      .medium-2.columns From
+      .medium-2.columns To
+      .medium-1.columns Amount
+      .medium-2.columns Status
+      .medium-3.columns Description
+    - @scrilla_transfers.each do |transfer|
+      .row
+        .medium-2.columns.when
+          .header.hide-for-medium-up.inline When:
+          = transfer.created_at.to_s(:short_datetime)
+        .medium-2.columns.sender
+          .header.hide-for-medium-up.inline Sender:
+          - if transfer.sender
+            = link_to transfer.sender.full_name, user_path(transfer.sender)
+          - else
+            | MySchool
+        .medium-2.columns.recipient
+          .header.hide-for-medium-up.inline Recipient:
+          - if transfer.recipient
+            = link_to transfer.recipient.full_name, user_path(transfer.recipient)
+          - else
+            | MySchool
+        .medium-1.columns.text-right.small-text-left
+          .header.hide-for-medium-up.inline Amount
+          - if transfer.recipient == @user
+            = formatted_scrilla_balance(transfer.amount)
+          - else
+            = formatted_scrilla_balance(-transfer.amount)
+        .medium-2.columns
+          .header.hide-for-medium-up.inline Status
+          = transfer.aasm_state.titleize
+        .medium-3.columns
+          .header.hide-for-medium-up.inline Description:
+          = formatted_scrilla_transfer_description(transfer)
+            - if transfer.message
+              .message= "Message: #{transfer.message}"
+
+  = paginate @scrilla_transfers

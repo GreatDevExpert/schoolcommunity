@@ -1,0 +1,34 @@
+- unless activity.trackable.blank?
+  - document = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+      .medium-11.small-10.columns
+        .right
+          = render partial: 'shared/item_flagged_notice', locals: {item: document, icon_size: :medium}
+        h5
+          = link_to(activity.owner.full_name, activity.owner)
+          |  shared a document labeled 
+          = link_to document.name, document_path(document)
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+
+        .text-left
+          = link_to document.preview.small_preview, document_path(document)
+          
+        .row
+          .medium-12.columns
+            - if policy(document).destroy? || policy(document).flag?
+              .spacer-top
+              .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "document-#{document.id}-dropdown", 'data-options' => 'align:left', class: 'left'
+              ul.f-dropdown.tiny id="document-#{document.id}-dropdown" data-dropdown-content='data-dropdown-content'
+                - if policy(document).destroy?
+                  li= link_to fa_icon('trash', text: 'Delete document'), document_path(document), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this document?'}
+
+                - if policy(document).flag?
+                  li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-document-#{document.id}"
+              = render partial: 'documents/flag', locals: {document: document}
+        hr
+
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }

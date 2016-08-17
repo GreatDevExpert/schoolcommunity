@@ -1,0 +1,96 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .small-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  .th
+                    = image_tag(@battle.owner.avatar.small.url)
+                  .th
+                    = battle_item_preview(@battle.first_item, 'small')
+              .large-6.columns.no-padding
+                center
+                  = image_tag('me_vs_you_logo.png')
+              .large-3.columns.mini-thumbs
+                .left
+                  .th
+                    = battle_item_preview(@battle.second_item, 'small')
+                span.change-item-preview.th
+                  = image_tag("whos_going_down_icon.png", class: 'left')
+                p.going-down Who's Going Down?
+      .hide-for-large-up
+        .row
+          .small-3.columns
+            .right
+              .th
+                = image_tag(@battle.owner.avatar.small.url)
+              .th
+                = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.no-padding
+            center
+              = image_tag('me_vs_you_logo_stacked.png')
+          .small-3.columns
+            .left
+              .change-item-preview.th
+                = image_tag("question-mark-box-small.png")
+              .th
+                = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Select Opponent
+        | They will also select an item to compete against you.
+
+  .panel
+    .row
+      .medium-9.small-12.columns
+        dl.sub-nav
+          = active_link_to 'My Rivals', params.merge(items: 'rival_people', q: nil), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=rival_people*/
+          = active_link_to 'My Schoolies', params.merge(items: 'schoolies', q: nil), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=schoolies*/
+
+
+      .medium-3.small-12.columns
+        = form_tag params.merge(page: ''), method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+          = hidden_field_tag :items, params[:items]
+    hr
+    = simple_form_for @form, url: wizard_path, method: :put do |f|
+      .battle_thumbs
+        ul.medium-block-grid-5.small-block-grid-2
+          = f.collection_radio_buttons :opponent_object_id, @users, :id, :id, :item_wrapper_tag => :li do |i|
+            = i.label(id: "friend-id-#{i.object.id}", class: 'text-center selectable-battle-thumb') { i.radio_button + image_tag(i.object.avatar.url(:medium)) + sanitize("<p class='grid-text'>#{i.object.full_name}</p") }
+          - if params[:items] == 'schoolies'
+            = f.hidden_field :opponent_object_type, value: 'friends'
+          - else
+            = f.hidden_field :opponent_object_type, value: 'rival_people'
+          - if @users.blank?
+            .text-center
+              h4 No Schooies Found
+              = link_to 'Find Schoolies Now', find_friends_path, class_active: 'tab-title active', class: 'button radius'
+   
+      - if @users.total_pages > 1
+        hr
+        .row
+          .large-offset-4.large-4.columns.small-12.columns
+            = paginate @users
+        hr
+      .row
+        .medium-12.columns
+          .pull-right
+            = f.button :submit, 'Next Step >', class: 'button radius small'
+          .pull-left
+            = link_to('< Cancel', new_battle_path, class: 'button radius button-blue tiny')
+
+  .user-search id="newSearch" class="reveal-modal" data-reveal=true
+    .row
+      .medium-12.columns
+        h3 Find a group to battle
+        = form_tag params.merge(page: ''), method: :get do
+          = text_field_tag :q
+          = hidden_field_tag :items, 'users'
+          = submit_tag 'Search', class: 'button button-default radius'

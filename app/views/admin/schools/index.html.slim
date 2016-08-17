@@ -1,0 +1,42 @@
+h3 School Manager
+
+- if @schools.blank?
+  .panel.callout
+    .text-center
+      p No schools to approve or decline at this time.
+- else
+  - @schools.each do |school|
+    .panel.clearfix id="school-id-#{school.id}"
+      h3= link_to school.name, school
+      .row
+        .small-12.columns
+          - if school.monitors.present?
+            p 
+              | Added by: 
+              = link_to school.monitors.first.full_name, school.monitors.first
+            p= "Address: #{school.full_address}"
+        .small-12.columns
+          ul.button-group.right
+            li= link_to 'Approve', admin_school_approve_path(school), class: 'button radius tiny button-default', data: { confirm: "Are you sure you want to approve #{school.name}?"}
+            li= link_to 'Decline', '#', 'data-reveal-id' => "decline-school-id-#{school.id}", remote: true, class: 'button radius tiny button-red'
+
+
+            / li= link_to 'Decline', admin_school_decline_path(school), class: 'button radius button-red'
+          ul.button-group.radius
+            li= link_to 'Search Google', "https://www.google.com/#q=#{school.name}, #{school.full_address}", target: :_blank, class: 'button button-blue tiny radius'
+            li= link_to 'Search Myschool', "/search/schools?utf8=✓&school_query=#{school.name}, #{school.full_address}&commit=Search", target: :_blank, class: 'button button-blue tiny radius'
+
+
+    .rival-search id="decline-school-id-#{school.id}" class="reveal-modal" data-reveal=true
+      .row
+        .medium-12.columns
+          h3= "Decline #{school.name}"
+          p= "Let #{school.monitors.first.try(:full_name)} know whey you are declining this school. They will be notified via email."
+          = simple_form_for school, url: admin_school_decline_path(school), method: :put do |f|
+            = f.input :declined_comments
+            = f.button :submit, "Decline School", class: 'button button-red tiny radius'
+      a.close-reveal-modal &#215;
+
+
+
+

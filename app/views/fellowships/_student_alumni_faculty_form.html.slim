@@ -1,0 +1,27 @@
+.panel
+  .row
+    .medium-2.columns
+      = link_to image_tag(@school.avatar.url(:medium)), @school, class: 'th'
+    .medium-10.columns
+      h3= @school.full_name
+      h4= @school.address.city_state unless @school.address.blank?
+      = link_to(pluralize(@school.users.count, 'member'), members_school_path(@school))
+      |  | 
+      = link_to(pluralize(@school.groups.count, 'group'), groups_school_path(@school))
+      |  | 
+      = link_to(pluralize(@school.monitors.count, 'monitors'), monitors_school_path(@school))
+      .row.spacer-top.small
+        .medium-6.columns.last
+          = simple_form_for [@school, @fellowship] do |f|
+            = f.input :school_id, as: :hidden
+            = f.input :role, as: :hidden
+            - if @fellowship.role == 'student'
+              = f.input :graduation_date, as: :date, start_year: @fellowship.earliest_valid_graduation_year, end_year: @fellowship.latest_valid_graduation_year, discard_day: true, discard_month: true, order: [:year], input_html: {class: 'chosen-select'}, label: (safe_join ["My Graduation Year ", link_to("(?)", '#', 'data-reveal-id' => 'graduation_chart')])
+            - elsif @fellowship.role == 'alumni'
+              = f.input :graduation_date, as: :date, start_year: @fellowship.earliest_valid_graduation_year, end_year: @fellowship.latest_valid_graduation_year, discard_day: true, discard_month: true, order: [:year], input_html: {class: 'chosen-select'}, label: "My Graduation Year"
+            div
+              = f.submit button_text, class: 'button radius tiny'
+
+#graduation_chart.reveal-modal data-reveal=true
+  = render partial: 'info/graduation_chart'
+  a.close-reveal-modal &#215;

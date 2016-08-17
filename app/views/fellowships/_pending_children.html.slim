@@ -1,0 +1,23 @@
+- if @existing_children.present? || @pending_children.present?
+  .panel
+    .row
+      .medium-12.columns
+        h3 Your Children
+        p
+          ' You are the parent of the following children at this school.
+          - if @pending_children.present? && @existing_children.empty?
+            ' You will become a member of this school once the child has approved the relationship.
+          = link_to "You can manage your relationships here. ", parent_child_relationships_path
+
+        .members
+          ul.medium-block-grid-5.small-block-grid-2
+            - @existing_children.each do |student|
+              li
+                = image_tag(student.avatar.url(:medium))
+                .text-center = student.full_name
+            - @pending_children.each do |student|
+              li
+                = image_tag(student.avatar.url(:medium))
+                .text-center
+                  .name= student.full_name
+                  .note Pending Approval

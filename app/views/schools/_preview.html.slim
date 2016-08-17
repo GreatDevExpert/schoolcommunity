@@ -1,0 +1,7 @@
+.row.profile-preview
+  .small-2.columns
+    = link_to school_path(school) do
+      = image_tag(school.avatar.url(:small))
+  .small-10.columns
+    .name
+      = link_to school.name, school_path(school)

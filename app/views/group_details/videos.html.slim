@@ -1,0 +1,19 @@
+.row
+  .small-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    = render partial: 'group_details/stuff_sub_nav'
+.panel
+  .row
+    .small-12.columns
+      h3= "#{@group.name} Videos"
+  .row
+    .small-12.columns
+      - if policy(@group).show_content?
+        = render partial: 'group_details/video_sub_nav'
+        = render partial: 'user_details/query_controls', locals: {collection: @videos, query: @query}
+        = render partial: 'videos/thumbs', locals: { videos: @videos, custom_new_video_path: new_group_video_path(@group), parent_object: @group } 
+      - else
+        p Must be a member to see this group's content
+
+= paginate @videos

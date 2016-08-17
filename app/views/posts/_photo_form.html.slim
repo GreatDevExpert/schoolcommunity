@@ -1,0 +1,30 @@
+- hide_choose_from_existing ||= false
+.stuff-uploader
+  = simple_form_for photo do |f|
+    = f.input :existing_photo_id, as: :hidden, input_html: {class: 'existing-stuff'}
+    = f.input :file_cache, as: :hidden
+    = hidden_field_tag :type, params[:type]
+    #image_cache_preview
+      - if photo.file?
+          = image_tag(photo.file.url)
+    .row
+      .medium-3.columns
+        = f.input :file, label: "Upload File"
+        label.supported-extensions
+          = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+      - unless hide_choose_from_existing
+        .medium-4.columns.end
+          .spacer-top.mobile-hide-spacer-top.small
+            = link_to "Or choose from My Photos", "#", 'data-reveal-id' => 'existing-photo-target', 'data-reveal-ajax' => selector_photos_path
+
+    = f.input :name
+    = f.input :description
+    .row
+      .medium-4.columns
+        = render partial: 'posts/school_and_group_select', locals: {f: f, include_private: true, sharing_options: sharing_options.photo_options, selected: @selected}
+      .medium-4.columns
+        = render partial: 'posts/year_select', locals: {f: f}
+      .medium-4.columns
+        = f.submit 'Upload Photo', class: 'right button radius tiny', id: 'submit_photo'
+
+#existing-photo-target.stuff-target.reveal-modal data-reveal=true

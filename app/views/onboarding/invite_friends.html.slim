@@ -1,0 +1,28 @@
+.row
+  .medium-12.columns
+    .panel.clearfix
+      .row
+        .medium-6.columns
+          h3 Invite Facebook Friends
+          p Select friends and click 'Send Invites'.
+
+        .medium-6.columns
+          .progress.large.round
+            span.meter style="width: 99%"
+          p.text-center Step 4 of 4 
+
+    - if @friends.present?
+      = text_field_tag 'name', '', placeholder: "Search Facebook Friends", id: 'invite-friends-search'
+
+      .panel.clearfix
+        #friends-container
+          = render 'invite_friends/friends'
+
+      .right
+        ul.button-group.radius
+          li= link_to "Next Step", wizard_path(:mission_statement), class: 'button info radius tiny'
+          li= link_to "Send Invites", "#", id: 'invitation-button', class: 'button radius disabled tiny'
+
+    - else
+      p Unable to find any invitable friends on Facebook
+      = link_to "Skip", root_url, class: 'button button-blue radius tiny'

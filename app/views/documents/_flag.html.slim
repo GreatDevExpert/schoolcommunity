@@ -1,0 +1,13 @@
+.flag-document id="flag-document-#{document.id}" class="reveal-modal" data-reveal=true
+  .row
+    .large-6.columns
+      = simple_form_for [document, Flag.new] do |f|
+        = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this document?'
+        = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+        = f.button :submit, class: 'button tiny radius'
+    .large-6.columns
+      h5
+        | You're about to flag a document uploaded by 
+        = document.user.full_name
+      p= document.name
+  a.close-reveal-modal &#215;

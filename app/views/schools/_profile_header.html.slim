@@ -1,0 +1,62 @@
+.panel
+  .row data-equalizer=true
+    .medium-2.small-4.columns data-equalizer-watch=true
+      .clearfix.text-center
+        = link_to image_tag(school.avatar.url(:medium)), school, class: 'th'
+      = link_to fa_icon('cog 2x'), '#', class: 'left cog-spacer', 'data-dropdown' => "school-#{school.id}", 'data-options' => 'align:right'
+      ul.f-dropdown.tiny id="school-#{school.id}" data-dropdown-content= 'data-dropdown-content'
+        - if policy(school).edit?
+          li= link_to fa_icon('edit', text: 'Edit'), edit_school_path(school)
+        li= link_to fa_icon('edit', text: 'Suggest Logo'), new_school_suggestion_path(school, kind: 'logo')
+        - if policy(school).remove_rival?
+          li= link_to fa_icon("minus-circle lg", text: "Unrival"), remove_rival_school_path(school), method: :post
+        - if policy(school).new_monitor_request?
+          li= link_to fa_icon('user lg', text: 'Request to be Monitor'), new_monitor_request_school_path(school), method: :post
+        - if policy(school).leave_as_monitor?
+          li= link_to fa_icon('minus-circle lg', text: 'Resign as monitor'), step_down_as_monitor_school_path(school), method: :post, data: { confirm: "Are you sure you want to resign as a monitor of #{school.full_name}?" }
+      .text-center
+        = render partial: 'shared/item_flagged_notice', locals: {item: school, icon_size: :medium}
+
+
+    .medium-10.small-8.columns data-equalizer-watch=true
+      h3= link_to school.full_name, school
+      ul.button-group.radius.right
+        li= join_school_button(school)
+        li=render partial: 'schools/rival_button', locals: {school: school}
+      
+      - if school.address.present?
+        h5
+          div= school.address.line_one
+          div= school.address.city_state_zip
+      = link_to(pluralize(school.users.count, 'member'), members_school_path(school, role: 'student'))
+      |  | 
+      = link_to(pluralize(school.visible_groups.count, 'group'), groups_school_path(school))
+      |  | 
+      = link_to(pluralize(school.monitors.count, 'monitors'), monitors_school_path(school))
+      .caret-wrapper
+        = link_to fa_icon('caret-square-o-down lg'), '#', 'data-dropdown' => "flag-#{school.id}", 'data-options' => 'align:left', class: 'right'
+      ul.f-dropdown.tiny id="flag-#{school.id}" data-dropdown-content= 'data-dropdown-content'
+        li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-school-#{school.id}"
+
+
+.flag-comment id="flag-school-#{school.id}" class="reveal-modal" data-reveal=true
+  .row
+    .large-6.columns
+      = simple_form_for [school, Flag.new] do |f|
+        = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this school?'
+        = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+        = f.button :submit, class: 'button tiny radius'
+    .large-6.columns
+      h5
+        | You're flagging  
+        = school.full_name
+        |.
+
+      .row
+        .large-2.medium-2.small-4.columns
+          = image_tag(school.avatar.url(:small))
+
+        .large-10.medium-10.small-8.columns
+          = auto_link(@content, :html => { :target => '_blank' })
+
+  a.close-reveal-modal &#215;

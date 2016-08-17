@@ -1,0 +1,43 @@
+.comment id="comment-#{comment.id}"
+  hr
+  .row
+    .medium-3.small-2.large-2.columns.no-padding
+      = image_tag(comment.user.avatar.url(:small), class: 'th')
+
+    .medium-9.small-10.large-10.columns
+      = link_to fa_icon('caret-square-o-down'), comment_path(comment), class: 'right', 'data-dropdown' => "drop-#{comment.id}", 'data-options' => 'align:left'
+      ul.f-dropdown.tiny id="drop-#{comment.id}" data-dropdown-content= 'data-dropdown-content'
+        - if policy(comment).destroy?
+          li= link_to fa_icon('trash', text: 'Delete'), comment_path(comment), method: :delete, data: { confirm: 'Remove your comment?'}
+        li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-comment-#{comment.id}", remote: true
+
+      h5
+        = link_to comment.user.full_name, comment.user
+        |  
+        span= " #{time_ago_in_words(comment.created_at)} ago"
+
+      = auto_link(comment.content, :html => { :target => '_blank' })
+      .right
+        = render partial: 'shared/item_flagged_notice', locals: {item: comment, icon_size: :medium}
+
+  .flag-comment id="flag-comment-#{comment.id}" class="reveal-modal" data-reveal=true
+
+    .row
+      .large-6.columns
+        = simple_form_for [comment, Flag.new] do |f|
+          = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this content?'
+          = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+          = f.button :submit, class: 'button radius tiny'
+      .large-6.columns
+        h5
+          | You're flagging a comment made by 
+          = comment.user.full_name
+
+        .row
+          .large-2.medium-2.small-4.columns
+            = image_tag(comment.user.avatar.url(:small), class: 'th')
+
+          .large-10.medium-10.small-8.columns
+            = auto_link(comment.content, :html => { :target => '_blank' })
+
+    a.close-reveal-modal &#215;

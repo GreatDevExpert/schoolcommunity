@@ -1,0 +1,2 @@
+- if VotePolicy.new(current_user, battle).new_first_item_vote?
+  br= link_to fa_icon('thumbs-o-up lg', text: 'Vote'), battle_new_first_item_vote_path(battle), method: :post, class: 'button small expand'

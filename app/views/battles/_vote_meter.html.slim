@@ -1,0 +1,11 @@
+.row
+  .small-12.columns
+    .spirit-meter
+      span.meter style="width: #{battle.challenger_vote_percentage}%"
+      .row
+        .small-3.columns
+          p.left= pluralize(battle.first_item_vote_count.to_i, 'Vote')
+        .small-6.columns
+          p.text-center Vote Tally
+        .small-3.columns
+          p.right= pluralize(battle.second_item_vote_count.to_i, 'Vote')

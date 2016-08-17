@@ -1,0 +1,32 @@
+p Stale Flag Alert!
+
+p Please take a look and resolve to help keep Myschool safe.
+
+table
+  tr
+    td Type
+    td= @flag.kind
+  tr
+    td Created on
+    td= @flag.created_at
+
+  tr
+    td Description
+    td= @flag.description
+
+  tr
+    td Reporting User
+    td = link_to @reporting_user.full_name, user_url(@reporting_user)
+
+  tr
+    td Offending User
+    td 
+      - if  @offending_user.present?
+        = link_to @offending_user.full_name, user_url(@offending_user)
+      - else
+        | N/A
+
+= link_to('View Flag', admin_flagged_item_url(@flag))
+
+p Thanks for being an awesome Myschool Admin!
+p This email will be sent again if flag has not been resolved soon.

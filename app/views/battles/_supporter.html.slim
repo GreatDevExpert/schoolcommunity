@@ -1,0 +1,7 @@
+ul.medium-block-grid-3.small-block-grid-2
+  - battle_passes.each do |battle_pass|
+    li
+      = link_to user_path(battle_pass.user) do
+        = image_tag(battle_pass.user.avatar.url(:medium), class: 'th')
+      .text-center
+        = battle_pass.amount

@@ -1,0 +1,19 @@
+.row
+  .large-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    .row
+      .small-12.columns
+        = render partial: 'group_details/member_sub_nav', locals: {group: @group}
+
+      .small-12.columns
+        h3 Invite Schoolies to join group
+        - if @eligible_users.present?
+          = simple_form_for(@invitation) do |f|
+            = f.input :target, as: :hidden
+            .recipients
+              = f.input :recipients, collection: @eligible_users, label_method: 'full_name', value_method: 'id', label: "Select schoolies to send invitation to", input_html: {class: 'chosen-select', multiple: true}
+            = f.input :message, as: :text, label: "Message (optional)"
+            = f.submit "Send Invitation", class: 'button radius right'
+        - else
+          p All available schoolies have already been invited to this group.  To invite additional members, you must be schoolies with them first.

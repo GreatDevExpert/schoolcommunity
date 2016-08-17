@@ -1,0 +1,36 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-medium-up
+        .row
+          .small-12.columns
+            .row
+              .small-4.columns.mini-thumbs
+                .right.th
+                  = battle_item_preview(@battle.first_item, 'small')
+              .small-4.columns.no-padding
+                center
+                  = image_tag('this_vs_that_logo.png')
+              .small-4.columns.mini-thumbs
+                .left.change-item-preview.th
+                  = battle_item_preview(@battle.second_item, 'small')
+      .hide-for-medium-up
+        .row
+          .small-3.columns
+            .right.th
+              = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.no-padding
+            center
+              = image_tag('this_vs_that_logo_stacked.png')
+          .small-3.columns.mini-thumbs.left
+            .right.change-item-preview.th
+              = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Select "that"
+        | Select a photo or video for your second item. 
+
+  = render partial: 'pick_items', locals: { item_id: :second_object_id, item_kind: :second_object_type, show_back_button: true, previous_item: 'photos' }

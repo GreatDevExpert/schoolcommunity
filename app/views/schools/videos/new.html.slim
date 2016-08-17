@@ -1,0 +1,9 @@
+.row
+  .large-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+    = render partial: 'school_details/stuff_sub_nav'
+    hr
+    .upload-header
+      = retina_image(default: 'my-videos-logo.png', retina: 'my-videos-logo-retina.png', width: 132, height: 40)
+    = render partial: 'posts/combined_post_form', locals: {active: 'video', video: @video, hide_post: true, hide_photo: true, hide_document: true, hide_top_tab: true, hide_bottom_tab: true, title: 'Share a Video'}

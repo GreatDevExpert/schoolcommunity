@@ -1,0 +1,28 @@
+.parent-relationships
+    ul.medium-block-grid-5.small-block-grid-2
+      - unless child_relationships.empty?
+        - child_relationships.each do |relationship|
+          = render layout: 'users/preview_box', locals: {user: relationship.child} do
+            - if relationship.aasm_state == 'pending_approval'
+              .pending Awaiting approval
+
+            - if relationship.aasm_state == 'pending_approval' && policy(relationship).approve?
+              - if policy(relationship).approve?
+                = link_to "Approve", approve_parent_child_relationship_path(relationship), class: 'button radius mini', method: :post
+              - if policy(relationship).destroy?
+                = link_to "Decline", relationship, method: :delete, class: 'button button-red radius mini', confirm: 'Are you sure you want to remove this relationship?'
+            - elsif policy(relationship).destroy?
+              = link_to "Remove", relationship, method: :delete, class: 'button button-red radius mini', confirm: 'Are you sure you want to remove this relationship?'
+      - unless parent_relationships.empty?
+        - parent_relationships.each do |relationship|
+          = render layout: 'users/preview_box', locals: {user: relationship.parent} do
+            - if relationship.aasm_state == 'pending_approval'
+              .pending Awaiting approval
+
+            - if relationship.aasm_state == 'pending_approval' && policy(relationship).approve?
+              - if policy(relationship).approve?
+                = link_to "Approve", approve_parent_child_relationship_path(relationship), class: 'button radius mini', method: :post
+              - if policy(relationship).destroy?
+                = link_to "Decline", relationship, method: :delete, class: 'button button-red radius mini', confirm: 'Are you sure you want to remove this relationship?'
+            - elsif policy(relationship).destroy?
+              = link_to "Remove", relationship, method: :delete, class: 'button button-red radius mini', confirm: 'Are you sure you want to remove this relationship?'

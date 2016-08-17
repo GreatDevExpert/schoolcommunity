@@ -1,0 +1,21 @@
+a.close-reveal-modal &#215;
+
+h3 New Group
+
+= simple_form_for(@group, url: battle_groups_path) do |f|
+  = hidden_field_tag :next_step, params[:next_step]
+  = hidden_field_tag :item_kind, params[:item_kind]
+
+  = f.input :name
+  = f.input :description
+  = f.input :avatar, label: 'Logo'
+  label.supported-extensions
+    = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+
+  .row
+    .medium-4.columns
+      = f.input :visibility_type, collection: Group::VISIBILITY_TYPES, prompt: 'Select Privacy Level' 
+    .medium-4.columns
+      = f.association :school, collection: current_user.schools, prompt: 'Select School', label: 'Related School (Optional)', include_blank: true
+    .medium-4.columns
+      = f.submit "Create Group", class: 'button radius right tiny'

@@ -1,0 +1,24 @@
+.row
+  .small-9.columns
+    = link_to(image_tag(video.thumbnail_medium), video, class: 'th')
+    h3= link_to video.name, video
+  .small-3.columns
+    .right.text-center
+      = link_to image_tag(video.user.avatar.url(:small)), video.user
+      br= link_to video.user.full_name, video.user
+    .left
+      = render partial: 'shared/item_flagged_notice', locals: {item: video, icon_size: :medium}
+
+.row
+  .medium-12.columns
+    - if policy(video).destroy? || policy(video).flag?
+      .spacer-top
+      .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "video-#{video.id}-dropdown", 'data-options' => 'align:left', class: 'left'
+      ul.f-dropdown.tiny id="video-#{video.id}-dropdown" data-dropdown-content='data-dropdown-content'
+        - if policy(video).destroy?
+          li= link_to fa_icon('trash', text: 'Delete video'), video_path(video), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this video?'}
+
+        - if policy(video).flag?
+          li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-video-#{video.id}"
+
+= render partial: 'videos/flag', locals: {video: video}

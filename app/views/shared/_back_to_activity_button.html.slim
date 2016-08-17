@@ -1,0 +1,9 @@
+- unless request.referer.blank?
+  - if URI(request.referer).path == '/'
+    = link_to '< Back', :back, class: 'button button-blue tiny radius'
+  / - elsif URI(request.referer).path.split('/')[1] == 'users'
+  /   = link_to '< Back', :back, class: 'button button-blue tiny'
+  / - elsif URI(request.referer).path.split('/')[1] ==  'schools'
+  /   = link_to '< Back', :back, class: 'button button-blue tiny'
+  / - elsif URI(request.referer).path.split('/')[1] == 'groups'
+  /   = link_to '< Back', :back, class: 'button button-blue tiny'

@@ -1,0 +1,67 @@
+- current_year = Date.today.month >= 9 ? Date.today.year + 1 : Date.today.year
+
+.row
+  .medium-12.columns
+    h3 Graduation Year
+    p Not sure what year you graduate? Find your current grade or age in the chart below to help figure it out. 
+    h4 Jr. High/Middle School
+    table
+      thead
+        tr
+          th Current Class
+          td Current Age
+          td Graduation Year
+      tbody
+        tr
+          td 7th Grade
+          td 12-13
+          td= current_year + 1
+        tr
+          td 8th Grade
+          td 13-14
+          td= current_year
+
+    h4 High School
+    table
+      thead
+        tr
+          th Current Class
+          td Current Age
+          td Graduation Year
+      tbody
+        tr
+          td 9th Grade / Freshman
+          td 14-15
+          td= current_year + 3
+        tr
+          td 10th Grade / Sophomore
+          td 15-16
+          td= current_year + 2
+        tr
+          td 11th Grade / Junior
+          td 16-17
+          td= current_year + 1
+        tr
+          td 12th Grade / Senior
+          td 17-18
+          td= current_year
+
+    h4 College/University
+    table
+      thead
+        tr
+          th Current Class
+          td Graduation Year
+      tbody
+        tr
+          td Freshman
+          td= current_year + 3
+        tr
+          td Sophomore
+          td= current_year + 2
+        tr
+          td Junior
+          td= current_year + 1
+        tr
+          td Senior
+          td= current_year

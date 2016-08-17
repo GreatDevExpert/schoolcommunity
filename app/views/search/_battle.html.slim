@@ -1,0 +1,4 @@
+.row
+  .small-12.columns
+    = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+    = link_to 'View Battle', battle, class: 'button button-blue radius expand'

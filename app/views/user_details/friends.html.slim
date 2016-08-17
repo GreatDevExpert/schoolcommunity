@@ -1,0 +1,23 @@
+.row
+  .medium-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user}
+    .panel
+      .right
+        h3= retina_image(default: 'my-schoolies-logo.png', retina: 'my-schoolies-logo-retina.png', width: 137, height: 40)
+
+      - if @user == current_user
+        h3 My Schoolies
+        = render partial: 'schoolies_filter'
+      - else
+        h3= "#{@user.first_name_possessive} Schoolies"
+
+      .friends
+        - if @friends.length > 0
+          ul.medium-block-grid-5.small-block-grid-2
+            = render partial: 'users/preview_box', collection: @friends, as: :user
+        - else
+          p You don't have any schoolies yet
+
+
+    = paginate @friends

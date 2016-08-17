@@ -1,0 +1,40 @@
+- if @school.avatar.blank?
+  .panel.callout
+    .text-center
+      h5
+        = "#{@school.name} does not currently have a logo.   "
+        = link_to 'Add One Now', new_school_suggestion_path(@school, kind: 'logo'), class: 'button info tiny radius'
+
+= render 'shared/back_to_activity_button'
+= render 'shared/back_to_flag_manager_button'
+
+- if @school.hidden?
+  .alert-box.alert.text-center
+    p School Is Hidden
+    p= "Current State: #{@school.visibility.titleize}"
+
+.row
+  .large-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+    - if policy(@school).new_post?
+      = simple_form_for [@school, Post.new] do |f|
+        = f.input :content, label: false, input_html: { rows: 4 }, placeholder: "Share your thoughts with #{@school.name}."
+        = f.button :submit, 'Post', class: 'right button radius tiny'
+    .clearfix
+    h3
+      = @school.name
+      |  Activity
+    - if policy(@school).show_activity?
+      - if @activities.present?
+        = render_unique_activities(@activities)
+        .row
+          .small-12.columns
+            = paginate(@activities)
+      - else
+        .panel
+          p No activity yet
+    - else
+      .panel
+        p You must be a member of this school to view activity
+

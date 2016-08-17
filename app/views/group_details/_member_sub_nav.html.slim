@@ -1,0 +1,6 @@
+dl.sub-nav
+  = active_link_to 'Members', members_group_path(group, role: 'everyone'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=everyone/
+  - if policy(@group).send_invitation?
+    = active_link_to 'Invited', members_group_path(group, role: 'invited'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=invited/
+  - if policy(@group).approve_join?
+    = active_link_to 'Awaiting Approval', members_group_path(group, role: 'pending'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=pending/

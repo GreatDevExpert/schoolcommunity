@@ -1,0 +1,23 @@
+- if item.has_open_flag?
+  - first_flag = item.open_flags.first
+  - if icon_size == :small
+  
+    .flagged_icon
+      span data-tooltip=true aria-haspopup="true" class="has-tip" title="We have received a flag for '#{first_flag.kind.titleize}' and the Myschool administrators are looking into it."
+        - if FlaggedItemsPolicy.new(current_user, first_flag).show?
+          = link_to admin_flagged_item_path(first_flag) do
+            = fa_icon('flag-o')
+        - else
+          = fa_icon('flag-o')
+
+  - else
+    .flagged_icon.text-center
+      span data-tooltip=true aria-haspopup="true" class="has-tip" title="We have received a flag for '#{first_flag.kind.titleize}' and the Myschool administrators are looking into it."
+        - if FlaggedItemsPolicy.new(current_user, first_flag).show?
+          = link_to admin_flagged_item_path(first_flag) do
+            = fa_icon('flag-o')
+            p Flagged
+
+        - else
+          = fa_icon('flag-o')
+          p Flagged

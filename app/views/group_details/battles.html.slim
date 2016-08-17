@@ -1,0 +1,29 @@
+.row
+  .small-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    .panel
+      h3
+        = @group.name
+        |  Battles
+      dl.sub-nav#stuff-sub-nav
+        = active_link_to 'Current Battles', battles_group_path(filter: 'open'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /filter=open*/
+        = active_link_to 'Closed Battles', battles_group_path(filter: 'closed'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /filter=closed*/
+
+      - if @user == current_user
+        = link_to 'Start Battle', new_battle_path, class: 'button radius right'
+      .clearfix
+      - unless @query.blank?
+        .panel.callout
+          = "Your results have been filtered using the term: '#{@query}'"
+          |  
+          = link_to 'Reset Filters', params.merge(page: '', q: '')
+      - if @battles.blank? && @query.present?
+        p= "No results for '#{@query}'"
+      - elsif @battles.blank? && @query.blank?
+        p= "No battles to show."
+
+    - @battles.each do |battle|
+      .panel
+        = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+        = link_to 'View Battle', battle_path(battle), class: 'button button-blue expand radius'

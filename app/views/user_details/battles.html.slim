@@ -1,0 +1,79 @@
+.row
+  .small-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user}
+.panel.clearfix
+
+
+  .show-for-medium-up
+    .row
+      .medium-4.columns
+        - if current_user == @user
+          h3 My Battles
+        - else
+          h3= "#{@user.first_name_possessive} Battles"
+      .medium-5.columns
+        h4
+          - if current_user == @user
+            = "You have won "
+          - else
+            = "#{@user.first_name} has won "
+          = formatted_scrilla_balance(@user.scrilla_balance.try(:lifetime_winnings))
+          |  in battles.
+      .medium-3.columns
+        h3= retina_image(default: 'my-battles-logo.png', retina: 'my-battles-logo-retina.png', width: 133, height: 40)
+
+  .hide-for-medium-up
+    .row
+      .small-6.columns
+        - if current_user == @user
+          h3 My Battles
+        - else
+          h3= "#{@user.first_name_possessive} Battles"
+
+      .small-6.columns
+        h3= retina_image(default: 'my-battles-logo.png', retina: 'my-battles-logo-retina.png', width: 133, height: 40)
+
+      .small-12.columns
+        hr
+        h4
+          - if current_user == @user
+            = "You have won "
+          - else
+            = "#{@user.first_name} has won "
+          = formatted_scrilla_balance(@user.scrilla_balance.try(:lifetime_winnings))
+          |  in battles.
+
+  .small-12.columns
+    dl.sub-sub-nav
+      = active_link_to 'Current Battles', battles_user_path(filter: 'open'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /filter=open*/
+      = active_link_to 'Closed Battles', battles_user_path(filter: 'closed'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /filter=closed*/
+
+      dd
+        = link_to fa_icon('search'), '#', class: 'search-icon'
+        .toggle
+          = form_tag params.merge(page: ''), method: :get do
+            = text_field_tag :q, @query, placeholder: 'Narrow Results'
+            = hidden_field_tag :filter, params[:filter]
+
+      - if current_user == @user
+        = link_to 'Start A Battle', new_battle_path, class: 'button info radius small right hide-for-small-only battle'
+
+    .clearfix
+    - unless @query.blank?
+      .panel.callout
+        = "Your results have been filtered using the term: '#{@query}'"
+        |  
+        = link_to 'Reset Filters', params.merge(page: '', q: '')
+    - if @battles.blank? && @query.present?
+      .panel
+        p= "No results for '#{@query}'"
+    - elsif @battles.blank? && @query.blank?
+      p= "No battles to show."
+
+- @battles.each do |battle|
+  .panel
+    = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+    = link_to 'View Battle', battle_path(battle), class: 'button button-blue expand radius'
+
+= paginate (@battles)

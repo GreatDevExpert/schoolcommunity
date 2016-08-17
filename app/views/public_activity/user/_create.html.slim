@@ -1,0 +1,14 @@
+.activity
+  .row
+    .medium-1.small-2.columns
+      = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+    .medium-11.small-10.columns
+      h5
+        = link_to(activity.owner.full_name, activity.owner)
+        |  joined myschool 
+        br
+        span = "#{time_ago_in_words(activity.created_at)} ago"
+
+
+
+

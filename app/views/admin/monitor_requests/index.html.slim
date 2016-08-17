@@ -1,0 +1,25 @@
+h3 Pending Monitor Requests
+
+- if @groups.present? || @schools.present?
+  .panel
+    - @groups.each do |group|
+      h4 = link_to "Group: #{group.full_name}", group
+      ul.medium-block-grid-5.small-block-grid-2
+        - group.monitor_requests.each do |request|
+          = render layout: 'users/preview_box', locals: {user: request.user} do
+            div= "Requested: #{time_ago_in_words(request.updated_at)} ago"
+            ul.button-group.radius
+              li= link_to "Approve", approve_monitor_group_path(request), method: :post, class: 'button button-default tiny'
+              li= link_to "Deny", decline_monitor_group_path(request), method: :post, class: 'button button-red tiny'
+
+    - @schools.each do |school|
+      h4 = link_to "School: #{school.full_name}", school
+      ul.medium-block-grid-5.small-block-grid-2
+        - school.monitor_requests.each do |request|
+          = render layout: 'users/preview_box', locals: {user: request.user} do
+            div= "Requested: #{time_ago_in_words(request.updated_at)} ago"
+            ul.button-group.radius
+              li= link_to "Approve", approve_monitor_school_fellowship_path(school, request), method: :post, class: 'button radius button-default tiny'
+              li= link_to "Deny", decline_monitor_school_fellowship_path(school, request), method: :post, class: 'button radius button-red tiny'
+- else
+  p No unapproved monitor requests.

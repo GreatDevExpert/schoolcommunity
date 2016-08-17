@@ -1,0 +1,70 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-medium-up
+        .row
+          .small-12.columns
+            .row
+              .small-4.columns.mini-thumbs
+                .right
+                  .th
+                    = battle_item_preview(@battle.first_item, 'small').html_safe
+              .small-4.columns.no-padding
+                center
+                  = image_tag('this_vs_that_logo.png')
+              .small-4.columns.mini-thumbs
+                .left.th
+                  = battle_item_preview(@battle.second_item, 'small').html_safe
+      .hide-for-medium-up
+        .row
+          .small-3.columns.mini-thumbs
+            .th
+              = battle_item_preview(@battle.first_item, 'small').html_safe
+          .small-6.columns.no-padding
+            center
+              = image_tag('this_vs_that_logo_stacked.png')
+          .small-3.columns.mini-thumbs.left
+            .right.th
+              = battle_item_preview(@battle.second_item, 'small').html_safe
+  
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Finalize Battle
+        | Review and let us know how long people can vote.
+
+
+  .panel.clearfix
+    .row.text-center
+      h3= @battle.description
+
+    .row.text-center data-equalizer=true
+      .small-6.columns
+        .panel data-equalizer-watch=true
+          = battle_item_preview(@battle.first_item).html_safe
+          h5= @battle.first_item_name
+
+      .small-6.columns
+        .panel data-equalizer-watch=true
+          = battle_item_preview(@battle.second_item).html_safe
+          h5= @battle.second_item_name
+
+    = simple_form_for @form, url: wizard_path, method: :put do |f|
+      = f.input :battle_length, collection: Battle::LENGTH_OPTIONS, prompt: 'How long can people vote?'
+
+      - if current_user.scrilla_balance.can_deduct?(50)
+        = link_to('< Back', previous_wizard_path, class: 'button radius button-blue tiny')
+        = f.button :submit, "Start Battle >", class: 'button radius small right'
+        .row
+          .medium-offset-6.medium-6.columns
+            .panel 50 scrilla will be deducted from your account, voting will start immediately. All your schoolies are eligible to vote.
+      - else
+        .row
+          .medium-offset-6.medium-6.columns
+            .panel
+              p= "You need at least 50 Scrilla, but you only have #{current_user.scrilla_balance.balance} Scrilla"
+              = link_to '$ Buy Scrilla', new_facebook_payment_path, class: 'button radius button-default'
+
+          = link_to('< Back', previous_wizard_path, class: 'button radius button-blue tiny')
+

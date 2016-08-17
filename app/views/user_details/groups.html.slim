@@ -1,0 +1,48 @@
+.row
+  .medium-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user }
+    .panel
+      .right
+        h3= retina_image(default: 'my-groups-logo.png', retina: 'my-groups-logo-retina.png', width: 140, height: 40)
+
+      - if current_user == @user
+        h3 My Groups
+      - else
+        h3= "#{@user.first_name_possessive} Groups"
+
+      dl.sub-sub-nav.clearfix
+        = active_link_to 'All', groups_user_path(@user, filter: 'school', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd
+        dd
+          = link_to fa_icon('search'), '#', class: 'search-icon'
+          .toggle
+            = form_tag params.merge(page: ''), method: :get do
+              = text_field_tag :q, @query, placeholder: 'Narrow Results'
+              = hidden_field_tag :filter, params[:filter]
+
+      - unless @query.blank?
+        .panel.callout
+          = "Your results have been filtered using the term: '#{@query}'"
+          |  
+          = link_to 'Reset Filters', params.merge(page: '', q: '')
+
+      - if @groups.present? || current_user == @user
+        ul.medium-block-grid-5.small-block-grid-2
+          - if @user == current_user && @query.blank?
+            li.text-center
+              = link_to(image_tag('search_logo.png'), '#', 'data-reveal-id' => "newSearch", remote: true)
+              p.grid-text= link_to('Find & Join', '#', 'data-reveal-id' => "newSearch", remote: true)
+            li= link_to(image_tag('new_group_logo.png'), new_group_path)
+
+          = render partial: 'groups/preview_box', collection: @groups, as: 'group', locals: {user: @user}
+      - else
+        p= "#{@user.first_name} is not a member of any groups yet"
+
+.rival-search id="newSearch" class="reveal-modal" data-reveal=true
+  .row
+    .medium-12.columns
+      h3 Search and join a group
+      = form_tag search_groups_path, class: 'navbar-form', role: 'search', method: :get do
+        = text_field_tag :group_query, params[:group_query], placeholder: 'Search'
+        = submit_tag "Search", class: 'button radius'
+  a.close-reveal-modal &#215;

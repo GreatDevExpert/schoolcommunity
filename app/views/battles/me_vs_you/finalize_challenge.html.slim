@@ -1,0 +1,99 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .small-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  .th
+                    = image_tag(@battle.owner.avatar.small.url)
+                  .th
+                    = battle_item_preview(@battle.first_item, 'small')
+              .large-6.columns.no-padding
+                center
+                  = image_tag('me_vs_you_logo.png')
+              .large-3.columns.mini-thumbs
+                .left
+                  .th
+                    = battle_item_preview(@battle.second_item, 'small')
+                .th
+                  = image_tag(@battle.opposing_user.avatar.small.url, class: 'left')
+      .hide-for-large-up
+        .row
+          .small-3.columns
+            .right
+              .th
+                = image_tag(@battle.owner.avatar.small.url, class: 'left')
+              .th
+                = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.no-padding
+            center
+              = image_tag('me_vs_you_logo_stacked.png')
+          .small-3.columns
+            .left
+              .th
+                = image_tag(@battle.opposing_user.avatar.small.url, class: 'left')
+              .th
+                = battle_item_preview(@battle.second_item, 'small')
+  
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Finalize Challenge
+        | Ask a battle question, name your item and set battle duration.
+
+  .panel
+    = simple_form_for @form, url: wizard_path, method: :put  do |f|
+      .row
+        .small-12.columns
+          = f.input :description, label: 'Battle Question', placeholder: 'E.g. Best Selfie? Which do you like better?'
+      .row data-equalizer=true
+        .small-6.columns
+          .panel.transparent data-equalizer-watch=true
+            .text-center
+              .th
+                = battle_item_preview(@battle.first_item).html_safe
+
+        .small-6.columns
+          .panel.transparent data-equalizer-watch=true
+            .text-center
+              .th
+                = battle_item_preview(@battle.second_item).html_safe
+      .row
+        .small-12.medium-6.columns
+          .hide-for-large-up
+            p.text-center
+              strong= @battle.opposing_user.full_name 
+              |  will select an item to compete against yours.
+
+          = f.input :first_item_name, label: "Label your #{@battle.first_item.class.to_s.downcase}:"
+
+          = f.input :battle_length, label: 'Set your battle length:', collection: Battle::LENGTH_OPTIONS, prompt: 'How long can people vote?'
+
+        .small-12.medium-6.columns
+          .show-for-large-up
+            p.text-center
+              strong= @battle.opposing_user.full_name 
+              |  will select an item to compete against yours.
+
+      - if current_user.scrilla_balance.can_deduct?(50)
+        = link_to('< Back', previous_wizard_path(items: 'photos'), class: 'button button-blue radius tiny')
+        = f.button :submit, "Start Battle >", class: 'button radius small right'
+        .row
+          .medium-offset-6.medium-6.columns
+            .panel
+              = "50 scrilla will be deducted from your account. #{@battle.opposing_user.first_name} must accept the battle in order for voting to begin."
+
+      - else
+        .row
+          .small-12.columns
+            = link_to('< Back', previous_wizard_path(items: 'photos'), class: 'button button-blue radius tiny')
+            = link_to '$ Buy Scrilla', new_facebook_payment_path, class: 'button small right'
+        .row
+          .small-12.columns
+
+
+            p.text-right= "You need at least 50 Scrilla to proceed, but you currently have just #{current_user.scrilla_balance.balance}."

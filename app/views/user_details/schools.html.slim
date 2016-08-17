@@ -1,0 +1,34 @@
+.row
+  .medium-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user}
+    .panel
+      .right
+        h3= retina_image(default: 'my-schools-logo.png', retina: 'my-schools-logo-retina.png', width: 150, height: 40)
+
+      - if current_user == @user
+        h3 My Schools
+      - else
+        h3= "#{@user.first_name_possessive} Schools"
+      - if @schools.present? || current_user == @user
+
+        ul.medium-block-grid-5.small-block-grid-2.schools.spacer-top
+
+          - if current_user == @user
+            li.text-center
+              = link_to(image_tag('search_logo.png'), '#', 'data-reveal-id' => "newSchoolSearch", remote: true)
+              p.grid-text= link_to('Find & Join', '#', 'data-reveal-id' => "newSchoolSearch", remote: true)
+          = render partial: 'schools/preview_box', collection: @schools, as: 'school', locals: {user: @user}
+      - else
+        p= "#{@user.first_name} is not a member of any schools yet"
+
+    = paginate @schools
+
+.rival-search id="newSchoolSearch" class="reveal-modal" data-reveal=true
+  .row
+    .medium-12.columns
+      h3 Search and join a school
+      = form_tag search_schools_path, class: 'navbar-form', role: 'search', method: :get do
+        = text_field_tag :school_query, params[:school_query], placeholder: 'Search'
+        = submit_tag "Search", class: 'button radius'
+  a.close-reveal-modal &#215;

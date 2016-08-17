@@ -1,0 +1,5 @@
+br
+.flex-video.widescreen.vimeo style="display: block;"
+  = VideoInfo.new(@video.url).embed_code(iframe_attributes: { width: '100%', height: '300'}, url_attributes: { autoplay: 0 }).html_safe 
+
+a.close-reveal-modal &#215;

@@ -1,0 +1,50 @@
+.panel
+  p.right
+    | Suggestion Type: 
+    = suggestion.kind.titleize
+  p = "Suggestion ##{suggestion.id}"
+  hr
+  .row
+    .small-12.columns
+      h4.text-center= suggestion.suggestible.name
+
+  - if suggestion.kind == 'logo'
+    .row
+      .small-6.columns
+        .left
+          p.text-center Current Logo
+          = link_to(image_tag(suggestion.suggestible.avatar.url(:medium), class: 'th'), suggestion.suggestible)
+      .small-6.columns
+        .right
+          p.text-center Suggested Logo
+          = image_tag(suggestion.avatar.url(:medium), class: 'th')
+  - elsif suggestion.kind == 'about'
+    .row
+      .small-12.columns
+        .panel
+          h4 Current About
+          - if suggestion.suggestible.description.blank?
+            p Currently No About Content
+          - else
+            = simple_format(suggestion.suggestible.description)
+    .row
+      .small-12.columns
+        .panel.callout
+          h4 Suggested About
+          = simple_format(suggestion.content)
+
+  hr
+    .row
+      .medium-6.small-12.columns
+        p 
+          | Suggested by: 
+          = link_to suggestion.user.full_name, suggestion.user
+        p= suggestion.action_taken
+      .medium-6.small-12.columns
+        .right
+          ul.button-group.radius
+            li= link_to 'Decline', decline_suggestion_path(suggestion), method: :post, class: 'button button-red radius', data: { confirm: 'Are you sure you want to decline this suggestion?'}
+            li
+              = link_to 'Accept', approve_suggestion_path(suggestion), method: :post, class: 'button button-default radius', data: { confirm: "Are you sure you want to accept and update #{suggestion.suggestible.name} with the new suggestion?", disable_with: "Please wait..."}
+
+

@@ -1,0 +1,35 @@
+- if @documents.present? || params[:q].present?
+  #document-selector.stuff-selector
+    .row
+      .medium-offset-8.medium-3.columns.end
+        = form_tag params.merge(page: ''), class: 'ajax', method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+
+    - if params[:q].present?
+      .panel.callout
+        = "Your results have been filtered using the term: '#{params[:q]}'"
+        '
+        = link_to 'Reset Filters', params.merge(page: '', q: '')
+      - unless @documents.present?
+        p No matches were found
+
+    = form_tag "#", id: 'document-selector-form' do
+      ul.medium-block-grid-5.small-block-grid-2
+        - @documents.each do |document|
+          li.text-center.stylized-radios
+            = label_tag "existing_document_id_#{document.id}"
+              = radio_button_tag('existing_document_id', document.id, false, id: "existing_document_id_#{document.id}", 'data-preview-url' => document.preview.icon_preview_path)
+              = document.preview.small_preview
+            .grid-text
+              .right= render partial: 'shared/item_flagged_notice', locals: { item: document, icon_size: :small }
+
+              = truncate(document.name, length: 17)
+              - if document.visibility_type == 'private'
+                '
+                = fa_icon('lock')
+      = submit_tag "Choose this Document", class: 'button radius small right disabled'
+    = paginate(@documents)
+- else
+  p You haven't uploaded any documents to your profile yet.
+
+.close-reveal-modal &#215;

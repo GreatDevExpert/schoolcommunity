@@ -1,0 +1,22 @@
+.row
+  .medium-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user}
+    .panel
+      - if @user == current_user
+        = render partial: 'schoolies_filter'
+
+      .friends
+        - if @requests.length > 0
+          ul.medium-block-grid-5.small-block-grid-2
+            - @requests.each do |request|
+              = render layout: 'users/preview_box', locals: {user: request.user} do
+                ul.button-group.radius.text-center
+                  li= link_to "Approve", approve_friendship_request_path(request),
+                  method: :post, class: 'button button-default tiny friend-request-approval-button',
+                  remote: true
+                  li= link_to "Deny", friendship_request_path(request),
+                  method: :delete, class: 'button button-red tiny friend-request-deny-button'
+        - else
+          p You don't have any pending schoolie requests
+    = paginate @requests

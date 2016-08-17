@@ -1,0 +1,36 @@
+#battle_steps
+  = display_base_errors (@battle)
+  
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Admin Edit/Override Battle Results
+    
+        - if @battle.aasm_state == 'needs_scores'
+          .panel.callout= "This will be the first time scores are entered for this battle. Winner awards have not been scheduled, yet."
+
+
+  .panel
+    .row
+      .small-12.columns
+        h3 1. Select Winning School
+        = simple_form_for @form, url: admin_battle_path, method: :put  do |f|
+          ul.medium-block-grid-3.small-block-grid-3
+            = f.collection_radio_buttons :game_winner_kind, [['challenger', 'challenger']], :first, :first, :item_wrapper_tag => :li do |i|
+              = i.label(id: "photo-id-#{i.object.first}") { i.radio_button + image_tag("#{@battle.challenger.avatar.url(:medium)}")  + "</br>#{@battle.challenger.name}".html_safe }
+            = f.collection_radio_buttons :game_winner_kind, [['draw', 'draw']], :first, :first, :item_wrapper_tag => :li do |i|
+              = i.label(id: "photo-id-#{i.object.first}") { i.radio_button + image_tag("draw_logo.png")  + '</br>No Winner'.html_safe }
+            = f.collection_radio_buttons :game_winner_kind, [['opponent', 'opponent']], :first, :first, :item_wrapper_tag => :li do |i|
+              = i.label(id: "photo-id-#{i.object.first}") { i.radio_button + image_tag("#{@battle.opponent.avatar.url(:medium)}")  + "</br>#{@battle.opponent.name}".html_safe }
+          hr
+          h3 2. Add Scores or Competitor Names (optional)
+          .row
+            .medium-6.columns
+              = f.input :challenger_score, label: "#{@battle.challenger.name}"
+            .medium-6.columns
+              = f.input :opponent_score, label: "#{@battle.opponent.name}"
+          hr
+          h3 3. Score Detail (optional)
+          p Add more detail on the result of this battle:
+          = f.input :score_detail, label: false, as: :text, input_html: { rows: 10 }
+          = f.button :submit, 'Update Battle Results', class: 'radius tiny radius'

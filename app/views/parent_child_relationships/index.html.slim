@@ -1,0 +1,6 @@
+.panel
+  h3 My Family
+  - unless @parent_relationships.blank? && @child_relationships.blank?
+    = render partial: 'parent_child_relationships/list', locals: {child_relationships: @child_relationships, parent_relationships: @parent_relationships }
+  - else
+    p No relationships are currently in place

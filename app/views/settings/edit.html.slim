@@ -1,0 +1,18 @@
+
+.panel.settings
+  .row
+    .small-7.columns
+      h3 Account Settings
+
+    .small-5.columns
+      .right= retina_image(default: 'my-settings-logo.png', retina: 'my-settings-logo-retina.png', width: 153, height: 40)
+  br
+  = simple_form_for(@form) do |f|
+    h5 Notifications
+    = f.input :email_on_new_notification, as: :boolean, label: 'Email me when I receive a notification'
+
+    h5 Facebook Sharing
+    = f.input :share_activity_on_facebook, as: :boolean, label: 'Share my activity on Facebook'
+
+    .spacer-top
+      = f.submit "Save Settings", class: 'button radius tiny'

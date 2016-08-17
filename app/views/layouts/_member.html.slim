@@ -1,0 +1,27 @@
+.off-canvas-wrap data-offcanvas=true
+  .inner-wrap
+    nav.tab-bar.mobile.show-for-small.hide-for-large
+      = render 'layouts/member/mobile_top_nav'
+    .contain-to-grid
+      nav.top-bar.hide-for-small data-topbar="true" role="navigation" data-options="is_hover: false"
+          = render 'layouts/member/top_nav'
+    br
+    .row
+      .small-12.columns.show-for-small-only
+        = form_tag search_everything_index_path, role: 'search', method: :get do
+            = text_field_tag :site_query, @site_query, placeholder: 'Search'
+
+    aside.left-off-canvas-menu
+      = render 'layouts/member/mobile_left_nav'
+    aside.right-off-canvas-menu
+      = render 'layouts/member/mobile_right_nav'
+    a.exit-off-canvas href="#"
+    section.main.scroll-container
+      .row
+        .medium-3.large-2.columns
+          .hide-for-small
+            = render 'layouts/member/left_nav'
+        #main-container.medium-9.large-10.columns
+          = display_flash_messages
+          = yield
+    = render 'layouts/public/footer'

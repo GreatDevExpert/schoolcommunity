@@ -1,0 +1,24 @@
+h3 Report an inaccurate faculty member.
+.panel
+  .row
+    .medium-3.small-6.columns.text-center
+      .th
+        = image_tag(@fellowship.school.avatar.url(:medium))
+      p= @fellowship.school.name
+    .medium-3.small-6.columns.text-center
+      .th
+        = image_tag(@flagged_faculty_member.avatar.url(:medium))
+      p= @flagged_faculty_member.name
+
+    - if @fellowship.has_open_flag?
+      p= "We have already received confirmation #{@flagged_faculty_member.full_name} is not currently a faculty member of #{@fellowship.school.name}."
+      p Thanks for helping keep Myschool accurate!
+    - else
+      .medium-6.columns
+        h5= "#{@flagged_faculty_member.full_name} has joined #{@fellowship.school.name} as a current faculty member."
+
+        = simple_form_for [@fellowship, Flag.new] do |f|
+          = f.input :kind, as: :hidden, input_html: { value: 'Not A Current Faculty Member' }
+          = f.input :description, label: 'Comments', placeholder: "Any additional information you can provide will be helpful."
+          = f.button :submit, "Report #{@flagged_faculty_member.full_name}", class: 'button tiny button-red radius'
+        br= "If #{@flagged_faculty_member.first_name} is not really a faculty of #{@fellowship.school.name}, please let us know so we can keep Myschool accurate."

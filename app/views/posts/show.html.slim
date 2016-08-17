@@ -1,0 +1,35 @@
+= render 'shared/back_to_activity_button'
+= render 'shared/back_to_flag_manager_button'
+
+.activity
+  .row
+    .medium-1.small-2.columns.no-padding
+      = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: @post.user}
+    .medium-11.small-10.columns
+      h5
+        = link_to(@post.user.full_name, @post.user)
+        |  shared a post 
+        br
+        span = "#{time_ago_in_words(@post.created_at)} ago"
+
+      = auto_link(@post.content, html: {target: '_blank'})
+      .right
+        = render partial: 'shared/item_flagged_notice', locals: {item: @post, icon_size: :medium}
+    .row
+      .medium-8.small-8.medium-offset-1.columns.spacer-top
+        - if policy(@post).share?
+          = social_share_icons
+        | 
+      .medium-3.small-4.columns.end.spacer-top
+        - if policy(@post).destroy? || policy(@post).flag?
+          = link_to fa_icon('caret-square-o-down'), post_path(@post), class: 'right', 'data-dropdown' => "drop-#{@post.id}", 'data-options' => 'align:left'
+          ul.f-dropdown.tiny id="drop-#{@post.id}" data-dropdown-content= 'data-dropdown-content'
+            - if policy(@post).destroy?
+              li= link_to fa_icon('trash', text: 'Delete'), post_path(@post), method: :delete, data: { confirm: 'Delete your post permanently?'}
+            - if policy(@post).flag?
+              li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-post-#{@post.id}"
+
+= render partial: 'posts/comments'
+
+= render partial: 'posts/flag', locals: { post: @post}
+

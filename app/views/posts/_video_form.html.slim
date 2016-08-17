@@ -1,0 +1,28 @@
+- hide_choose_from_existing ||= false
+
+= simple_form_for video do |f|
+  = f.input :existing_video_id, as: :hidden, input_html: {class: 'existing-stuff'}
+  = hidden_field_tag :type, params[:type]
+  #video_cache_preview
+
+  .row
+    .medium-6.columns
+      = f.input :url, placeholder: 'E.g. https://www.youtube.com/watch?v=nAeUHzVp8N0'
+      label.supported-extensions
+        = " (e.g., #{Video::ACCEPTABLE_PROVIDERS.join(", ")})"
+    - unless hide_choose_from_existing
+      .medium-4.columns.end
+        .spacer-top.mobile-hide-spacer-top.small
+          = link_to "Or choose from My Videos", "#", 'data-reveal-id' => 'existing-video-target', 'data-reveal-ajax' => selector_videos_path
+
+  = f.input :title
+  = f.input :description
+  .row
+    .medium-4.columns
+      = render partial: 'posts/school_and_group_select', locals: {f: f, include_private: true, sharing_options: sharing_options.video_options, selected: @selected}
+    .medium-4.columns
+      = render partial: 'posts/year_select', locals: {f: f}
+    .medium-4.columns
+      = f.submit 'Upload Video', class: 'right button radius tiny', id: 'submit_video'
+
+#existing-video-target.stuff-target.reveal-modal data-reveal=true

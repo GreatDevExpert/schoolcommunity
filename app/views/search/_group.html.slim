@@ -1,0 +1,12 @@
+.row
+  .large-3.columns
+    = link_to(image_tag(group.avatar.url(:medium)), group, class: 'th')
+  .large-9.columns
+    h3= link_to(group.name, group)
+    table.no-border
+      tr
+        td= link_to(pluralize(hit.stored(:member_count), 'member'), members_group_path(group))
+    hr
+    ul.button-group.radius
+      = render partial: 'groups/join_group_buttons', locals: {group: group}
+      li= render partial: 'groups/rival_button', locals: {group: group}

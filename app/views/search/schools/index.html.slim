@@ -1,0 +1,13 @@
+.row
+  .medium-12.columns
+    h3 Search results
+.row
+  - if @search.results.blank? 
+    .panel.callout.text-center
+      p 
+        | No schools were found found with the keywords 
+        strong= "'#{@query.to_s}'"
+        |.
+      = link_to 'Add A New School', new_school_path, class: 'button radius'
+  - else
+    = render partial: 'search/results', locals: { search: @search }

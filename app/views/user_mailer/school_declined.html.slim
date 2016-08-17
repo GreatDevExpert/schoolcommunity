@@ -1,0 +1,6 @@
+p = "Hi #{@user.first_name},"
+
+p = "We're writing to let you know your request to add #{@school.name} to Myschool has been declined."
+
+- if @school.declined_comments.present?
+  p= simple_format(@school.declined_comments)

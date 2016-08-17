@@ -1,0 +1,34 @@
+ul.off-canvas-list
+  li
+    label Profile
+  li= link_to "View Profile", user_path(current_user)
+  li= link_to "Edit Profile", edit_user_registration_path
+  li
+    label Settings
+  li= link_to "My Scrilla", user_scrilla_transfers_path(current_user)
+  li= link_to "Settings", edit_setting_path('my')
+  li
+    label Notifications
+
+  li
+    = link_to notifications_path(filter: 'recent') do
+      | Notifications&nbsp;
+      - if notification_count > 0
+        span.alert.round.label = notification_count
+
+  - if policy(:dashboard).users? || FlaggedItemsPolicy.new(current_user, nil).index?
+    li
+      label Admin
+    - if FlaggedItemsPolicy.new(current_user, nil).index?
+      li= link_to "Flagged Items", admin_flagged_items_path(tab: 'open')
+      li= link_to "Monitor Requests", admin_monitor_requests_path
+    - if policy(:dashboard).users?
+      li= link_to "User Dashboard", admin_users_path
+      li= link_to "Suggestions Dashboard", suggestions_path
+      li= link_to "Pending Schools", admin_schools_path
+      li= link_to "Workers (Sidekiq)", admin_sidekiq_web_path, target: :blank
+
+
+  li.spacer-top
+    label
+  li= link_to "Log Out", destroy_user_session_path, method: :delete

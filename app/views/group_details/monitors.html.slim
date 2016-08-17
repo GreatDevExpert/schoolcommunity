@@ -1,0 +1,29 @@
+.row
+  .large-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    .panel
+      - if policy(@group).approve_monitor? && @group.monitor_requests.count > 0
+        h4 Monitor Requests
+        .members
+          ul.medium-block-grid-5.small-block-grid-2
+            - @group.monitor_requests.each do |membership|
+              = render layout: 'users/preview_box', locals: {user: membership.user} do
+                ul.button-group.radius
+                  li= link_to "Approve", approve_monitor_group_path(membership), method: :post, class: 'button radius button-default tiny'
+                  li= link_to "Deny", decline_monitor_group_path(membership), method: :post, class: 'button radius button-red tiny'
+
+      .row
+        .large-12.columns
+          h3= "Monitors of #{@group.name}"
+
+          - if policy(@group).show_membership?
+            .members
+            - if @monitors.blank?
+              .small-12.columns
+                p No monitors yet.
+            - else
+              ul.medium-block-grid-5.small-block-grid-2
+                = render partial: 'users/preview_box', collection: @monitors, as: :user
+          - else
+            p You must be a member to see this group's membership

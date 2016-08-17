@@ -1,0 +1,7 @@
+ul.large-block-grid-4.medium-block-grid-3.small-block-grid-2.invite-grid
+  - @friends.each do |friend|
+    li.text-center
+      .friend data-facebook-id=friend['id']
+        .photo.th
+          =image_tag friend['picture']['data']['url']
+        .name= friend['name']

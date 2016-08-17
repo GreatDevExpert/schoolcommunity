@@ -1,0 +1,7 @@
+div.notification class=(notification.read? ? 'read' : 'unread')
+  span.status
+    = link_to fa_icon('certificate'), toggle_read_status_notification_path(notification), method: :put, class: 'update-read-status'
+  | &nbsp;
+  span.body= notification.body.html_safe
+  | &nbsp;
+  p.when= "Received #{time_ago_in_words(notification.created_at)} ago"

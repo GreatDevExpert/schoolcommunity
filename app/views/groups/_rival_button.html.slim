@@ -1,0 +1,4 @@
+- if policy(group).remove_rival?
+  = link_to fa_icon("check-circle lg", text: "Rival"), '#', class: 'button tiny button-inactive radius'
+- elsif policy(group).add_rival?
+  = link_to fa_icon("plus-circle lg", text: "Mark As Rival"), add_rival_group_path(group), method: :post, class: 'button tiny radius button-default'

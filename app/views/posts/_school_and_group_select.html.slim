@@ -1,0 +1,4 @@
+- selected ||= f.object.group && f.object.group.identifier
+- selected ||= f.object.school && f.object.school.identifier
+
+= f.input :identifier, collection: sharing_options, selected: selected, label_method: "name", value_method: "identifier", include_blank: "Share with schoolies", label: false, input_html: {class: 'chosen-select'}

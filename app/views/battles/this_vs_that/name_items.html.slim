@@ -1,0 +1,65 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-medium-up
+        .row
+          .small-12.columns
+            .row
+              .small-4.columns.mini-thumbs
+                .right.th
+                  = battle_item_preview(@battle.first_item, 'small')
+              .small-4.columns.no-padding
+                center
+                  = image_tag('this_vs_that_logo.png')
+              .small-4.columns.mini-thumbs
+                .left.th
+                  = battle_item_preview(@battle.second_item, 'small')
+      .hide-for-medium-up
+        .row
+          .small-3.columns
+           .mini-thumbs.right.th
+              = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.no-padding
+            center
+              = image_tag('this_vs_that_logo_stacked.png')
+          .small-3.columns.mini-thumbs.left
+            .right.change-item-preview.th
+              = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Name Items
+        | State a battle question and label you items.
+
+  .panel
+
+    = simple_form_for @form, url: wizard_path, method: :put  do |f|
+      .row
+        .small-12.columns
+          = f.input :description, placeholder: 'E.g. Which do you like better?', label: 'Title'
+
+      .row
+        .small-6.columns
+          center
+            .th
+              = battle_item_preview(@battle.first_item).html_safe
+          
+          .spacer-top
+          = f.input :first_item_name
+
+        .small-6.columns
+          center
+            .th
+              = battle_item_preview(@battle.second_item).html_safe
+          .spacer-top
+          = f.input :second_item_name
+
+      .row
+        .small-12.columns
+          = link_to('< Back', previous_wizard_path(items: 'photos'), class: 'button radius button-blue tiny')
+
+          = f.button :submit, 'Next Step >', class: 'button radius small right'
+
+

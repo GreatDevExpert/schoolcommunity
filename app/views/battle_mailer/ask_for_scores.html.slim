@@ -1,0 +1,23 @@
+css:
+  #header {
+    height: 60px;
+  }
+
+  #header img {
+    padding: 5px;
+  }
+
+
+#header
+  center
+    = link_to(image_tag('myschool_logo_blue_green.png'), root_url)
+
+p
+  | Hey 
+  = @user.first_name
+  |,
+
+p You're School vs School battle has ended. As the battle commander, you need to update the battle to let us know who won. 
+
+
+= link_to 'Update Score Now', battle_school_vs_school_url(@battle, 'add_scores')

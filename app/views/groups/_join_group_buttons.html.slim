@@ -1,0 +1,11 @@
+- if current_user && current_user.already_associated_with_group?(group)
+  li= link_to fa_icon("check-circle lg", text: "Member"), '#', class: 'button tiny button-inactive radius'
+- elsif current_user && group.user_awaiting_approval?(current_user)
+  li= link_to fa_icon("clock-o lg", text: "Request Pending"), '#', class: 'button tiny button-inactive radius'
+- elsif group.visibility_type == 'moderated'
+  li= link_to fa_icon("plus-circle lg", text: 'Request to Join'), join_group_path(group), method: :post, class: 'button tiny button-default radius'
+- elsif current_user && group.user_invited?(current_user)
+  li= link_to fa_icon("plus-circle lg", text: 'Accept Invitation'), join_group_path(group), method: :post, class: 'button tiny button-default radius'
+  li= link_to fa_icon("plus-circle lg", text: 'Decline Invitation'), decline_invitation_group_path(group), method: :post, class: 'button tiny button-red radius'
+- else
+  li= link_to fa_icon("plus-circle lg", text: 'Join Group'), join_group_path(group), method: :post, class: 'button tiny button-default radius'

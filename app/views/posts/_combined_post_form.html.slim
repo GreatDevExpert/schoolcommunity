@@ -1,0 +1,52 @@
+- active   ||= 'share'
+- post     ||= Post.new
+- photo    ||= Photo.new
+- video    ||= Video.new
+- document ||= Document.new
+- title           ||= nil
+- hide_post       ||= false
+- hide_photo      ||= false
+- hide_video      ||= false
+- hide_document   ||= false
+- hide_top_tab    ||= false
+- hide_bottom_tab ||= false
+- hide_choose_from_existing ||= false
+- sharing_options = SharingOptionBuilder.new(current_user)
+
+#post-controller
+  - if title
+    h4= title
+  dl.tabs data-tab=true
+    - unless hide_post || hide_top_tab
+      dd class=(active == 'share' ? 'active' : '')
+        = link_to "Share", "#post-tab"
+    - unless hide_top_tab
+      dd class=(active != 'share' ? 'active' : '')
+        = link_to "#stuff-tab" do
+          span Upload
+  .tabs-content
+    - unless hide_post
+      #post-tab.content class=(active == 'share' ? 'active' : '')
+        = render partial: 'posts/post_form', locals: {post: post, sharing_options: sharing_options}
+    #stuff-tab.content class=(active != 'share' ? 'active' : '')
+      - unless hide_bottom_tab
+        dl.tabs data-tab=true
+          - unless hide_photo
+            dd class=(active == 'photo' || active == 'share' ? 'active' : '')
+              = link_to "Photo", "#photo"
+          - unless hide_video
+            dd class=(active == 'video' ? 'active' : '')
+              = link_to "Video", "#video"
+          - unless hide_document
+            dd class=(active == 'document' ? 'active' : '')
+              = link_to "Document", "#document"
+      .tabs-content
+        - unless hide_photo
+          #photo.content class=(active == 'photo' || active == 'share' ? 'active' : '')
+            = render partial: 'posts/photo_form', locals: {photo: photo, sharing_options: sharing_options, hide_choose_from_existing: hide_choose_from_existing}
+        - unless hide_video
+          #video.content class=(active == 'video' ? 'active' : '')
+            = render partial: 'posts/video_form', locals: {video:  video, sharing_options: sharing_options, hide_choose_from_existing: hide_choose_from_existing}
+        - unless hide_document
+          #document.content class=(active == 'document' ? 'active' : '')
+            = render partial: 'posts/document_form', locals: {document: document, sharing_options: sharing_options, hide_choose_from_existing: hide_choose_from_existing}

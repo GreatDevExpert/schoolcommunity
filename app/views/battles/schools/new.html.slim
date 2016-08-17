@@ -1,0 +1,13 @@
+h3 New School
+
+= simple_form_for(@school, url: battle_schools_path) do |f|
+  = f.input :name
+  = f.input :description
+  = f.input :avatar, label: 'Logo'
+  label.supported-extensions
+    = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+  
+  = hidden_field_tag :next_step, params[:next_step]
+  = hidden_field_tag :item_kind, params[:item_kind]
+
+  = f.button :submit, class: 'button radius tiny'

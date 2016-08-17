@@ -1,0 +1,8 @@
+- if user.schools.count > 0
+  .member-schools
+    h3 My Schools
+    ul.medium-block-grid-5.small-block-grid-2
+      - user.schools.each do |school|
+        = render layout: 'schools/preview_box', locals: { school: school, join_school_button: true } do
+          div= school.address.try(:line_one)
+          div= school.address.try(:city_state)

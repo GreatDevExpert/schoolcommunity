@@ -1,0 +1,22 @@
+a.close-reveal-modal &#215;
+
+h3 New Document for Battle
+= simple_form_for [@battle, @document], method: :post do |f|
+  = hidden_field_tag :next_step, params[:next_step]
+  = hidden_field_tag :item_kind, params[:item_kind]
+  - if @document.file?
+    #image_cache_preview
+      = image_tag(@document.file.url)
+  - else
+    = f.input :file, label: 'Upload File'
+
+  label.supported-extensions
+    = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+  = f.input :file_cache, as: :hidden
+  = f.input :name
+  = f.input :description
+  .row
+    .medium-4.columns
+      = f.input :year, as: :date, start_year: Date.today.year, end_year: Date.today.year - 100, discard_day: true, discard_month: true, order: [:year], label: 'What year was this document from?', prompt: 'Select Year'
+    .medium-8.columns
+      = f.submit "Upload Document", class: 'button radius right tiny'

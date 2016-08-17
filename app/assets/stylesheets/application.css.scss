@@ -1,0 +1,892 @@
+/*
+
+ *request->sehis is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ 
+ *= require_self
+ */
+
+ @import url(//fonts.googleapis.com/css?family=Roboto:400,700,300);
+ @import 'compass';
+ @import 'colors';
+ @import 'font-awesome';
+ @import 'foundation_and_overrides';
+ @import 'foundation-datetimepicker';
+ @import 'foundation-datepicker';
+ @import 'foundation-icons';
+ @import 'battle';
+ @import 'stylized-radios';
+ @import 'zurb_chosen_overrides';
+ @import 'dates';
+
+ /* Import responsive media queries at the bottom of this file */
+
+.spacer-right {
+  margin-right: 10px;
+}
+.spacer-left {
+  margin-left: 10px;
+}
+.spacer-top {
+  margin-top: 40px;
+  &.small { margin-top: 20px; }
+}
+.spacer-bottom {
+  margin-bottom: 40px;
+  &.small { margin-bottom: 20px; }
+}
+
+.note {
+  font-style: italic;
+}
+
+ul li{
+  word-wrap: break-word;
+}
+
+.red-border{
+  border: red 1px solid;
+}
+
+img.beta-blue-logo{
+  padding: 15px;
+}
+
+.tab-bar{
+  background-color: $myschoolGreen;
+  height: 50px;
+
+  .left-small, .right-small{
+    height: 50px;
+  }
+}
+
+#main-container{
+  min-height: 750px;
+  margin-top: 10px;
+}
+
+.tabs{
+  .tab-title {
+    border-right: 1px solid #ddd;
+    &:last-child { border-right: none; }
+  }
+  padding-bottom: 5px;
+  .tab-title > a {
+    padding-bottom: 10px;
+  }
+  .active a {
+    padding-bottom: 5px;
+  }
+}
+
+.sidebar.leftbar {
+  // background: $contentBackgroundColor;
+  // border: 1px solid $contentBorderColor;
+  margin-top: 0px;
+  padding: 10px 30px 10px 6px;
+  .edit-profile-link {
+    margin-top: 0.5em;
+  }
+  #sidebar-user-info {
+    padding-left: 10px;
+    a { color: $side-nav-link-color; }
+    a:hover { color: $side-nav-link-color-hover; }
+    .columns { padding: 0 5px; }
+  }
+  .side-nav {
+    li { margin-left: 1em; }
+    li { font-weight: bold; }
+    li.heading {
+      font-weight: normal;
+      a { color: #8d8d8d}
+    }
+    li.divider { border-top-color: $gray; }
+    li.divider, li.heading { margin-left: 0}
+  }
+
+}
+
+.child-relationships, .parent-relationships {
+  .user-preview-box {
+    p { margin-bottom: 0; }
+    .pending { font-size: 0.9em; font-style: italic; }
+  }
+}
+
+
+
+.responsive-table {
+  .header.inline {
+    padding-right: 1em;
+    font-weight: bold;
+  }
+  .row {
+    padding: 10px 0;
+    &.header {
+      background-color: $lightGray;
+      font-weight: bold;
+    }
+    &:nth-of-type(odd) {
+      background-color: $lightGray;
+    }
+  }
+}
+
+.off-canvas-list {
+  li.spacer-top {
+    margin-top: 1em;
+  }
+}
+
+#footer{
+  margin-top: auto;
+  padding: 30px 0;
+  background-color: $lightGray;
+  a { color: $gray; }
+}
+
+.red{
+  border: 1px red solid;
+}
+
+#side-nav-background{
+  background-color: $darkGray;
+
+  .app-sidenav-class {
+    @include side-nav(
+      // // Border color of divider
+      $divider-color: darken($darkGray, 10%),
+      // // Color of navigation links
+      // // Color of navigation links on hover
+      $link-color: $lightGray,
+      $link-color-hover: $myschoolGreen
+    );
+
+    padding: rem-calc(14 5);
+  }
+}
+
+.button-default{
+  background-color: transparent;
+  border: 1px solid $myschoolGreen !important;
+  color: $myschoolGreen;
+  @include transition-property(background-color border color);
+  @include transition-duration(300ms);
+  margin: 2px;
+}
+
+.button-default .dropdown{
+  @include dropdown-button(
+    $pip-color: $red
+  );
+}
+
+.social-icons {
+  line-height: 10px;
+  .fb-share-button { margin-right: 10px; }
+  .twitter-share-button { vertical-align: bottom; }
+}
+
+.button-blue{
+  background-color: transparent;
+  border: 1px solid $myschoolBlue !important;
+  color: $myschoolBlue;
+  @include transition-property(background-color border color);
+  @include transition-duration(300ms);
+  margin: 2px;
+
+  &:hover, &:focus {
+    background-color: $myschoolBlue;
+    color: $white;
+  }
+}
+
+.button-red{
+  background-color: transparent;
+  border: 1px solid $red !important; 
+  color: $red;
+  @include transition-property(background-color border color);
+  @include transition-duration(300ms);
+  margin: 2px;
+
+  &:hover, &:focus {
+    background-color: $red;
+    color: $white;
+  }
+}
+
+.scrilla-symbol{
+  color: $white;
+  background: $myschoolGreen;
+  padding: 1px 5px;
+  @include border-radius(50px); 
+  font-size: .8em;
+}
+
+.button-outline {
+  @include button;
+  background-color: $white;
+  border: 1px solid $myschoolGreen !important;
+  color: $myschoolGreen;
+}
+
+.button-pseudo-inactive {
+  background-color: transparent;
+  border: 1px solid $mediumGray !important; 
+  color: $mediumGray;
+  @include transition-property(background-color border color);
+  @include transition-duration(300ms);
+  margin: 2px;
+
+  &:hover, &:focus {
+    background-color: $mediumGray;
+    color: $white;
+  }
+}
+
+.button-inactive {
+  background-color: transparent;
+  border: 1px solid $mediumGray !important; 
+  color: $mediumGray;
+  @include transition-property(background-color border color);
+  @include transition-duration(300ms);
+  margin: 2px;
+
+  cursor: default;
+  pointer-events: none;
+
+  &:hover, &:focus {
+    background-color: $mediumGray;
+    color: $white;
+  }
+}
+
+.button-facebook{
+  @include button;
+  background-color: $facebookBlue;
+
+  &:hover, &:focus {
+    background-color: lighten($facebookBlue, 5%);
+  }
+}
+
+.profile-preview {
+  padding: 10px 0;
+  .school, .relationship {
+    vertical-align: center;
+    font-size: 80%;
+  }
+}
+
+.side-user-name{
+  p{
+    font-weight: bold;
+    margin: 0px;
+  }
+  span{
+    font-size: 10px;
+  }
+}
+
+.caret-wrapper{
+  font-size: .8em;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+.profile-header {
+  .name h4 { margin: 0; }
+  .member-of { margin: 0.5em 0; }
+  .scrilla-balance { margin: 0.5em 0; }
+  .buttons { margin: 0.5em 0; }
+  .th{margin-bottom: 5px; }
+
+  ul.inline-list{
+    margin-bottom: 0px;
+  }
+
+  .city-description {
+    margin: 0.5em 0;
+  }
+}
+
+.top-bar {
+  .fa { font-size: rem-calc(24) }
+}
+
+.top-bar.mobile {
+  .section {
+    text-align: center;
+    a { color: #fff; }
+    i { font-size: 30px; }
+  }
+}
+
+table.no-border{
+  border: none;
+}
+
+.hero-image-container{
+  border-top: 2px #E4F096 solid;
+  border-bottom: 2px #E4F096 solid;
+  background-color: #B2D348;
+
+  .hero-image{
+    height: 500px;
+
+    #sign_in_box{
+      margin: auto;
+      margin-top: 100px;
+      margin-bottom: 60px;
+      max-width: 400px;
+
+      h1, h2, h3, h4, h5, p{
+        // @include text-shadow(rgba(0,0,0,0.3) 1px 1px 0, rgba(0,0,0,0.3) 2px 2px 0, rgba(0,0,0,0.3) 1px 1px 0);
+        color: $myschoolGreen;
+      }
+
+      h1{
+        font-size: 1.5em;
+      }
+      h2{
+        font-size: 3em;
+      }
+
+    }
+  }
+}
+
+#logged-in-nav{
+}
+
+#logged-out-nav{
+  margin-bottom: 1px;
+}
+
+
+#homepage-detail{
+  margin-top: 30px;
+
+  i.fa-heart-o{
+    color: red;
+  }
+
+  i.fa-share-square-o{
+    color: $myschoolBlue;
+  }
+
+  i.fa-trophy{
+    color: gold;
+  }
+
+  i.fa-users{
+    color: $myschoolGreen;
+  }
+}
+
+.comment, .activity{
+  h5 span{
+    font-size: .8em;
+    color: $gray;
+  }
+  margin-bottom: 10px; 
+}
+
+.comment-container {
+  h5 { font-size: 1em; }
+  .avatar { width: 75%; }
+}
+
+
+.activity {
+  border: 1px solid $contentBorderColor;
+  background: $contentBackgroundColor;
+  margin-bottom: 20px;
+  padding: 10px;
+  .when { font-style: italic; }
+}
+
+#suspend_account{
+  font-size: .8em;
+  margin-top: 150px;
+}
+
+.large-question-mark{
+  @include border-radius(4px, 4px);
+  color: white;
+  background-color: #8BC1DB;
+  margin: auto;
+  line-height: 310px;
+  text-align: center;
+  display: block;
+  font-size: 310px;
+  height: 310px;
+  width: 310px;
+}
+
+.thumb-question-mark{
+  @include border-radius(4px, 4px);
+  color: white;
+  background-color: #8BC1DB;
+  margin: auto;
+  line-height: 50px;
+  text-align: center;
+  display: block;
+  font-size: 50px;
+  height: 50px;
+  width: 50px;
+}
+
+.big_vs{
+  border: red 1px solid;
+  max-height: 300px;
+  min-height: 100px;
+  
+  h1{
+    position: absolute;
+    vertical-align: middle;
+    color: red;
+  }
+}
+
+.scrilla-purchase-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 36px !important;
+}
+
+#notifications-page {
+  .sub-nav { margin-left: 0px }
+  .notifications {
+    .notification {
+      margin: 0.5em 0 0.2em 0;
+      border-bottom: 1px solid $lightGray;
+      &:last-child { border-bottom: none }
+      .when { font-size: 80%; color: $gray; }
+    }
+
+    .unread {
+      .status, .status a {
+        color: $myschoolGreen;
+      }
+    }
+    .read {
+      .status, .status a {
+        color: $gray;
+      }
+    }
+    .callout {
+      padding-left: 10px;
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+.top-bar-section {
+  .unlinked-icon {
+    padding: 0 16.66667px;
+    color: $white;
+    line-height: 45px;
+    background: $myschoolGreen;
+    cursor: pointer;
+    &:hover { color: $black; }
+  }
+  .notification-dropdown {
+    max-width: 20em;
+    border: 1px solid $contentBorderColor;
+    background: $contentBackgroundColor;
+    position: absolute;
+    right: 0;
+    padding: 10px 20px 0 20px;
+    text-align: left;
+    z-index: 10;
+
+    .unread {
+      .status, .status a {
+        color: $myschoolGreen;
+      }
+    }
+    .read {
+      .status, .status a {
+        color: $gray;
+      }
+    }
+
+    p, .notification {
+      font-size: 10px;
+      line-height: 1.3em;
+      margin-bottom: 1em;
+ 
+      a, a:not(.button) {
+        margin: 0;
+        padding: 0;
+        background: none;
+        line-height: 1em;
+        &:hover {
+          background: none;
+
+        }
+      }
+      .when { color: $mediumGray; font-weight: normal; }
+      .status i { font-size: 10px; }
+    }
+    .notification {
+      border-bottom: 1px solid $lightGray;
+    }
+    .link-to-all {
+      padding-top: 10px;
+      text-align: center;
+    }
+    .callout {
+      padding: 10px;
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+.panel h5 { line-height: 1.25em; }
+
+.panel.settings {
+  label > input { margin-right: 10px; }
+}
+
+.icon-wrapper {
+  .fa {
+    position: relative;
+    .badge {
+      font-size: 9px;
+      display: block;
+      position: absolute;
+      top: -.75em;
+      right: -.75em;
+      width: 2em;
+      height: 2em;
+      line-height: 2em;
+      border-radius: 50%;
+      text-align: center;
+
+      color: #fff;
+      background: #f00;
+    }
+  }
+}
+
+.facebook-payment-history {
+  .when { width: 20% }
+  .amount { width: 15% }
+}
+
+
+.datetimepicker {
+  // the error message was not showing up for game time when finalizing a battle.
+  position: relative;
+}
+
+ul.notification-toolbar {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  li {
+    background: $lightGray;
+    color: #000;
+    width: 300px;
+    float: none;
+    padding: 10px 20px;
+    font-size: 90%;
+    list-style: none;
+    a {
+      color: #000;
+      padding: 0;
+      background: none;
+    }
+  }
+}
+
+#friends-container {
+  height: 410px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  .invite-grid {
+    .friend {
+      margin: 3px;
+      cursor: pointer;
+      padding: 0.4em; 
+      .name { font-size: 0.7em; height: 2em; }
+      &:hover{ background: $lightGray; }
+
+      &.selected { border: 3px solid $myschoolGreen; margin: 0}
+    }
+  }
+}
+
+.toggle{
+  display: none;
+}
+
+.grid-text{
+  padding-top: 2px;
+  font-size: 0.7em;
+  .icons {
+    padding-left: 0.5em;
+  }
+}
+
+.vertical-margin .th{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.spirit-meter{
+  
+  p{
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  @include progress-container();
+  $bar-height: rem-calc(25);
+  background: $myschoolBlue;
+  padding: 0px;
+  & > span {
+    @include progress-meter($myschoolGreen);
+  }
+}
+
+.user-preview-box {
+  .school { font-size: 0.7em; }
+}
+
+#user-profile-icons{
+  img{
+    padding-right: 3px;
+  }
+}
+
+.sub-nav.stuff {
+    margin-bottom: 0;
+}
+.sub-nav, .sub-sub-nav {
+  dd { margin-left: 0; }
+  dt { padding-right: 5px; }
+}
+
+dl.sub-nav{
+  padding-left: 9px;
+}
+
+.sub-sub-nav {
+  @include sub-nav(
+    $font-size: rem-calc(12),
+    $active-bg: $myschoolGreen,
+    $active-bg-hover: $myschoolGreen
+  );
+  margin-bottom: 0px;
+  margin-top: 10px;
+  min-height: 60px;
+
+  .active{
+    &:hover{
+      background-color: $myschoolGreen;
+    }
+  }
+
+  dd{
+    margin-bottom: 0px;
+  }
+  input[type="text"] {
+    margin-bottom: 0px;
+    width: 125px;
+    // height: 1.5em;
+    // font-size: .6em;
+  }
+}
+
+.main-activity-text {
+  img{
+    margin-top: -5px;
+    padding-right: 10px;
+  }
+  span{
+    font-size: 15px;
+
+  }
+}
+
+.panel{
+  .cog-spacer{
+  padding-top: 5px;
+  }
+}
+
+.change-item-preview img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+#stuff_show{
+  .th{
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    img{
+      padding-bottom: 20px;
+    }
+  }
+
+  #stuff-avatars{
+    img{
+      float: right;
+      padding-left: 3px;
+    }
+  }
+}
+
+#stuff-sub-nav{
+  margin-top: 10px;
+}
+
+#post-controller {
+  &:focus, div:focus, a:focus, dd:focus { outline: 0; }
+  border: 1px solid $contentBorderColor;
+  background: $contentBackgroundColor;
+  padding: 10px 10px 0 10px;
+  #school-group-dropdown-activator { color: $mediumGray; }
+  .tabs dd a { color: $mediumGray; }
+  .tabs dd.active a { color: $body-font-color; }
+  .content { padding-bottom: 0; }
+  .button { margin-bottom: 0; }
+
+  .tabs-content .tabs dd > a { font-size: 0.8rem; }
+
+  // Fix for chosen bug not displaying when initially hidden
+  // https://github.com/harvesthq/chosen/issues/92#issuecomment-47545047
+  .chosen-container, .chosen-drop, .chosen-drop .chosen-search, .chosen-drop {
+    width: 220px !important;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+
+  .chosen-search input {
+      width: 210px !important;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+}
+
+label.supported-extensions {
+  font-size: 0.8em;
+  line-height: 0.8em;
+  margin-bottom: 1em;
+}
+
+.modal {
+  .document-preview {
+    width: 100%;
+    height: 600px;
+  }
+}
+
+.upload-header {
+  margin-bottom: 10px;
+}
+
+#image_cache_preview{
+  padding: 5px;
+  img{
+    max-width: 150px;
+    max-height: 150px;
+  }
+}
+
+input#q:focus {
+  box-shadow: none!important;
+}
+
+.button.expand {
+  padding-right: 0;
+  padding-left: 0;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.show-document {
+  .document-preview {
+    width: 100%;
+    height: 500px;
+  }
+  .document-preview-icon {
+    margin-bottom: 20px;
+  }
+}
+
+img.mybattleslogo_icon {
+  float: right;
+}
+
+a.button.info.radius.small.right.hide-for-small-only-battles {
+  float: left!important;
+  margin-top: -20px;
+}
+
+img.settings-icon {
+    width: 27px;
+    margin-left: -10px;
+}
+
+.medium-3.columns{
+  padding-left: 15px;
+  padding-right: 16px;
+}
+
+.medium-3.large-2.columns {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+a.button.radius.expand.tiny {
+  width: 80%;
+}
+
+img.battlelogo {
+  float: right;
+}
+
+a.button.info.radius.small.right.hide-for-small-only.battle {
+  display: block!important;
+  margin: auto;
+  float: none!important;
+  width: 16%;
+}
+
+
+/* Override width of the whole thing */
+.chosen-container { width:220px !important; }
+
+.fa-6x { font-size: 6em; }
+.fa-7x { font-size: 7em; }
+.fa-8x { font-size: 8em; }
+.fa-9x { font-size: 9em; }
+.fa-10x { font-size: 10em; }
+
+@import 'small_screen_overrides';
+
+// Fix Firefox off-canvas glitches
+.left-off-canvas-menu, .right-off-canvas-menu {
+  -moz-transition: transform 0ms ease 0s;
+}

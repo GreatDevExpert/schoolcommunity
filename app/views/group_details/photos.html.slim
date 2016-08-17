@@ -1,0 +1,19 @@
+.row
+  .large-12.columns
+    = render partial: 'groups/profile_header', locals: { group: @group }
+    = render partial: 'groups/tabs', locals: { group: @group }
+    = render partial: 'group_details/stuff_sub_nav'
+.panel
+  .row
+    .small-12.columns
+      h3= "#{@group.name} Photos"
+  .row
+    .small-12.columns
+      - if policy(@group).show_content?
+        = render partial: 'group_details/photo_sub_nav'
+        = render partial: 'user_details/query_controls', locals: {collection: @photos, query: @query}
+        = render partial: 'photos/thumbs', locals: { photos: @photos, custom_new_photo_path: new_group_photo_path(@group), parent_object: @group }
+      - else
+        p Must be a member to see this group's content
+
+= paginate @photos

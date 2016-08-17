@@ -1,0 +1,16 @@
+.row
+  .large-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+    = render partial: 'school_details/stuff_sub_nav'
+.panel
+  .row
+    .small-12.columns
+      h3= "#{@school.name} Documents"
+  .row
+    .small-12.columns
+      = render partial: 'school_details/document_sub_nav'
+      = render partial: 'user_details/query_controls', locals: {collection: @documents, query: @query}
+      = render partial: 'documents/list', locals: { documents: @documents, custom_new_document_path: new_school_document_path(@school), parent_object: @school } 
+
+  = paginate @documents

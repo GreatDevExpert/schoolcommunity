@@ -1,0 +1,7 @@
+h3 Adjust User's Scrilla
+
+= simple_form_for @form do |f|
+  = f.input :recipient_id, label: "Recipient User ID"
+  = f.input :amount, placeholder: 'ex: 100 or -200'
+  = f.input :message
+  = f.submit "Adjust Scrilla", class: 'button radius tiny', data: {confirm: 'Are you sure you want to add or remove this scrilla from the user?'}

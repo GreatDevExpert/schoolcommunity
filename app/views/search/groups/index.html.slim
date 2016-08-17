@@ -1,0 +1,11 @@
+.row
+  .medium-12.columns
+    h3 Search results
+.row
+  - if @search.results.blank? 
+    .panel.callout
+      | No results found with the keywords 
+      strong= "'#{@query.to_s}'"
+      |.
+  - else
+    = render partial: 'search/results', locals: { search: @search }

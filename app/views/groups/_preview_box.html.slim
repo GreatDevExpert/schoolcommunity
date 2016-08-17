@@ -1,0 +1,15 @@
+- user ||= nil
+li.text-center
+  = link_to group_path(group), class: 'th' do
+    = image_tag(group.avatar.url(:medium))
+  .grid-text
+    .right= render partial: 'shared/item_flagged_notice', locals: { item: group, icon_size: :small }
+
+
+    = link_to group.name, group_path(group)
+    - if user && user.monitor_of?(group)
+      span.icons= image_tag('monitor-icon-tiny.png')
+    - if group.visibility_type == 'private'
+      ' 
+      = fa_icon('lock')
+

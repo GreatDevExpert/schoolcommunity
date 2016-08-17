@@ -1,0 +1,5 @@
+-if PassPolicy.new(current_user, battle).edit?
+  - if current_user.already_purchased_opponent_battle_pass?(battle)
+    br= link_to "Upgrade Your #{@current_user_pass.amount} Battle Pass", edit_battle_pass_path(battle, @current_user_pass, kind: 'opponent'), 'data-reveal-id' => 'battlePassModal', 'data-reveal-ajax' => 'true', class: 'button button-blue radius expand'
+- elsif PassPolicy.new(current_user, battle).new?
+    br= link_to 'Buy Battle Pass', new_battle_pass_path(battle, kind: 'opponent'), 'data-reveal-id' => 'battlePassModal', 'data-reveal-ajax' => 'true', class: 'button button-blue radius expand'

@@ -1,0 +1,24 @@
+css:
+  #header {
+    height: 60px;
+  }
+
+  #header img {
+    padding: 5px;
+  }
+
+
+#header
+  center
+    = link_to(image_tag('myschool_logo_blue_green.png'), root_url)
+
+p
+  | Hey 
+  = @winner.first_name
+  |,
+
+p You're battle has ended and you're the winner! Great job!
+
+p Did you have fun playing myschool battles?
+
+= link_to 'Start A New Battle now', new_battle_url

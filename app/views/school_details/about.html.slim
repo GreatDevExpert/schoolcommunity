@@ -1,0 +1,17 @@
+.row
+  .large-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+.panel
+  .row
+    .small-12.columns
+      h3= "About #{@school.name}"
+      - if @school.description.present?
+        = simple_format(@school.description)
+        = link_to 'Suggest A Change To About Page', new_school_suggestion_path(@school, kind: 'about'), class: 'button info expand radius'
+
+
+      - else
+        .panel.callout
+          h4= "Nothing has been written about #{@school.name}, yet."
+        = link_to 'Suggest About Page', new_school_suggestion_path(@school, kind: 'about'), class: 'button info expand radius'

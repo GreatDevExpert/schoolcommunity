@@ -1,0 +1,20 @@
+- unless activity.trackable.blank? || activity.trackable.friend.blank?
+  - owner = activity.owner
+  - friend = activity.trackable.friend
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: owner}
+      .medium-11.small-10.columns
+        h5
+          = link_to(owner.full_name, user_path(owner))
+          |  became schoolies with 
+          = link_to friend.full_name, user_path(friend)
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+    .row
+      .medium-11.medium-offset-1.columns
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity }
+
+

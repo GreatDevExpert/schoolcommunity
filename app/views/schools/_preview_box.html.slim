@@ -1,0 +1,15 @@
+- join_school_button ||= false
+- user ||= nil
+
+li.text-center
+  = link_to(image_tag(school.avatar.url(:medium)), school, class: 'th')
+  .grid-text
+    = link_to school.name, school
+    - if user && user.monitor_of?(school)
+      span.icons= image_tag('monitor-icon-tiny.png')
+    .right= render partial: 'shared/item_flagged_notice', locals: { item: school, icon_size: :small }
+    - if block_given?
+      = yield
+    - if join_school_button
+      div= join_school_button(school)
+

@@ -1,0 +1,129 @@
+img.battle-icon{
+  max-height: 30px;
+}
+
+#challenger-winner-panel{
+ background: $myschoolGreen;
+}
+
+#opponent-winner-panel{
+ background: $myschoolBlue;
+}
+
+#draw-panel{
+ background: transparentize($lightGray, 0.10);
+}
+
+#loser-panel{
+ background: transparentize($lightGray, 0.10);
+ // @include opacity(0.7);
+}
+
+#start-battle{
+  img{
+    padding: 20px;
+  }
+}
+
+.th {
+    background: $contentBackgroundColor;
+    word-wrap: break-word;
+  }
+
+.winner{
+  @include panel(
+    $bg: $white,
+    $padding:5px
+  );
+  max-width: 160px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  color: green;
+  text-align: center;
+  font-size: 1.7em;
+  line-height: 1.5em;
+}
+
+.draw{
+  @include panel(
+    $bg: $lightGray,
+    $padding:10px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+    $adjust:true
+  );
+  text-align: center;
+}
+
+.mini-battle-preview{
+  .th{
+    margin: 5px;
+  }
+
+  .mini-thumbs img{
+    max-height: 50px;
+    max-width: 50px;
+  }
+}
+
+.flagged_icon{
+  padding: 3px;
+  color: $red;
+
+  a{
+    color: $red;
+  }
+  
+  .has-tip{
+    color: $red;
+    border-bottom: none;
+  }
+
+  p{
+    color: $red;
+    font-size: .7em;
+  }
+}
+
+#battle-preview{
+  .battle-item-name {
+    padding-top: 10px;
+  }
+}
+
+#battle-resutls{
+  .th{
+    margin-right: 5px;
+  }
+}
+
+.more-spirit-panel{
+  line-height: 1.3em;
+  color: green;
+  font-size: .8em;
+}
+
+.battle-side-column{
+  .th{
+    margin-bottom: 5px;
+    p{
+      font-size: .7em;
+      line-height: 1.3em;
+      margin-bottom: 0px;
+    }
+  }
+}
+
+.going-down{
+  margin-left: 10px;
+}
+
+.voted{
+  color: green;
+  margin-top: 5px;
+  
+  p{
+    color: green;
+    font-size: .7em;
+  }
+}

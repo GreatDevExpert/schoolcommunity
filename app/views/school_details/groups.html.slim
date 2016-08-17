@@ -1,0 +1,19 @@
+.row
+  .large-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+    
+    .panel.clearfix
+      h3
+        = @school.name
+        |  Groups
+      - if @groups.blank?
+        .panel.callout
+          h4 There are no groups yet. 
+          p= "Be the first to create a group for #{@school.name}!"
+
+
+      .groups
+        = render partial: 'groups/preview', locals: { groups: @groups, custom_new_group_path: new_group_path(group_school_id: @school.id) }
+
+    = paginate @groups

@@ -1,0 +1,66 @@
+.row
+  .medium-12.columns
+    .panel.clearfix
+      .row
+        .medium-6.columns
+          h3 Confirm Account
+          p Please confirm your account details.
+        .medium-6.columns
+          .progress.large.round
+            span.meter style="width: 25%"
+          p.text-center Step 1 of 4
+      
+    .panel.clearfix
+      h3 Profile Information
+
+      = simple_form_for @user, url: onboarding_path, method: :put do |f| 
+        = f.error_notification 
+        .form-inputs
+          .row
+            .medium-4.columns
+              .text-left
+                = image_tag(@user.avatar.url(:medium))
+                hr
+                = f.input :avatar_cache, as: :hidden
+                = f.input :avatar, label: 'Upload a different profile pic'
+                label.supported-extensions
+                  = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+
+            .medium-8.columns
+              .row
+                .medium-6.columns
+                  = f.input :first_name
+                .medium-6.columns
+                  = f.input :last_name
+              = f.input :email, required: true
+              .row
+                .medium-8.columns
+                  = f.input :city_description, required: true, label: 'My Current City'
+                .medium-4.columns
+                  = f.input :postal_code, required: true
+              .row
+                .small-12.columns
+                  = f.input :birthday, order: [:month, :day, :year], start_year: Date.today.year - 101, end_year: Date.today.year - 13
+          
+          - unless current_user.fellowships.blank? 
+            br 
+            .row
+              .medium-6.columns.spacer-top
+                h3 School Information
+            .row data-equalizer=true
+              = f.simple_fields_for :fellowships do |fs|
+                .medium-6.columns
+                  .panel id="#{fs.object.school.name.parameterize}" data-equalizer-watch=true
+                    h3= fs.object.school.name
+                    .row
+                      .medium-6.columns.role-selector
+                        = fs.input :role, collection: Fellowship::JOIN_ROLES, prompt: 'Please Select', label: 'Are you a student or alumni?'
+                      .medium-6.columns.date-selector
+                        = fs.input :graduation_date, as: :date, start_year: Date.today.year + 5, end_year: Date.today.year - 100, discard_day: true, discard_month: true, order: [:year]
+                        = fs.input :status, as: :hidden, input_html: { value: 'approved' }
+
+
+        .form-actions
+          .row
+            .medium-offset-12.columns
+              = f.submit "Next Step", class: 'right button radius tiny'

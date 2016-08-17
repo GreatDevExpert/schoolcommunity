@@ -1,0 +1,32 @@
+#start-battle
+  .row
+    .medium-12.columns
+      .panel
+        h3 Start A New Battle
+
+  .row.text-center data-equalizer=true
+    .medium-6.columns
+      .panel#start-me-vs-you data-equalizer-watch=true
+        h3 Me Vs You
+        = link_to image_tag('start_me_vs_you_logo.png'), battles_path(kind: 'me_vs_you'), method: :post
+        br= link_to 'Start', battles_path(kind: 'me_vs_you'), method: :post, class: 'button radius small'
+        p.show-for-large-up Battle it out against the rival opponent of your choice. You pick yours - they pick theirs and it's on! May the best schoolie win.
+    .medium-6.columns
+      .panel#start-this-vs-that data-equalizer-watch=true
+        h3 This vs That
+        = link_to image_tag('start_this_vs_that_logo.png'), battles_path(kind: 'this_vs_that'), method: :post
+        br= link_to 'Start', battles_path(kind: 'this_vs_that'), method: :post, class: 'button radius small'
+        p.show-for-large-up Have a question or a thought? Put it out there. You set the Battle and let your schoolies cast their votes. Get a quick answer on just about anything!.
+  .row.text-center data-equalizer=true
+    .medium-6.columns
+      .panel#start-group-vs-group data-equalizer-watch=true
+        h3 Group vs Group
+        = link_to image_tag('start_group_vs_group_logo.png'), battles_path(kind: 'group_vs_group'), method: :post
+        br= link_to 'Start', battles_path(kind: 'group_vs_group'), method: :post, class: 'button radius small'
+        p.show-for-large-up Challenge any other Myschool Group to a head to head Battle of pride. You choose your Group thing - they choose their Group thing and may the best Group win. It's on!.
+    .medium-6.columns
+      .panel#start-school-vs-school data-equalizer-watch=true
+        h3 School vs School
+        = link_to image_tag('start_school_vs_school_logo.png'), battles_path(kind: 'school_vs_school'), method: :post
+        br= link_to 'Start', battles_path(kind: 'school_vs_school'), method: :post, class: 'button radius small'
+        p.show-for-large-up Start an epic Battle against a rival school on an ACTUAL LIVE sporting event or competition. With a Battle Pass in hand, challenge the opposing school publicly and test everyone's school pride. If your school wins, you'll earn a spirit award worth double the amount of your pass - and the right to brag about it!.

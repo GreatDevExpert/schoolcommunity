@@ -1,0 +1,14 @@
+.flag-photo id="flag-photo-#{photo.id}" class="reveal-modal" data-reveal=true
+  .row
+    .large-6.columns
+      = simple_form_for [photo, Flag.new] do |f|
+        = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this photo?'
+        = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+        = f.button :submit, class: 'button radius tiny'
+    .large-6.columns
+      h5
+        | You're about to flag a photo uploaded by 
+        = photo.user.full_name
+      .text-center.photo-container
+        = image_tag(photo.file.url(:large))
+  a.close-reveal-modal &#215;

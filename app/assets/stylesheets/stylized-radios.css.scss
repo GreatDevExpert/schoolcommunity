@@ -1,0 +1,20 @@
+.stylized-radios, #battle_steps {
+  
+  label > input{ /* HIDE RADIO */
+    visibility: hidden;
+    position: absolute;
+  }
+  label > input + img{ /* IMAGE STYLES */
+    cursor: pointer;
+    border: 5px solid #ddd;
+    padding: 5px;
+
+    &:hover {
+      border: 5px solid $myschoolBlue;
+    }
+  }
+  
+  label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+    border: 5px solid $myschoolGreen;
+  }
+}

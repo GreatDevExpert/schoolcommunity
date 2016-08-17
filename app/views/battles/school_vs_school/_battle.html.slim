@@ -1,0 +1,111 @@
+.panel#battle-resutls
+  - if battle.closed?
+  .row
+    .small-12.columns
+      h3.text-center Voting Closed
+  .row.show-for-medium-up
+    .medium-6.columns
+      h4= battle.challenger.name
+      h5= battle.challenger_score unless battle.challenger_score.blank?
+
+    .medium-6.columns.text-right
+      h4= battle.opponent.name
+      h5= battle.opponent_score unless battle.opponent_score.blank?
+
+  .row.hide-for-medium-up.text-center
+    .medium-6.columns
+      h4= battle.challenger.name
+      h5= battle.challenger_score unless battle.challenger_score.blank?
+
+    .medium-6.columns
+      h4= battle.opponent.name
+      h5= battle.opponent_score unless battle.opponent_score.blank?
+
+  - if battle.score_detail.present?
+    .spacer-top
+    .panel.callout
+      h4.text-center Battle Result Details
+      = simple_format(battle.score_detail)
+
+  - else
+    .text-center
+      = status_header(battle)
+    - if battle.needs_scores? && current_user == battle.owner
+      = link_to fa_icon('pencil-square-o lg', text: 'Add Scores Now'), battle_school_vs_school_path(battle, id: 'add_scores'), class: 'button info radius expand'
+
+.panel
+  = render partial: 'battles/school_vs_school/preview', locals: { battle: battle }
+
+  .row
+    .small-6.columns.challenger-buy
+      - if current_user.scrilla_balance.can_deduct?(50)
+        = render partial: 'battles/school_vs_school/buy_challenger_pass_button', locals: { battle: battle }
+
+    .small-6.columns.opponent-buy
+      - if current_user.scrilla_balance.can_deduct?(50)
+        = render partial: 'battles/school_vs_school/buy_opponent_pass_button', locals: { battle: battle }
+      - else
+        p= "You need at least 50 Scrilla to support a team, but you only have #{current_user.scrilla_balance.balance} Scrilla."
+        .text-right
+          = link_to '$ Buy Scrilla', new_facebook_payment_path, class: 'button radius button-default'
+      center#second_item
+        h5= battle.second_item_name
+        = render partial: 'battles/second_item_vote_button', locals: {battle: battle}
+.row.panel
+  .medium-3.columns.show-for-medium-up
+    .row
+      .small-3.columns
+        = link_to image_tag(battle.challenger.avatar.small.url, class: 'th'), battle 
+      .small-9.columns
+        p Supporters
+    hr
+    = render partial: 'battles/supporter', locals: { battle_passes: battle.challenger_passes }
+
+  .medium-6.columns
+    - if policy(Comment).create?
+      .row
+        .small-12.columns
+          .comment-form
+            = simple_form_for [@commentable, @comment], remote: true do |f|
+              = f.input :content, as: :string, placeholder: 'Share your thoughts', label: false, hint: 'Enter to post'
+              .hide
+                = f.button :submit, 'Post', class: 'button tiny right radius'
+      .comments
+        .latest-comment
+        - @comments.each do |comment| 
+          = render partial: 'comments/narrow_comment', locals: { comment: comment }
+
+  .medium-3.columns.show-for-medium-up
+    .row
+      .small-3.columns
+        = link_to image_tag(battle.opponent.avatar.small.url, class: 'th'), battle 
+      .small-9.columns
+        p Supporters
+
+    hr
+    = render partial: 'battles/supporter', locals: { battle_passes: battle.opponent_passes }
+
+  .row.hide-for-large-up
+    hr
+    .small-6.columns
+      .row
+        .small-3.columns
+          .right
+            = link_to image_tag(battle.opponent.avatar.small.url, class: 'th'), battle 
+        .small-9.columns
+          p Supporters
+      hr
+      = render partial: 'battles/supporter', locals: { battle_passes: battle.challenger_passes }
+
+    .small-6.columns
+      .row
+        .small-3.columns
+          .right
+            = link_to image_tag(battle.opponent.avatar.small.url, class: 'th'), battle 
+        .small-9.columns
+          p Supporters
+    = render partial: 'battles/supporter', locals: { battle_passes: battle.opponent_passes }
+
+
+/ Do not remvoe
+div id="battlePassModal" class="reveal-modal" data-reveal=true

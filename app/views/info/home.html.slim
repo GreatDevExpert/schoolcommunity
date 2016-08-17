@@ -1,0 +1,67 @@
+- if current_user.nil?
+  .hero-image-container
+    .hero-image style="background: url(#{asset_path('myschool_green_squares.png')}) no-repeat; background-size: cover; background-position: top; "
+      .row
+        .large-12.columns
+          #sign_in_box.text-center
+            .panel
+              = image_tag('logo_myschool_blue_beta.png', class: 'beta-blue-logo')
+              p= render 'devise/shared/sign_in_with_facebook_button'
+              p
+                | By signing up, you have read and agree to our 
+                = link_to 'Terms', tos_path
+                |  and 
+                = link_to 'Data Use Policy', data_use_policy_path
+                | , including our 
+                = link_to 'Cookie Use', cookie_policy_path
+                | .
+
+  #homepage-detail.text-center
+    .row
+      .medium-12.columns
+
+        .row
+          .medium-3.columns
+            = image_tag('connecticon.png', :class => "home-icon")
+            h2 Connect
+            p Schools are the center of everything here on Myschool. Connect with a purpose to friends, parents, faculty and alumni. Stay in contact by sending comments or passing them notes. Challenge others to a Battle of your choosing. Feel great knowing Myschool is doing it’s best to help keep minors safe with many built-in security features, a user driven monitoring system and a stricly enforced flagging policy.
+          .medium-3.columns 
+            = image_tag('share.png', :class => "home-icon-two")
+            h2 Share
+            p Share photos, videos, documents, posts and more. It’s your school and it’s up to you to help build it the way you want it. You’re in control! The more you share, the better Myschool gets. Easily find, view and download what others have shared too. You can even post items for sale or trade and fundraise like never before. Curious? - Check out any other School and see what those members are up to.
+          .medium-3.columns 
+            = image_tag('groups.png', :class => "home-icon-three")
+            h2 Groups
+            p Create and join groups of almost kind you can think of - sports, hobbies, interests, social groups, classes and much more. From public groups to completely private ones on the  down low -It’s all here. Join with others who care about the things that are important to you. Share, collaborate, discuss and plan out everything in life and at your school. Reunion time?  Everything you need is right here in one place!
+          .medium-3.columns 
+            = image_tag('battles.png', :class => "home-icon-four")
+            h2 Battles
+            p Let the fun begin - Only on Myschool! Start an epic Battle against a rival school onan ACTUAL LIVE sporting event or competition. Challenge any other Myschool Group to a head to head Battle of pride. Battle it out against the rival opponent of your choice. Have a question or a thought? Put it out there. You set the Battle and let your schoolies cast their votes. Who’s better? What’s better? Let’s find out!
+        hr
+        = render 'devise/shared/sign_in_with_facebook_button'
+
+- else
+  = render partial: 'posts/combined_post_form', locals: {title: "Quick Add to Profile"}
+
+  .clearfix.spacer-top
+  p.main-activity-text.clearfix
+    = retina_image(default: 'myschool-logo-blue-green-beta.png', retina: 'myschool-logo-blue-green-beta-retina.png', width: 133, height: 40)
+    span Activity Feed
+
+  - if @activities.blank?
+
+    p
+      | There's no activity yet, but find  
+      = link_to "find your schoolies", find_friends_path
+      |  and you'll see their posts, photos, videos, documents, and battles.
+  - else
+
+
+    = render_unique_activities(@activities)
+
+
+    .row
+      .small-12.columns
+        = paginate @activities
+
+

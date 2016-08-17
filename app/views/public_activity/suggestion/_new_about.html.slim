@@ -1,0 +1,29 @@
+- unless activity.trackable.blank?
+  - suggestion = activity.trackable
+
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+      .medium-11.small-10.columns
+        h5
+          = link_to(activity.owner.full_name, activity.owner)
+          |  approved 
+          = link_to(suggestion.user.full_name_possessive, suggestion.user)
+          |  suggestion for a new about page for 
+          = link_to(suggestion.suggestible.name, suggestion.suggestible)
+          | .
+          br 
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+
+        .row
+          .medium-12.columns
+            h4
+              | New About 
+              = link_to(suggestion.suggestible.name, suggestion.suggestible)
+              |  Page
+            = simple_format(suggestion.content)
+          = link_to("View #{suggestion.suggestible.name} About Page", polymorphic_url([:about, suggestion.suggestible]), class: 'button button-blue expand radius')
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity }
+

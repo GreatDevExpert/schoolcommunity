@@ -1,0 +1,7 @@
+= simple_form_for post do |f|
+  = f.input :content, label: false, as: :string, placeholder: 'Share your thoughts here'
+  .row
+    .medium-4.columns
+      = render partial: 'posts/school_and_group_select', locals: {f: f, include_private: false, sharing_options: sharing_options.post_options, selected: @selected}
+    .medium-8.columns
+      = f.button :submit, 'Post', class: 'right button radius tiny'

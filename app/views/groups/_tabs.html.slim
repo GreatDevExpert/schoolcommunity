@@ -1,0 +1,18 @@
+.show-for-small-only
+  ul.tabs
+    = active_link_to 'Activity', group_path(group), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Members', members_group_path(group, role: 'everyone'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+
+    = active_link_to 'More', '#', class_active: 'tab-title active', 'data-dropdown' => "mobileTabMore", class_inactive: 'tab-title', :wrap_tag => :li
+    ul#mobileTabMore.f-dropdown data-dropdown-content=true
+      li= link_to 'Monitors', monitors_group_path(group)
+      li= link_to 'Battles', battles_group_path(group, filter: 'open')
+      li= link_to 'Stuff', photos_stuff_group_path(group, filter: 'all')
+
+.hide-for-small-only
+  ul.tabs
+    = active_link_to 'Activity', group_path(group), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Members', members_group_path(group, role: 'everyone'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Monitors', monitors_group_path(group), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /monitors/
+    = active_link_to 'Battles', battles_group_path(group, filter: 'open'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Stuff', photos_stuff_group_path(group, filter: 'all'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => /stuff*/

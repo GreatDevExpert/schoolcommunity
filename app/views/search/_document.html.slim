@@ -1,0 +1,26 @@
+.row
+  .small-9.columns
+    = document.preview.small_preview
+    h3= link_to document.name, document
+  .small-3.columns
+    .right.text-center
+      = link_to image_tag(document.user.avatar.url(:small)), document.user
+      br= link_to document.user.full_name, document.user
+
+    .left
+      = render partial: 'shared/item_flagged_notice', locals: {item: document, icon_size: :medium}
+
+
+.row
+  .medium-12.columns
+    - if policy(document).destroy? || policy(document).flag?
+      .spacer-top
+      .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "document-#{document.id}-dropdown", 'data-options' => 'align:left', class: 'left'
+      ul.f-dropdown.tiny id="document-#{document.id}-dropdown" data-dropdown-content='data-dropdown-content'
+        - if policy(document).destroy?
+          li= link_to fa_icon('trash', text: 'Delete document'), document_path(document), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this document?'}
+
+        - if policy(document).flag?
+          li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-document-#{document.id}"
+
+= render partial: 'documents/flag', locals: {document: document}

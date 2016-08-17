@@ -1,0 +1,33 @@
+ul.title-area
+  li.name
+    h1= link_to root_path do
+      = image_tag('myschool_411_logo_navbar.png')
+section.top-bar-section
+  ul.left
+    li.has-form
+      = render 'layouts/member/top_nav_search'
+  ul.right
+    li= link_to fa_icon("home"), root_path
+    - if FlaggedItemsPolicy.new(current_user, nil).index?
+      li.has-dropdown
+        .unlinked-icon
+          = fa_icon('shield')
+        ul.dropdown
+          li= link_to "Flagged Items", admin_flagged_items_path(tab: 'open')
+          li= link_to "Monitor Requests", admin_monitor_requests_path
+          - if policy(:dashboard).users?
+            li= link_to "User Dashboard", admin_users_path
+            li= link_to "Suggestions Dashboard", suggestions_path
+            li= link_to "Pending Schools", admin_schools_path
+            li= link_to "Workers (Sidekiq)", admin_sidekiq_web_path, target: :blank
+    li= inbox_with_badge
+    li.has-dropdown
+      .unlinked-icon
+        = fa_icon('gear')
+      ul.dropdown
+        li= link_to "View My Profile", user_path(current_user)
+        li= link_to "Edit Profile", edit_user_registration_path
+        li= link_to "My Scrilla", user_scrilla_transfers_path(current_user)
+        li= link_to "Settings", edit_setting_path('my')
+        li.divider
+        li= link_to "Log Out", destroy_user_session_path, method: :delete

@@ -1,0 +1,4 @@
+- if policy(school).remove_rival?
+  = link_to fa_icon("check-circle lg", text: "Rival"), '#', class: 'button tiny button-inactive radius'
+- elsif policy(school).add_rival?
+   = link_to fa_icon("plus-circle lg", text: "Mark As Rival"), add_rival_school_path(school), method: :post, class: 'button tiny radius button-default'

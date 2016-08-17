@@ -1,0 +1,12 @@
+- if policy(group).edit?
+  - unless current_user.super_admin?
+    .left
+      = link_to 'Step Down As A Monitor', step_down_as_monitor_group_path(group), method: :post, class: 'button radius tiny'
+- elsif current_user.has_pending_monitor_request_for(group)
+  .left
+    .button.radius.tiny Monitor Request Pending
+- else
+  - unless current_user.super_admin?
+    .left
+      = link_to 'Request To Become A Monitor', new_monitor_request_group_path(group), method: :post, class: 'button radius tiny'
+  hr

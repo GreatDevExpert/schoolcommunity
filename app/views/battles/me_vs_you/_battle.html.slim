@@ -1,0 +1,9 @@
+.panel
+  center
+    = status_header(battle)
+  
+  - if battle.challenge_pending? && current_user == battle.opposing_user 
+    br= link_to 'Accept Challenge', battle_me_vs_you_url(battle, 'pick_that'), class: 'button radius expand'
+
+.panel
+  = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }

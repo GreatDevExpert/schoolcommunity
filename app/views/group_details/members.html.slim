@@ -1,0 +1,33 @@
+.row
+  .large-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    .panel.clearfix
+      .row
+        .small-12.columns
+          h3= "Members of #{@group.name}"
+          = render partial: 'group_details/member_sub_nav', locals: {group: @group}
+      - if policy(@group).show_membership?
+        .members
+          - if @members.blank?
+            .small-12.columns
+              p No members yet.
+          - else
+            ul.medium-block-grid-5.small-block-grid-2
+              - if @role == 'pending'
+                - @members.each do |member|
+                  = render layout: 'users/preview_box', locals: {user: member} do
+                    ul.button-group.radius
+                      li= link_to "Approve", approve_join_group_path(Membership.find_by(group: @group, user: member, role: 'awaiting_approval')), method: :post, class: 'button button-default tiny'
+                      li= link_to "Deny", decline_join_group_path(Membership.find_by(group: @group, user: member, role: 'awaiting_approval')), method: :post, class: 'button button-red tiny'
+              - elsif @role == 'everyone' && policy(@group).approve_monitor?
+                - @members.each do |member|
+                  - if @group.user_is_monitor?(member)
+                    = render partial: 'users/preview_box', locals: {user: member}
+                  - else
+                    = render layout: 'users/preview_box', locals: {user: member} do
+                      = link_to "Promote to Monitor", approve_monitor_group_path(Membership.find_by(group: @group, user: member)), method: :post, class: 'button button-default tiny radius'
+              - else
+                = render partial: 'users/preview_box', collection: @members, as: :user
+      - else
+        p You must be a member to see this group's membership

@@ -1,0 +1,36 @@
+- if @photos.present? || params[:q].present?
+  #photo-selector.stuff-selector
+    .row
+      .medium-offset-8.medium-3.columns.end
+        = form_tag params.merge(page: ''), class: 'ajax', method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+
+    - if params[:q].present?
+      .panel.callout
+        = "Your results have been filtered using the term: '#{params[:q]}'"
+        '
+        = link_to 'Reset Filters', params.merge(page: '', q: '')
+      - unless @photos.present?
+        p No matches were found
+
+    = form_tag "#", id: 'photo-selector-form' do
+      ul.medium-block-grid-5.small-block-grid-2
+        - @photos.each do |photo|
+          li.text-center.stylized-radios
+            = label_tag "existing_photo_id_#{photo.id}"
+              = radio_button_tag('existing_photo_id', photo.id, false, id: "existing_photo_id_#{photo.id}", 'data-preview-url' => image_path(photo.file.url(:small)))
+              = image_tag(photo.file.url(:medium))
+            .grid-text
+              .right= render partial: 'shared/item_flagged_notice', locals: { item: photo, icon_size: :small }
+
+              = truncate(photo.name, length: 17)
+              - if photo.visibility_type == 'private'
+                '
+                = fa_icon('lock')
+      = submit_tag "Choose this Photo", class: 'button radius small right disabled'
+    = paginate(@photos)
+- else
+  p You haven't uploaded any photos to your profile yet.
+
+
+.close-reveal-modal &#215;

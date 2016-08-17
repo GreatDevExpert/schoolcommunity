@@ -1,0 +1,39 @@
+- unless activity.trackable.blank?
+  - video = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+      .medium-11.small-10.columns
+        .right
+          = render partial: 'shared/item_flagged_notice', locals: {item: video, icon_size: :medium}
+        h5
+          = link_to(activity.owner.full_name, activity.owner)
+          |  shared a video titled 
+          = link_to(video.title, url_for(video))
+          br 
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        .row.text-left
+          .medium-12.columns
+            / = VideoInfo.new(video.url).embed_code(iframe_attributes: { width: "250", height: "150"}, url_attributes: { autoplay: 0 }).html_safe
+            = link_to(image_tag(video.thumbnail_medium, class: 'th'), video)
+            br
+            br
+            p= link_to('Quick Watch', '#', 'data-reveal-id' => "videoModal-#{video.id}", 'data-reveal-ajax' => video_stuff_path(video)) 
+            div id="videoModal-#{video.id}" class="reveal-modal large" data-reveal="true">
+
+        .row
+          .medium-12.columns
+            - if policy(video).destroy? || policy(video).flag?
+              .spacer-top
+              .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "video-#{video.id}-dropdown", 'data-options' => 'align:left', class: 'left'
+              ul.f-dropdown.tiny id="video-#{video.id}-dropdown" data-dropdown-content='data-dropdown-content'
+                - if policy(video).destroy?
+                  li= link_to fa_icon('trash', text: 'Delete video'), video_path(video), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this video?'}
+
+                - if policy(video).flag?
+                  li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-video-#{video.id}"
+              = render partial: 'videos/flag', locals: {video: video}
+
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }

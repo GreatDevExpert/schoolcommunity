@@ -1,0 +1,35 @@
+- if @videos.present? || params[:q].present?
+  #video-selector.stuff-selector
+    .row
+      .medium-offset-8.medium-3.columns.end
+        = form_tag params.merge(page: ''), class: 'ajax', method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+
+    - if params[:q].present?
+      .panel.callout
+        = "Your results have been filtered using the term: '#{params[:q]}'"
+        '
+        = link_to 'Reset Filters', params.merge(page: '', q: '')
+      - unless @videos.present?
+        p No matches were found
+
+    = form_tag "#", id: 'video-selector-form' do
+      ul.medium-block-grid-5.small-block-grid-2
+        - @videos.each do |video|
+          li.text-center.stylized-radios
+            = label_tag "existing_video_id_#{video.id}"
+              = radio_button_tag('existing_video_id', video.id, false, id: "existing_video_id_#{video.id}", 'data-preview-url' => image_path(video.thumbnail_small))
+              = image_tag(video.thumbnail_medium)
+            .grid-text
+              .right= render partial: 'shared/item_flagged_notice', locals: { item: video, icon_size: :small }
+
+              = truncate(video.name, length: 17)
+              - if video.visibility_type == 'private'
+                '
+                = fa_icon('lock')
+      = submit_tag "Choose this video", class: 'button radius small right disabled'
+    = paginate(@videos)
+- else
+  p You haven't uploaded any videos to your profile yet.
+
+.close-reveal-modal &#215;

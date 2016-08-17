@@ -1,0 +1,18 @@
+h3 Invite Facebook Friends
+- if @friends.present?
+  p Select friends to send them an invitation
+
+  = text_field_tag 'name', '', placeholder: "Quick search", id: 'invite-friends-search'
+
+  .panel
+    #friends-container
+      = render 'friends'
+
+    .spacer-top.text-right
+      = link_to "Send Invites", "#", id: 'invitation-button', class: 'button radius disabled'
+      = link_to "Skip", root_url, class: 'button radius disabled'
+
+
+- else
+  p Unable to find any invitable friends on Facebook
+  = link_to "Skip", root_url, class: 'button button-blue radius'

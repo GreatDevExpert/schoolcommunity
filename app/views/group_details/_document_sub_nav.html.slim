@@ -1,0 +1,8 @@
+dl.sub-sub-nav.clearfix
+  = active_link_to 'All', documents_stuff_group_path, class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd
+  dd
+    = link_to fa_icon('search'), '#', class: 'search-icon'
+    .toggle
+      = form_tag params.merge(page: ''), method: :get do
+        = text_field_tag :q, @query, placeholder: 'Narrow Results'
+        = hidden_field_tag :filter, params[:filter]

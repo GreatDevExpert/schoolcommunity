@@ -1,0 +1,26 @@
+.show-for-small-only
+  ul.tabs
+    = active_link_to 'Activity', school_path(school), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Members', members_school_path(school, role: 'student'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+
+    = active_link_to 'More', '#', class_active: 'tab-title active', 'data-dropdown' => "mobileTabMore", class_inactive: 'tab-title', :wrap_tag => :li
+    ul#mobileTabMore.f-dropdown data-dropdown-content=true
+      li= link_to 'Monitors', monitors_school_path(school)
+      li= link_to 'Groups', groups_school_path(school)
+      li= link_to 'Battles', battles_school_path(school, filter: 'open')
+      li= link_to 'Stuff', photos_stuff_school_path(school, filter: 'all')
+      li= link_to 'About', about_school_path(school)
+
+.hide-for-small-only
+  ul.tabs
+    = active_link_to 'Activity', school_path(school), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Members', members_school_path(school, role: 'student'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Monitors', monitors_school_path(school), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /monitors/
+
+    = active_link_to 'Groups', groups_school_path(school), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+    = active_link_to 'Battles', battles_school_path(school, filter: 'open'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+
+    = active_link_to 'Stuff', photos_stuff_school_path(school, filter: 'all'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => /stuff*/
+    = active_link_to 'About', about_school_path(school), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => /about*/
+
+

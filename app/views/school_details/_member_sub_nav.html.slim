@@ -1,0 +1,21 @@
+
+dl.sub-nav
+  = active_link_to 'Students', members_school_path(school, role: 'student'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=student/
+  = active_link_to 'Alumnus', members_school_path(school, role: 'alumni'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=alumni/
+  = active_link_to 'Parents', members_school_path(school, role: 'parent'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=parent/
+  = active_link_to 'Faculty', members_school_path(school, role: 'faculty'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /role=faculty/
+
+  dd
+    = link_to fa_icon('search'), '#', class: 'search-icon'
+    .toggle
+      = form_tag params.merge(page: ''), method: :get do
+        = text_field_tag :q, @query, placeholder: 'Narrow Results'
+        = hidden_field_tag :filter, params[:filter]
+        = hidden_field_tag :role, params[:role]
+        = hidden_field_tag :grad_year, params[:grad_year]
+
+- if @search.facet(:graduation_year).rows.size > 1
+  ul.inline-list
+    li Narrow By Year:
+    - @search.facet(:graduation_year).rows.each do |facet|
+      li= link_to "#{facet.value.titleize} (#{number_with_delimiter(facet.count, :delimiter => ',')})", params.merge(filter_by: facet.value)

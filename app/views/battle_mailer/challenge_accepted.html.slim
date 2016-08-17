@@ -1,0 +1,20 @@
+css:
+  #header {
+    height: 60px;
+  }
+
+  #header img {
+    padding: 5px;
+  }
+
+
+#header
+  center
+    = link_to(image_tag('myschool_logo_blue_green.png'), root_url)
+
+p= "#{@opposing_user.first_name} has accepted your challenge. Voting is now open."
+
+= link_to('Start Voting ', battle_url(@battle) , class: 'button radius')
+
+.panel 
+  h3 Maybe a preview down here?

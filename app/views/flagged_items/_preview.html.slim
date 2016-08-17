@@ -1,0 +1,46 @@
+- if flagged_object.is_a?(Video)
+  .flex-video
+    = VideoInfo.new(flagged_object.url).embed_code(iframe_attributes: { width: '350', height: 300, "data-key" => "value" }).html_safe
+- elsif flagged_object.is_a?(Photo)
+  = link_to(image_tag(flagged_object.file.url(:large)), flagged_object)
+- elsif flagged_object.is_a?(Document)
+  = link_to flagged_object.file.url, class: 'button large' do
+    | Download 
+    = flagged_object.name  
+    |  
+    = fa_icon('cloud-download')
+- elsif flagged_object.is_a?(Comment)
+  .panel
+    h5 User's Comment:
+    p= flagged_object.content
+- elsif flagged_object.is_a?(Group)
+  h5 This group's entire profile was flagged.
+  = link_to("View #{flagged_object.name} Profile", flagged_object, class: 'button info radius')
+
+- elsif flagged_object.is_a?(School)
+   h5 This school's profile was flagged.
+- elsif flagged_object.is_a?(User)
+   h5 This user's entire profile was flagged.
+- elsif flagged_object.is_a?(Battle)
+  = render partial: "battles/#{flagged_object.kind}/preview", locals: { battle: flagged_object }
+  = link_to('View This Battle', flagged_object, class: 'button button-blue radius')
+  - if policy(flagged_object).override_scores?
+    = link_to('Edit/Override Battle Results', edit_admin_battle_path(flagged_object), class: 'button button-red radius')
+
+- elsif flagged_object.is_a?(Fellowship)
+  h5
+    = "#{flagged_object.user.full_name} has been reported as "
+    strong= "not being a #{flagged_object.role} "
+    = " of #{flagged_object.school.name}. Would you like to remove them from the list of #{flagged_object.role}?"
+  .row
+    .small-6.columns.text-center
+      .th
+        = image_tag(flagged_object.school.avatar.url(:medium))
+      p= flagged_object.school.name
+    .small-6.columns.text-center
+      .th
+        = image_tag(flagged_object.user.avatar.url(:medium))
+      p= flagged_object.user.name
+    = link_to 'Search Google', "https://www.google.com/#q=#{flagged_object.user.full_name} #{flagged_object.role} #{flagged_object.school.name}", target: :_blank, class: 'button button-blue tiny radius'
+
+

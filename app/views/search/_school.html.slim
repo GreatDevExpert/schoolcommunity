@@ -1,0 +1,14 @@
+.row
+  .large-3.columns
+    = link_to(image_tag(school.avatar.url(:medium)), school, class: 'th')
+  .large-9.columns
+    h3= link_to(school.name, school)
+    p= school.address.try(:city_state)
+    table.no-border
+      tr
+        td= link_to(pluralize(hit.stored(:user_count), 'person'), members_school_path(school))
+        td= link_to(pluralize(hit.stored(:group_count), 'group'), groups_school_path(school))
+    hr
+    ul.button-group.radius
+      li=join_school_button(school)
+      li=render partial: 'schools/rival_button', locals: {school: school}

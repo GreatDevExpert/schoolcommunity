@@ -1,0 +1,4 @@
+dl.sub-nav.stuff#stuff-sub-nav
+  = active_link_to 'Photos', photos_stuff_user_path(@user, filter: 'profile'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => :exclusive
+  = active_link_to 'Videos', videos_stuff_user_path(@user, filter: 'profile'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => :exclusive
+  = active_link_to 'Documents', documents_stuff_user_path(@user, filter: 'profile'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => :exclusive

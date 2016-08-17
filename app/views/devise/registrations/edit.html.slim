@@ -1,0 +1,68 @@
+.panel.clearfix
+  .row
+    .small-7.columns
+      h3 Edit Profile
+
+    .small-5.columns
+      .right= retina_image(default: 'my-account-logo.png', retina: 'my-account-logo-retina.png', width: 153, height: 40)
+
+  .spacer-top
+  .stuff-uploader
+    = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+      = f.input :existing_photo_id, as: :hidden, input_html: {class: 'existing-stuff'}
+      = f.error_notification
+      .form-inputs
+        .row
+          .medium-4.columns
+            .panel.callout.text-center Your profile Photo must clearly show your face
+            .text-left
+              = image_tag(@user.avatar.url(:medium), class: 'th')
+              hr
+
+              #image_cache_preview
+              = f.input :avatar, label: 'Update profile pic'
+              label.supported-extensions
+                = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+
+
+              = link_to "Or choose from My Photos", "#", 'data-reveal-id' => 'existing-photo-target', 'data-reveal-ajax' => selector_photos_path
+            
+          .medium-8.columns
+            .row
+              .medium-6.columns
+                = f.input :first_name
+              .medium-6.columns
+                = f.input :last_name
+            = f.input :email, required: true, label: 'Email for Myschool notifications'
+            .row
+              .medium-8.columns
+                = f.input :city_description, label: 'My Location'
+              .medium-4.columns
+                = f.input :postal_code
+            = f.input :birthday, order: [:month, :day, :year], start_year: Date.today.year - 101, end_year: Date.today.year - 13
+
+      = f.submit "Update Profile", class: 'right button radius tiny'
+
+
+.panel.clearfix
+  = render partial: 'list_schools', locals: {user: @user}  
+
+
+  .rival-search id="newSchoolSearch" class="reveal-modal" data-reveal=true
+    .row
+      .medium-12.columns
+        h3 Search and join a school
+        = form_tag search_schools_path, class: 'navbar-form', role: 'search', method: :get do
+          = text_field_tag :school_query, params[:school_query], placeholder: 'Search'
+          = submit_tag "Search", class: 'button radius'
+
+- if current_user.parent_relationships.present? || current_user.child_relationships.present?
+  .panel.clearfix
+    h3 My Family
+    = render partial: 'parent_child_relationships/list', locals: {child_relationships: current_user.child_relationships, parent_relationships: current_user.parent_relationships}
+
+#suspend_account.right
+  = link_to "Suspend my account", cancel_my_account_users_path, data: { confirm: "Are you sure you want to cancel your account?" }, id: 'cancel_account'
+
+
+#existing-photo-target.stuff-target.reveal-modal data-reveal=true

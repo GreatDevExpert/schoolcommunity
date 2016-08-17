@@ -1,0 +1,49 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .large-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  .th
+                    = image_tag(@battle.challenger.avatar.small)
+                  .th
+                    = battle_item_preview(@battle.first_item, 'small')
+              .large-6.columns.no-padding
+                center
+                  = battle_logo(@battle.kind)
+              .large-3.columns.mini-thumbs
+                .left
+                  span.change-item-preview.th
+                    = battle_item_preview(@battle.second_item, 'small')
+                  .th
+                    = image_tag(@battle.opponent.avatar.small)
+      .hide-for-large-up
+        .row
+          .small-3.columns.mini-thumbs
+            .th
+              = image_tag(@battle.challenger.avatar.small, class: 'left')
+            .th
+              = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.text-center.no-padding
+            = link_to(image_tag('group_vs_group_logo_stacked.png'), @battle)
+          .small-3.columns.mini-thumbs
+            .right
+              .th
+                = image_tag(@battle.opponent.avatar.small)
+              span.change-item-preview.th
+                = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Select Your Item
+        h4= "'#{@battle.description}'"
+        | Select and item to compete against.
+
+
+  = render partial: 'battles/this_vs_that/pick_items', locals: { item_id: :second_object_id, item_kind: :second_object_type, show_back_button: false }
+

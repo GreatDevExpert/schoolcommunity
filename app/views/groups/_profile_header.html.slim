@@ -1,0 +1,66 @@
+.group-header.panel
+  .row data-equalizer=true
+    .medium-2.small-4.columns data-equalizer-watch=true
+      .clearfix.text-center
+        = link_to image_tag(group.avatar.url(:medium)), group, class: 'th'
+      = link_to fa_icon('cog 2x'), '#', class: 'cog-spacer left', 'data-dropdown' => "group-#{group.id}", 'data-options' => 'align:bottom'
+      ul.f-dropdown.tiny id="group-#{group.id}" data-dropdown-content= 'data-dropdown-content'
+        - if policy(group).send_invitation?
+          li=  link_to fa_icon('users', text: 'Invite members'), new_invitation_group_path(group)
+        - if policy(group).edit?
+          li= link_to fa_icon('edit', text: 'Edit'), edit_group_path(group)
+        - if policy(group).new_monitor_request?
+          li= link_to fa_icon('user lg', text: 'Request to be Monitor'), new_monitor_request_group_path(group), method: :post
+        - if policy(group).leave_as_monitor?
+          li= link_to fa_icon('minus-circle lg', text: 'Resign as monitor'), step_down_as_monitor_group_path(group), method: :post, data: { confirm: "Are you sure you want to resign as a monitor of #{group.full_name}?" }
+        - if policy(group).leave_group?
+          li= link_to fa_icon('minus-circle lg', text: 'Leave Group'), leave_group_path(group), method: :post, data: { confirm: "Are you sure you want to leave #{group.name}?" }
+        - if policy(group).confirm_destroy?
+          li= link_to fa_icon('trash-o lg', text: 'Close Group'), confirm_destroy_group_path(group) 
+        - if policy(group).remove_rival?
+          li= link_to fa_icon("minus-circle lg", text: "Unrival"), remove_rival_group_path(group), method: :post
+      .text-center
+        = render partial: 'shared/item_flagged_notice', locals: {item: group, icon_size: :medium}
+
+    .medium-10.small-8.columns data-equalizer-watch=true
+
+      h4
+        = link_to group.full_name, group
+        - if group.visibility_type == 'private'
+          |  
+          = fa_icon('lock')
+
+      .member-of
+        = link_to(pluralize(group.members.size, 'member'), members_group_path(group))
+        |  | 
+        = link_to(pluralize(group.monitors.size, 'monitors'), monitors_group_path(group))
+
+      ul.button-group.radius.right
+        =render partial: 'groups/join_group_buttons', locals: {group: group}
+        li=render partial: 'groups/rival_button', locals: {group: group}
+    
+
+      .caret-wrapper
+        = link_to fa_icon('caret-square-o-down lg'), '#', 'data-dropdown' => "flag-#{group.id}", 'data-options' => 'align:left', class: 'right'
+      ul.f-dropdown.tiny id="flag-#{group.id}" data-dropdown-content= 'data-dropdown-content'
+        li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-group-#{group.id}", remote: true
+
+
+.flag-comment id="flag-group-#{group.id}" class="reveal-modal" data-reveal=true
+  .row
+    .large-6.columns
+      = simple_form_for [group, Flag.new] do |f|
+        = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this group?'
+        = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+        = f.button :submit, class: 'button radius tiny'
+    .large-6.columns
+      h5= "You're flagging #{group.full_name}."
+
+      .row
+        .large-2.medium-2.small-4.columns
+          = image_tag(group.avatar.url(:small))
+
+        .large-10.medium-10.small-8.columns
+          = auto_link(@content, :html => { :target => '_blank' })
+
+  a.close-reveal-modal &#215;

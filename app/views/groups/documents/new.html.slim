@@ -1,0 +1,9 @@
+.row
+  .large-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    = render partial: 'group_details/stuff_sub_nav'
+    hr
+    .upload-header
+      = retina_image(default: 'my-documents-logo.png', retina: 'my-documents-logo-retina.png', width: 192, height: 40)
+    = render partial: 'posts/combined_post_form', locals: {active: 'document', document: @document, hide_post: true, hide_video: true, hide_photo: true, hide_top_tab: true, hide_bottom_tab: true, title: 'Upload a Document'}

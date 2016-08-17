@@ -1,0 +1,8 @@
+h3 Inbox
+
+= render partial: 'tabs'
+
+
+- @conversations.each do |conversation|
+  div
+    = conversation.subject

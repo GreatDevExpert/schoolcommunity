@@ -1,0 +1,5 @@
+ul.tabs
+  = active_link_to 'Inbox', conversations_path(folder: 'inbox'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+  = active_link_to 'Sent', conversations_path(folder: 'sent'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+  = active_link_to 'Drafts', conversations_path(folder: 'drafts'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive
+  = active_link_to 'Trash', conversations_path(folder: 'trash'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :li, active: :exclusive

@@ -1,0 +1,65 @@
+= render 'shared/back_to_activity_button'
+= render 'shared/back_to_flag_manager_button'
+
+- if @photo.hidden?
+  .alert-box.alert
+    p.text-center Photo Is Hidden
+
+#stuff_show.panel.clearfix
+  .row
+    .small-12.medium-6.columns
+      .left
+        = render partial: 'shared/item_flagged_notice', locals: {item: @photo, icon_size: :medium}
+      h4= @photo.name
+    .small-8.medium-4.columns
+      #stuff-avatars
+        = link_to(image_tag(@photo.user.avatar.small.url, 'data-tooltip' => 'user', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "#{@photo.user.full_name}"), @photo.user)
+        = link_to image_tag(@group.avatar.small.url, 'data-tooltip' => 'group', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "#{@group.name}"), @group if @group.present?
+        = link_to image_tag(@school.avatar.small.url, 'data-tooltip' => 'school', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "#{@school.name}"), @school if @school.present?
+    .small-4.medium-2.columns
+      = image_tag('my_photos_logo.png', class: 'right')
+  .row
+    .medium-12.columns
+      .text-center
+        .th
+          .show-for-small-only
+            = image_tag(@photo.file.url(:large))
+          .hide-for-small-only
+            = link_to(image_tag(@photo.file.url(:large)), '#', 'data-reveal-id' => "photoModal-#{@photo.id}")
+            div id="photoModal-#{@photo.id}" class="reveal-modal large" data-reveal=""
+              br
+              = image_tag(@photo.file.url)
+              a.close-reveal-modal &#215;
+    .row
+      .medium-6.columns
+        - if policy(@photo).share?
+          = social_share_icons
+      .medium-6.columns
+        .right
+          ul.button-group.radius.right
+            li= link_to @photo.file.url, class: 'button button-blue tiny radius', target: :_blank do
+              = fa_icon('cloud-download', text: 'Download')
+            - if policy(@photo).duplicate?
+              li= link_to duplicate_photo_path(@photo), method: :post, class: 'button button-blue tiny radius' do
+                = fa_icon('plus-circle', text: 'Save to my profile ')
+            - if policy(@photo).repost?
+              li
+                = link_to repost_photo_path(@photo), method: :post, class: 'button radius button-blue tiny' do
+                  = fa_icon('retweet', text: 'Repost')
+
+  - if policy(@photo).destroy? || policy(@photo).flag?
+  .row
+    .medium-12.columns
+      .spacer-top
+      .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "photo-dropdown", 'data-options' => 'align:left'
+      ul.f-dropdown.tiny id="photo-dropdown" data-dropdown-content='data-dropdown-content'
+        - if policy(@photo).destroy?
+          li= link_to fa_icon('trash', text: 'Delete photo'), photo_path(@photo), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this photo?'}
+
+        - if policy(@photo).flag?
+          li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-photo-#{@photo.id}"
+
+= render partial: 'photos/flag', locals: {photo: @photo}
+
+.spacer-top
+  = render partial: 'comments'

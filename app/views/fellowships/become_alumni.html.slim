@@ -1,0 +1,17 @@
+.panel
+    .row
+      .medium-2.columns
+        = link_to image_tag(@school.avatar.url(:medium)), @school, class: 'th'
+      .medium-10.columns
+        h3= @school.full_name
+        h4= @school.address.city_state unless @school.address.blank?
+        = link_to(pluralize(@school.users.count, 'member'), members_school_path(@school))
+        |  | 
+        = link_to(pluralize(@school.groups.count, 'group'), groups_school_path(@school))
+        |  | 
+        = link_to(pluralize(@school.monitors.count, 'monitors'), monitors_school_path(@school))
+        = simple_form_for [@school, @fellowship], url: approve_become_alumni_school_fellowship_path, method: :put do |f|
+          = f.input :school_id, as: :hidden
+          = f.input :role, as: :hidden
+          p Are you sure you want to change your status from student to alumni?
+          div= f.submit "Become an alumni", class: 'button radius tiny'

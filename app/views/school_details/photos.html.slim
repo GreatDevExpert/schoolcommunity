@@ -1,0 +1,16 @@
+.row
+  .small-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+    = render partial: 'school_details/stuff_sub_nav'
+.panel
+  .row
+    .small-12.columns
+      h3= "#{@school.name} Photos"
+  .row
+    .small-12.columns
+      = render partial: 'school_details/photo_sub_nav'
+      = render partial: 'user_details/query_controls', locals: {collection: @photos, query: @query}
+      = render partial: 'photos/thumbs', locals: { photos: @photos, custom_new_photo_path: new_school_photo_path(@school), parent_object: @school }
+      
+  = paginate @photos

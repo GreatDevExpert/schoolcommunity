@@ -1,0 +1,72 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .small-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  span.change-item-preview.th
+                    = image_tag("question-mark-box-small.png")
+                  .th
+                    = image_tag(@battle.challenger.avatar.small.url)
+              .large-6.columns.no-padding
+                center
+                  = battle_logo(@battle.kind)
+              .large-3.columns.mini-thumbs
+                .left
+                  .th
+                    = image_tag(@battle.opponent.avatar.small.url)
+                  .th
+                    = image_tag("question-mark-box-small.png")
+
+      .hide-for-large-up
+        .row
+          .small-3.columns.mini-thumbs
+            .right
+              .th
+                = image_tag(@battle.challenger.avatar.small.url)
+              .th
+                = image_tag("question-mark-box-small.png")
+          .small-6.columns.no-padding
+            center
+              = image_tag('school_vs_school_logo_stacked.png')
+          .small-3.columns.mini-thumbs
+            .left
+              .th
+                = image_tag(@battle.opponent.avatar.small.url)
+              .change-item-preview.th
+                = image_tag("question-mark-box-small.png")
+
+  .panel.text-center
+    .row
+      .medium-6.columns
+        h3 Select Gender & Sport
+      .medium-6.columns
+        p What kind of battle will this be?
+
+  .panel
+    = simple_form_for @form, url: wizard_path, method: :put do |f|
+      ul.small-block-grid-9.text-center.show-for-medium-up
+
+        = f.collection_radio_buttons :sport_category, Battle::SPORT_CATEGORIES, :first, :first, :item_wrapper_tag => :li do |i|
+          = i.label(id: "photo-id-#{i.object.first}", class: 'selectable-battle-thumb') { i.radio_button + image_tag("#{i.object.last}_sport.png") }
+
+      ul.small-block-grid-3.text-center.hide-for-medium-up
+
+        = f.collection_radio_buttons :sport_category, Battle::SPORT_CATEGORIES, :first, :first, :item_wrapper_tag => :li do |i|
+          = i.label(id: "photo-id-#{i.object.first}", class: 'selectable-battle-thumb') { i.radio_button + image_tag("#{i.object.last}_sport.png") }
+
+      = f.input :sport_name, collection: SPORT_OPTIONS, label_method: :first, value_method: :first, include_blank: true, input_html: { class: 'chosen-select', data: { placeholder: 'Select One' } }
+      = f.input :team_level, label: 'Team Level (optional)', placeholder: 'E.g. Varsity or Junior Varsity'
+
+      .row
+        .small-12.columns
+          .pull-right
+            = f.button :submit, 'Next Step >', class: 'button radius small'
+          .pull-left
+            = link_to('< Back', previous_wizard_path(items: 'rival_schools'), class: 'button radius button-blue tiny')
+
+div id="myModal" class="reveal-modal" data-reveal=true

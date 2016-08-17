@@ -1,0 +1,24 @@
+- battle = activity.trackable
+
+- unless battle.blank? || battle.challenge_pending? == false
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: battle.owner}
+      .medium-11.small-10.columns
+        h5
+          = link_to(battle.owner.full_name, battle.owner)
+          |  has challenged you to a battle. Pick an item and see who will win!
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        hr
+        .row
+          .small-12
+            = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+
+            - if battle.challenge_pending?
+              = link_to 'Pick An Item', battle_me_vs_you_url(battle, 'pick_that'), class: 'button radius expand'
+            - else 
+              = link_to 'View Full Results', battle, class: 'button button-default radius expand'
+
+            = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }

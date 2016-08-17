@@ -1,0 +1,8 @@
+.row.profile-preview
+  .small-2.columns
+    = image_tag(request.user.avatar.url(:small))
+  .small-10.columns
+    .name
+      = link_to request.user.full_name, user_path(request.user)
+    .right
+      = link_to('Approve', approve_monitor_school_fellowship_path(@school, request), class: 'button radius tiny', method: :post)

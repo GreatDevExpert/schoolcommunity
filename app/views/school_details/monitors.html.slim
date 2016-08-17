@@ -1,0 +1,27 @@
+.row
+  .large-12.columns
+    = render partial: 'schools/profile_header', locals: {school: @school}
+    = render partial: 'schools/tabs', locals: {school: @school}
+    .panel
+      .row
+        .large-12.columns
+          = render partial: 'school_details/monitor_sub_nav', locals: {school: @school}
+
+          - if policy(@school).approve_monitor? && @school.monitor_requests.count > 0
+              h4 Monitor Requests
+              .members
+                ul.medium-block-grid-5.small-block-grid-2
+                  - @monitor_requests.each do |request|
+                    = render layout: 'users/preview_box', locals: {user: request.user} do
+                      ul.button-group.radius
+                        li= link_to "Approve", approve_monitor_school_fellowship_path(@school, request), method: :post, class: 'button radius button-default tiny'
+                        li= link_to "Deny", decline_monitor_school_fellowship_path(@school, request), method: :post, class: 'button radius button-red tiny'
+              hr
+
+          .members
+            ul.medium-block-grid-5.small-block-grid-2
+              = render partial: 'users/preview_box', collection: @monitors, as: :user
+          - if @monitors.blank?
+            .large-12.columns
+              h3 No monitors yet.
+

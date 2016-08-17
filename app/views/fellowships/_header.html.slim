@@ -1,0 +1,12 @@
+.panel
+  .row
+    .medium-2.columns
+      = link_to image_tag(@school.avatar.url(:medium)), @school, class: 'th'
+    .medium-10.columns
+      h3= @school.full_name
+      h4= @school.address.city_state unless @school.address.blank?
+      = link_to(pluralize(@school.users.count, 'member'), members_school_path(@school))
+      |  | 
+      = link_to(pluralize(@school.groups.count, 'group'), groups_school_path(@school))
+      |  | 
+      = link_to(pluralize(@school.monitors.count, 'monitors'), monitors_school_path(@school))

@@ -1,0 +1,52 @@
+.panel
+  .row
+    .medium-6.columns
+      h4= "Flag ##{flag.id}"
+      p= " #{time_ago_in_words(flag.created_at)} ago"
+
+    .medium-6.columns
+      .right
+        h4= "#{flag.flaggable.try(:name)}"
+
+    hr
+
+    .medium-6.columns
+      p  
+        | Reported By: 
+        = link_to(flag.reporting_user.full_name, flag.reporting_user)
+      p 
+        | Content Type: 
+        - if flag.parent_object.is_a?(Fellowship)
+          = flag.parent_object.class
+        - else
+          = link_to(flag.parent_object.class, flag.parent_object)
+      p 
+        | Flag Type: 
+        = flag.kind.titleize
+
+    .medium-6.columns
+      p  
+        | Offending User: 
+        -if flag.offending_user.present?
+          = link_to(flag.offending_user.full_name, flag.offending_user)
+        - else
+          | N/A
+
+      p 
+        | Action Taken: 
+        - if flag.is_open? 
+          | None
+        - else
+          = flag.action_taken.titleize
+          |  by 
+          = link_to(flag.resolving_user.full_name, flag.resolving_user) 
+      p
+        | Related To: 
+        - if flag.monitorable.present? && flag.monitorable.is_a?(School)
+          = link_to(flag.monitorable.name, school_path(flag.monitorable))
+        - elsif flag.monitorable.present? && flag.monitorable.is_a?(Group)
+          = link_to(flag.monitorable.name, group_path(flag.monitorable))
+
+        - else
+          | My School Admin
+    = link_to('View Flag', admin_flagged_item_path(flag), class: 'button button-default tiny expand radius')

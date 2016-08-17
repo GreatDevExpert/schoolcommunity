@@ -1,0 +1,44 @@
+.sidebar.leftbar
+  section#sidebar-user-info
+    .row
+      .small-12.medium-4.columns.no-padding
+        = link_to image_tag(current_user.avatar.url(:small)), current_user, class: 'th'
+        .text-center.edit-profile-link
+          = link_to "Edit", edit_user_registration_path
+      .small-12.medium-8.columns
+        .side-user-name
+          p= link_to current_user.full_name, current_user
+  br
+
+  nav
+    ul.side-nav
+      li.divider
+
+      li.heading= link_to "My Scrilla", user_scrilla_transfers_path(current_user)
+      - if current_user && current_user.scrilla_balance
+        li= link_to  user_scrilla_transfers_path(current_user) do
+          = formatted_scrilla_balance(current_user.scrilla_balance.balance)
+      li= link_to "Purchase Scrilla", new_facebook_payment_path, class: 'button expand radius tiny info'
+      li.divider
+
+      li.heading= link_to "My Battles", battles_user_path(current_user, filter: 'open')
+      li= link_to "Open Battles", battles_user_path(current_user, filter: 'open')
+      li= link_to "Closed Battles", battles_user_path(current_user, filter: 'closed')
+      li= link_to "Start New Battle", new_battle_path, class: 'button radius expand tiny'
+      li.divider
+
+      li.heading= link_to "My Account", current_user
+      li= link_to root_path do
+        = retina_image(default: 'myschool-logo-tiny-blue-green.png', retina: 'myschool-logo-tiny-blue-green-retina.png', width: 60, height: 19)
+        '  Feed
+      li= link_to "My Schoolies", friends_user_path(current_user)
+      li= link_to "My Schools", schools_user_path(current_user)
+      li= link_to "My Groups", groups_user_path(current_user)
+      li= link_to "My Rivals", rivals_user_path(current_user, filter: 'school')
+      li.divider
+
+      li.heading= link_to "My Stuff", photos_stuff_user_path(current_user, filter: 'profile')
+      li= link_to "My Photos", photos_stuff_user_path(current_user, filter: 'profile')
+      li= link_to "My Videos", videos_stuff_user_path(current_user, filter: 'profile')
+      li= link_to "My Documents", documents_stuff_user_path(current_user, filter: 'profile')
+

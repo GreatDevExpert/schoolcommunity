@@ -1,0 +1,8 @@
+- if user.scrilla_balance
+  li= link_to new_scrilla_transfer_path(recipient_id: @user.id) do
+    span.scrilla-balance
+      = formatted_scrilla_balance(user.scrilla_balance.balance)
+    span.send
+      |  (Send Scrilla)
+
+

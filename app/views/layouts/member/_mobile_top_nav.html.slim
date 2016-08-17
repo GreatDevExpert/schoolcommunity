@@ -1,0 +1,9 @@
+.section.left-small
+  = link_to '<span></span>'.html_safe, '#', class: 'left-off-canvas-toggle menu-icon'
+
+.selection.middle.tab-bar-section
+  h1= link_to root_path do
+    = retina_image(default: 'myschool_411_logo_navbar.png', retina: 'myschool_411_logo_navbar-retina.png', width: 141, height: 56)
+.section.right-small
+  = link_to '#', class: 'right-off-canvas-toggle menu-icon' do
+    = image_tag('gear-512.png', :class => "settings-icon")

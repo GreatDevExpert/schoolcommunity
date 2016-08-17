@@ -1,0 +1,35 @@
+.row
+  .medium-12.columns
+    .panel.clearfix
+      .row
+        .medium-6.columns
+          h3 Some people you might know
+          h5 Let's make some "schoolies"! (aka - school friends)
+
+        .medium-6.columns
+          .progress.large.round
+            span.meter style="width: 75%"
+          p.text-center Step 3 of 4
+
+    = form_tag params.merge(page: ''), method: :get do
+      = text_field_tag :query, @query, placeholder: 'Search schoolie recommendations'
+    .panel
+      - unless @query.blank?
+        .panel.callout
+          | Your recommended friends have been filtered using the term: 
+          strong= "#{@query} "
+          = link_to 'Reset Filters', params.merge(page: '', query: '')
+
+      ul.medium-block-grid-5.small-block-grid-2
+        - @recommendations.each do |recommendation|
+          - unless recommendation.recommended_friend.nil?
+            = render partial: 'users/preview_box', locals: {user: recommendation.recommended_friend, include_friend_request_button: true}
+
+    .row
+      .small-12.columns
+        = paginate @recommendations
+
+    .right
+      ul.button-group.radius
+        li= link_to 'Skip', next_wizard_path, class: 'button info right radius tiny'
+        li= link_to 'Next Step', next_wizard_path, class: 'button right radius tiny'

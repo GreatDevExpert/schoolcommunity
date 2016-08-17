@@ -1,0 +1,28 @@
+= render 'shared/back_to_flag_manager_button'
+
+- if @user.suspended?
+  .alert-box.alert
+    .text-center 
+      p Account Suspended
+      - if policy(@user).unsuspend_account?
+        = link_to "Un-Suspend Account", unsuspend_account_user_path(@user), class: 'button info radius tiny'
+
+.row
+  .medium-12.columns
+    = render partial: 'users/profile_header', locals: { user: @user }
+    = render partial: 'tabs', locals: { user: @user }
+    - if policy(@user).new_post?
+      .clearfix
+        = simple_form_for Post.new do |f|
+          = f.input :content, label: false, input_html: { rows: 4 }, placeholder: "Share your thoughts with your schoolies."
+          = f.button :submit, 'Post', class: 'button tiny right radius'
+    - if current_user == @user
+      h3= retina_image(default: 'my-activity-logo.png', retina: 'my-activity-logo-retina.png', width: 140, height: 40)
+    - else
+      h3= "#{@user.first_name_possessive} Activity"
+
+    = render_unique_activities(@activities)
+    
+    .row
+      .small-12.columns
+        = paginate(@activities)

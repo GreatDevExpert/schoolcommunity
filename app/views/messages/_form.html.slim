@@ -1,0 +1,8 @@
+.row
+  .small-12.columns
+    = simple_form_for [user, message] do |f|
+      p
+        | Recipient: 
+        = user.full_name
+      = f.input :message, as: :text, label: "Note"
+      = f.submit "Send", class: 'button radius right tiny'

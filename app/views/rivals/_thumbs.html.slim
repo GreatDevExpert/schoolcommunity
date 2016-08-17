@@ -1,0 +1,26 @@
+ul.medium-block-grid-5.small-block-grid-2
+  - if @user == current_user
+    li= link_to(image_tag('new_rival_logo.png'), '#', 'data-reveal-id' => "newRival", remote: true)
+  - if rivals.first.is_a?(Rivalry)
+    - rivals.each do |rival|
+      / overwrite the object with the type
+      - rival = rival.send(rival.grab_kind)
+      li.text-center
+        = link_to(image_tag(rival.avatar.url(:medium)), rival, class: 'th')
+        p.grid-text
+          = rival.name
+  - else
+    - rivals.each do |rival|
+      li.text-center
+        = link_to(image_tag(rival.avatar.url(:medium)), rival, class: 'th')
+        .grid-text
+          .right= render partial: 'shared/item_flagged_notice', locals: { item: rival, icon_size: :small }
+          = link_to rival.name, rival
+
+.rival-search id="newRival" class="reveal-modal" data-reveal=true
+  .row
+    .medium-12.columns
+      h3 Search for Schools, Groups or People
+      = form_tag search_everything_index_path, class: 'navbar-form', role: 'search', method: :get do
+        = text_field_tag :query, params[:query], placeholder: 'Search'
+        = submit_tag "Search", class: 'button radius'

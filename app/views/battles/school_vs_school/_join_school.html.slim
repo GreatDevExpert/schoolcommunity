@@ -1,0 +1,13 @@
+.row id= "school_id_#{school.id}"
+
+  .small-3.columns
+    = image_tag(school.avatar.url(:medium))
+  .small-9.columns
+    h3= school.name
+    p= school.address.try(:city_state)
+    hr
+    ul.button-group.radius
+      - Fellowship::STANDARD_ROLES.each do |fellowship_role, fellowship_role_downcased|
+        li= link_to "Join as #{fellowship_role}", '#', class: "button button-default small radius fellowship_type_select", data: { school_id: school.id, fellowship_role: fellowship_role_downcased }
+    .clearfix
+  hr

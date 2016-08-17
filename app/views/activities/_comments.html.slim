@@ -1,0 +1,17 @@
+.comment-container
+  / this is a bit dirty, but need to assign ids so comments can be added to the right spot without the page reload
+  - object_id = "#{activity.id}"
+  .parent-object data={ 'object-class-and-id' => "#{object_id}" }
+
+  - if policy(Comment).create?
+    .row
+      div id="comment-form-#{object_id}" data={ 'object-class-and-id' => "#{object_id}" }
+        = simple_form_for [commentable, Comment.new], remote: true do |f| 
+          .small-12.columns
+            = f.input :content, as: :string, placeholder: 'Share your thoughts', label: false, hint: 'Enter to post'
+            .hide
+              = f.button :submit, 'Post', class: 'button tiny right'
+
+  .comments data-max-comments=5
+    div id= "latest-comment-#{object_id}" 
+    = render partial: 'comments/comment', collection: commentable.comments.limit(200)

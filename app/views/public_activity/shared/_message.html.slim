@@ -1,0 +1,8 @@
+- if defined?(owner_name) && owner_name && defined?(owner_link) && owner_link
+  = link_to owner_name, owner_link
+- if message
+  span.message = " #{message} "
+- if defined?(recipient_name) && recipient_name && defined?(recipient_link) && recipient_link
+  = link_to recipient_name, recipient_link
+- if activity
+  span.when = " #{time_ago_in_words(activity.created_at)} ago"

@@ -1,0 +1,98 @@
+@media only screen and (max-width: 40em) {
+  .spacer-top.mobile-hide-spacer-top { margin-top: 0; }
+  .spacer-bottom.mobile-hide-spacer-bottom { margin-bottom: 0; }
+
+  .hide-for-medium-up.inline {
+    display: inline !important;
+  }
+
+  ul.off-canvas-list {
+    li {
+      a {
+        padding-left: 2em;
+        font-weight: bold;
+        font-size: 0.8em;
+        color: $darkGray;
+        &:hover { background: $lightGray; }
+      }
+      a.edit-link {
+        font-weight: normal;
+      }
+      label {
+        font-size: 1rem;
+      }
+      .button { margin: 0.25rem 2em; }
+      .button.default {
+        color: $button-font-color;
+        &:hover {
+          background: scale-color($button-bg-color, $lightness: $button-function-factor);
+        }
+      }
+    }
+  }
+
+  .hero-image-container{
+    .hero-image{
+      height: 160px;
+
+      #tagline{
+        margin-bottom: 20px;
+        margin-top: 10px;
+
+        h1{
+          font-size: 1.6em;
+        }
+      }
+    }
+  }
+
+  .profile-header {
+    .button.tiny {
+      padding-top: 0.425rem;
+      padding-right: 0.5rem;
+      padding-bottom: 0.4875rem;
+      padding-left: 0.5rem;
+      font-size: 0.5rem;
+    }
+  }
+
+  .sub-nav, .sub-sub-nav {
+    dd {
+      margin-left: 0;
+      a { padding: 5px; }
+    }
+  }
+
+  .tabs{
+    line-height: 1.2em;
+    padding-bottom: 10px;
+    .tab-title > a {
+      padding-bottom: 2px;
+    }
+    .active a {
+      border-bottom: 2px solid $myschoolGreen;
+      padding-bottom: 0;
+    }
+  }
+
+  #stuff_show{
+    #stuff-avatars{
+      img{
+        float: none;
+      }
+    }
+  }
+
+
+  .button-group .button {
+    padding: 0.6rem 0.3rem;
+  }
+  .profile-header .button.tiny {
+    padding: 0.6rem 0.3rem;
+  }
+  .button.tiny.dropdown {
+    padding-right: 1rem;
+    &:after { border: none }
+  }
+}
+

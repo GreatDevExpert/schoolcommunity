@@ -1,0 +1,112 @@
+#battle-preview
+
+  .row.hide-for-medium-up
+    .small-12.text-center.columns
+      = image_tag('group_vs_group_logo.png')
+      hr
+      - if battle.challenger.present?
+        .row.text-center
+          .small-6.columns
+            .left= render partial: 'shared/item_flagged_notice', locals: {item: battle, icon_size: :medium}
+            = link_to image_tag(battle.challenger.avatar.small.url), battle.challenger, class: 'th'
+          .small-6.columns
+            = link_to image_tag(battle.opponent.avatar.small.url), battle.opponent, class: 'th'
+          - if battle.opponent.present?
+            .small-6.columns
+              p= link_to battle.challenger.name, battle.challenger
+            .small-6.columns
+              p= link_to battle.opponent.name, battle.opponent
+
+  .show-for-medium-up
+    - if battle.challenger.present?
+      .row.text-center
+        .medium-3.small-6.columns
+          .left= render partial: 'shared/item_flagged_notice', locals: {item: battle, icon_size: :medium}
+
+          p= link_to battle.challenger.name, battle.challenger
+        .medium-1.small-6.columns
+          = link_to image_tag(battle.challenger.avatar.small.url), battle.challenger, class: 'th'
+
+        - if battle.opponent.present?
+          .medium-4.small-0.columns.no-padding
+              = link_to(image_tag('group_vs_group_logo.png'), battle)
+          .medium-1.small-6.columns
+            = link_to image_tag(battle.opponent.avatar.small.url), battle.opponent, class: 'th'
+          .medium-3.small-6.columns
+            p= link_to battle.opponent.name, battle.opponent
+
+  .row.text-center
+    .small-12.columns
+      .spacer-top
+      h3= battle.description
+
+  .row.text-center data-equalizer=true
+    .small-6.columns
+      .panel.clearfix id="#{win_or_lose_id(battle, battle.challenger)}" data-equalizer-watch=true
+        .row
+          .medium-2.columns.show-for-medium-up.vertical-margin
+            = link_to image_tag(battle.challenger.avatar.small.url), battle.challenger, class: 'th'
+            = link_to image_tag(battle.owner.avatar.small.url), battle.owner, class: 'th'
+
+            - if current_user && current_user.voted_on_first_item?(battle)
+              .voted
+                = fa_icon('check-square-o 3x')
+                p Voted
+          .medium-10.columns
+            .th
+              = battle_item_preview(battle.first_item).html_safe
+              h5.text-center.battle-item-name= battle.first_item_name
+
+            = winner_panel(battle, battle.challenger)
+
+    .small-6.columns
+      .panel.clearfix id="#{win_or_lose_id(battle, battle.opponent)}" data-equalizer-watch=true
+        .row
+          .medium-10.columns
+            .th
+              = battle_item_preview(battle.second_item).html_safe
+              h5.text-center.battle-item-name
+                - if battle.second_item_name.present?
+                  = battle.second_item_name
+                - else
+                  | Battle item pending
+
+            = winner_panel(battle, battle.opponent)
+
+          .medium-2.columns.show-for-medium-up.vertical-margin
+            = link_to image_tag(battle.opponent.avatar.small.url), battle.opponent, class: 'th'
+            - if battle.opposing_user.present?
+              = link_to image_tag(battle.opposing_user.avatar.small.url), battle.opposing_user, class: 'th'
+            - else
+              = image_tag("question-mark-box-small.png", class: 'left th')
+
+
+            - if current_user && current_user.voted_on_second_item?(battle)
+              .voted
+                = fa_icon('check-square-o 3x')
+                p Voted
+
+  = draw_panel(battle)
+
+  = render partial: '/battles/vote_meter', locals: { battle: battle }
+
+  .row
+    .small-6.columns
+      center#first_item
+        = render partial: 'battles/first_item_vote_button', locals: {battle: battle}
+
+    .small-6.columns 
+      center#second_item
+        = render partial: 'battles/second_item_vote_button', locals: {battle: battle}
+
+  - unless battle.ends_at.nil? || battle.ends_at.in_time_zone < Time.current
+    .row
+      .small-12.columns
+        .text-center
+          = "#{distance_of_time_in_words battle.ends_at.in_time_zone, Time.current} and voting closes"
+  = render partial: 'battles/carrot_dropdown', locals: { battle: battle }
+  hr
+
+
+
+

@@ -1,0 +1,18 @@
+.flag-comment id="flag-user-#{user.id}" class="reveal-modal" data-reveal=true
+  .row
+    .large-6.columns
+      = simple_form_for [user, Flag.new] do |f|
+        = f.input :kind, collection: User::FLAG_REASONS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this person?'
+        = f.input :description, label: false, placeholder: "Optionally, provide details related to this incident."
+        = f.button :submit, class: 'button radius tiny'
+    .large-6.columns
+      h5= "You're flagging the user account of #{user.full_name}."
+
+      .row
+        .large-2.medium-2.small-4.columns
+          = image_tag(user.avatar.url(:small))
+
+        .large-10.medium-10.small-8.columns
+          = auto_link(@content, :html => { :target => '_blank' })
+
+  a.close-reveal-modal &#215;

@@ -1,0 +1,46 @@
+
+.row
+  .medium-12.columns
+    .panel.clearfix
+      .row
+        .medium-6.columns
+          h3 Find A School
+          - if @new_fellowhsip.role == 'student'
+            h5 Let us know when you plan to graduate
+          - elsif @new_fellowhsip.role == 'alumni'
+            h5 Tell us when you graduated
+
+        .medium-6.columns
+          .progress.large.round
+            span.meter style="width: 50%"
+          p.text-center Step 2 of 4
+
+    .panel.clearfix
+      = simple_form_for @user, url: onboarding_path, method: :put do |f| 
+        .row
+          .medium-3.columns
+            .right
+              = image_tag(@school.avatar.url(:medium), class: 'th')
+              p.text-center= @school.name
+          .medium-4.columns.end
+            = f.error_notification 
+            = f.simple_fields_for @new_fellowhsip do |fs|
+              = fs.input :role, input_html: { value: @role }, as: :hidden
+              = fs.input :school_id, input_html: { value: @school.id }, as: :hidden
+
+              - if @new_fellowhsip.role == 'student'
+                = fs.input :graduation_date, as: :date, start_year: @new_fellowhsip.earliest_valid_graduation_year, end_year: @new_fellowhsip.latest_valid_graduation_year, discard_day: true, discard_month: true, order: [:year], input_html: {class: 'chosen-select'}, label: (safe_join ["My Graduation Year ", link_to("(?)", '#', 'data-reveal-id' => 'graduation_chart')])
+              - elsif @new_fellowhsip.role == 'alumni'
+                = fs.input :graduation_date, as: :date, start_year: @new_fellowhsip.earliest_valid_graduation_year, end_year: @new_fellowhsip.latest_valid_graduation_year, discard_day: true, discard_month: true, order: [:year], input_html: {class: 'chosen-select'}, label: "My Graduation Year"
+
+          .row.spacer-top
+            .medium-offset-12.columns
+              .right
+                ul.button-group.radius
+                  li= f.submit "Add Another School", params: { add_another_school: 'true' }, class: 'right info button radius tiny'
+                  li= f.submit "Next Step", class: 'right button radius tiny'
+
+
+#graduation_chart.reveal-modal data-reveal=true
+  = render partial: 'info/graduation_chart'
+  a.close-reveal-modal &#215;

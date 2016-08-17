@@ -1,0 +1,36 @@
+- unless activity.trackable.blank?
+  - photo = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+      .medium-11.small-10.columns
+        .right
+          = render partial: 'shared/item_flagged_notice', locals: {item: photo, icon_size: :medium}
+        .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "photo-#{photo.id}-dropdown", 'data-options' => 'align:right', class: 'right'
+        h5
+          = link_to(activity.owner.full_name, activity.owner)
+          |  shared a photo named 
+          = link_to(activity.trackable.name, activity.trackable)
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+
+        .row.text-left
+          .medium-12.columns
+            = link_to(image_tag(photo.file.url(:medium)), photo, class: 'th')
+
+        .row
+          .medium-12.columns
+            - if policy(photo).destroy? || policy(photo).flag?
+              .spacer-top
+              ul.f-dropdown.tiny id="photo-#{photo.id}-dropdown" data-dropdown-content='data-dropdown-content'
+                - if policy(photo).destroy?
+                  li= link_to fa_icon('trash', text: 'Delete photo'), photo_path(photo), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this photo?'}
+
+                - if policy(photo).flag?
+                  li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-photo-#{photo.id}"
+              = render partial: 'photos/flag', locals: {photo: photo}
+
+
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }

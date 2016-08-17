@@ -1,0 +1,12 @@
+h3 Buy Scrilla
+p= "$1 = #{formatted_scrilla_balance(100)}".html_safe
+.require-facebook-frame data-app-id=ENV["FACEBOOK_APP_ID"]
+  ul.medium-block-grid-2
+    - SCRILLA_PLANS.each do |quantity|
+      li
+        = form_tag("/facebook_payments", method: :create, class: 'facebook-pay-form') do
+          = hidden_field_tag :id, @facebook_payment.id
+          = hidden_field_tag :quantity, quantity
+          = hidden_field_tag :request_id, @facebook_payment.uuid
+          = button_tag(type: 'submit', class: 'button expand large radius button-default scrilla-purchase-button') do
+           = formatted_scrilla_balance(quantity, html: false).html_safe

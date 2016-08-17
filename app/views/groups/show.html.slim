@@ -1,0 +1,32 @@
+= render 'shared/back_to_activity_button'
+= render 'shared/back_to_flag_manager_button'
+
+- if @group.hidden?
+  .alert-box.alert
+    .text-center 
+      p Group Hidden
+
+.row
+  .small-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    - if policy(@group).post_content?
+      .clearfix
+        = simple_form_for [@group, Post.new] do |f|
+          = f.input :content, label: false, input_html: { rows: 4 }, placeholder: "Share your thoughts with #{@group.name}."
+          = f.submit 'Post', class: 'button radius right tiny'
+
+    h3= "#{@group.name} Activity"
+    - if policy(@group).show_content?
+      - if @activities.present?
+        = render_unique_activities(@activities)
+        .row
+          .small-12.columns
+            = paginate(@activities)
+      - else
+        .panel
+          p No activity yet
+
+    - else
+      .panel
+        p You must be a member to see this group's activity

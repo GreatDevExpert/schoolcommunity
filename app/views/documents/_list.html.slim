@@ -1,0 +1,14 @@
+ul.medium-block-grid-5.small-block-grid-2
+  - if policy(parent_object).new_post?
+    li= link_to(image_tag('new_document_logo.png'), custom_new_document_path, id: 'new-document')
+  - documents.each do |document|
+    li.text-center
+      = link_to document, class: 'th' do 
+        = document.preview.small_preview
+      .grid-text
+        .right= render partial: 'shared/item_flagged_notice', locals: { item: document, icon_size: :small }
+        = link_to truncate(document.name, length: 25), document
+
+        - if document.visibility_type == 'private'
+          '
+          = fa_icon('lock')

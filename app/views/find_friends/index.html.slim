@@ -1,0 +1,36 @@
+h3 Find People you might know
+
+- if !@query.blank? || @recommendations.present?
+  p Myschool is better with more schoolies. Here is a list of people you might know.
+  = form_tag params.merge(page: ''), method: :get do
+    = text_field_tag :query, @query, placeholder: 'Narrow recommendations'
+
+  ul.inline-list
+    li View By Type:
+    li= link_to 'Students', params.merge(page: '0', query: 'student')
+    li= link_to 'Faculty', params.merge(page: '0', query: 'faculty')
+    li= link_to 'Alumnus', params.merge(page: '0', query: 'alumni')
+    li= link_to 'Parents', params.merge(page: '0', query: 'parent')
+
+  .panel
+    - unless @query.blank?
+      .panel.callout
+        | Your recommended friends have been filtered using the term: 
+        strong= "#{@query} "
+        = link_to 'Reset Filters', params.merge(page: '', query: '')
+    ul.medium-block-grid-5.small-block-grid-2
+      - @recommendations.each do |recommendation|
+        - unless recommendation.recommended_friend.nil?
+          = render layout: 'users/preview_box', locals: {user: recommendation.recommended_friend} do
+            = information_for_connection_type(recommendation.recommended_friend, recommendation.connection_type)
+            = friend_request_button(recommendation.recommended_friend, class: 'tiny')
+- else
+  p Unable to find any recommendations for you at this time.  Check back soon as new people are joining every day!
+
+.row
+  .small-12.columns
+    = paginate @recommendations
+
+    .panel.text-center
+      h4 Looking for somebody not on MySchool yet? 
+      = link_to 'Invite your friends from Facebook', invite_friends_path, class: 'button info radius'

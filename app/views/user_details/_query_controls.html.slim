@@ -1,0 +1,7 @@
+- unless query.blank?
+  .panel.callout
+    = "Your results have been filtered using the term: '#{query}'"
+    |  
+    = link_to 'Reset Filters', params.merge(page: '', q: '')
+- if collection.blank? && query.present?
+  h3= "No results for '#{query}'"

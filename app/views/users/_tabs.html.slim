@@ -1,0 +1,22 @@
+.show-for-small-only
+  ul.tabs
+    = active_link_to 'My Activity', user_path(user), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+    = active_link_to 'My Schoolies', friends_user_path(user), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+
+    = active_link_to 'More <i class="fa fa-angle-down"></i>'.html_safe, '#', class_active: 'tab-title active', 'data-dropdown' => "mobileTabMore", class_inactive: 'tab-title', :wrap_tag => :li
+    ul#mobileTabMore.f-dropdown data-dropdown-content=true
+      li= link_to 'My Schools', schools_user_path(user)
+      li= link_to 'My Groups', groups_user_path(user)
+      li= link_to 'My Rivals', rivals_user_path(user, filter: 'school')
+      li= link_to 'My Battles', battles_user_path(filter: 'open')
+      li= link_to 'My Stuff', photos_stuff_user_path(user, filter: 'profile')
+
+.hide-for-small-only
+  ul.tabs
+    = active_link_to 'My Activity', user_path(user), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+    = active_link_to 'My Schoolies', friends_user_path(user), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+    = active_link_to 'My Schools', schools_user_path(user), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+    = active_link_to 'My Groups', groups_user_path(user), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+    = active_link_to 'My Rivals', rivals_user_path(user, filter: 'school'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => :exclusive
+    = active_link_to 'My Battles', battles_user_path(filter: 'open'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, :active => :exclusive
+    = active_link_to 'My Stuff', photos_stuff_user_path(user, filter: 'profile'), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :li, :active => /stuff*/

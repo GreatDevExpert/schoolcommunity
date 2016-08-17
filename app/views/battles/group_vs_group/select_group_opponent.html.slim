@@ -1,0 +1,93 @@
+#battle_steps
+  = display_base_errors (@battle)
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      .show-for-large-up
+        .row
+          .large-12.columns
+            .row
+              .large-3.columns.mini-thumbs
+                .right
+                  .th
+                    = image_tag(@battle.challenger.avatar.small)
+                  .th
+                    = battle_item_preview(@battle.first_item, 'small')
+              .large-6.columns.no-padding
+                center
+                  = battle_logo(@battle.kind)
+              .large-3.columns.mini-thumbs
+                .left
+                  .th
+                    = battle_item_preview(@battle.second_item, 'small')
+                  span.change-item-preview.th
+                    = image_tag("question-mark-box-small.png")
+      .hide-for-large-up
+        .row
+          .small-3.columns.mini-thumbs
+            .th
+              = image_tag(@battle.challenger.avatar.small)
+            .th
+              = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.text-center.no-padding
+            = link_to(image_tag('group_vs_group_logo_stacked.png'), @battle)
+          .small-3.columns.mini-thumbs
+            .right
+              span.change-item-preview.th
+                = image_tag("question-mark-box-small.png")
+              .th
+                = battle_item_preview(@battle.second_item, 'small')
+
+  .panel.text-center
+    .row
+      .small-12.columns
+        h3 Select Your Opponent
+        | The group you will battle. A member of this group will select an item to compete against yours.
+
+  .panel
+    .row
+      .medium-9.small-12.columns
+        dl.sub-nav
+          = active_link_to 'My Rivals', params.merge(items: 'rival_groups', q: nil), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=rival_groups*/
+          = active_link_to 'Other Groups', params.merge(items: 'groups', q: nil), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=groups*/
+
+      .medium-3.small-12.columns
+        = form_tag params.merge(page: ''), method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+          = hidden_field_tag :items, params[:items]
+    hr
+    
+    = paginate @groups
+
+    = simple_form_for @form, url: wizard_path, method: :put do |f|
+      .battle_thumbs
+        ul.medium-block-grid-5.small-block-grid-2
+          - if params[:items] != 'rival_groups' || @groups.blank?
+            li= link_to(image_tag('search_logo.png'), '#', 'data-reveal-id' => "newSearch", remote: true)
+
+          = f.collection_radio_buttons :group_object_id, @groups, :id, :id, :item_wrapper_tag => :li do |i|
+            = i.label(id: "group-id-#{i.object.id}", class: 'selectable-battle-thumb') { i.radio_button + image_tag(i.object.avatar.url(:medium)) + i.object.name }
+      = f.hidden_field :group_object_type, value: 'groups'
+
+      - if @groups.total_pages > 1
+        hr
+        .row
+          .large-offset-4.large-4.columns.small-12.columns
+            = paginate @groups
+        hr
+      .row
+        .medium-12.columns
+          .pull-right
+            = f.button :submit, 'Next Step >', class: 'button radius small'
+          .pull-left
+            = link_to('< Back', wizard_path(:select_group, items: 'groups'), class: 'button radius button-blue tiny')
+
+  .group-search id="newSearch" class="reveal-modal" data-reveal=true
+    .row
+      .medium-12.columns
+        h3 Find a group to battle
+        = form_tag params.merge(page: ''), method: :get do
+          = text_field_tag :q
+          = hidden_field_tag :items, 'groups'
+          = submit_tag 'Search', class: 'button radius right'
+    a.close-reveal-modal &#215;
+

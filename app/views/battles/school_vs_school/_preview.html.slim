@@ -1,0 +1,83 @@
+#battle-preview
+  .row
+    .small-12.text-center.columns
+      = link_to image_tag('school_vs_school_logo.png'), battle
+      hr
+      .row
+        .small-2.medium-1.columns.no-padding
+          = link_to(image_tag(gender_icon(battle.sport_category), class: 'battle-icon th'), battle)
+        .small-8.medium-10.columns
+          .left= render partial: 'shared/item_flagged_notice', locals: {item: battle, icon_size: :medium}
+          h4
+            = "#{battle.sport_category} #{battle.sport_name}"
+          = "#{l battle.game_time, format: :long}"
+
+        .small-2.medium-1.columns.no-padding
+          = link_to(image_tag("sport_icons/#{battle.sport_icon}", class: 'battle-icon th'), battle)
+      hr
+  .row.text-center data-equalizer=true
+    .small-6.columns
+      .panel.clearfix id="#{win_or_lose_id(battle, battle.challenger)}" data-equalizer-watch=true
+        .row
+          .medium-2.columns.no-padding.battle-side-column.show-for-medium-up
+            - if current_user.voted_on_first_item?(battle)
+              .voted
+                = fa_icon('check-square-o 3x')
+                p Voted
+            - battle.challenger_passes.limit(1).each do |battle_pass|
+              .th
+                = link_to user_path(battle_pass.user) do
+                  = image_tag(battle_pass.user.avatar.url(:medium))
+                p= battle_pass.amount
+            = challenger_spirit_label(battle)
+
+          .medium-10.columns.text-center
+            .th
+              = link_to image_tag(battle.challenger.avatar.url(:medium_wide)), battle.challenger
+              h5.text-center.battle-item-name= battle.challenger.name
+            - if battle.closed?
+              = winner_panel(battle, battle.challenger)
+      
+    .small-6.columns
+      .panel.clearfix id="#{win_or_lose_id(battle, battle.opponent)}" data-equalizer-watch=true
+        .row
+          .medium-10.columns
+            .th
+              = link_to image_tag(battle.opponent.avatar.url(:medium_wide)), battle.opponent
+              h5.text-center.battle-item-name= battle.opponent.name
+            - if battle.closed?
+              = winner_panel(battle, battle.opponent)
+          .hide-for-medium-up
+            = challenger_spirit_label(battle)
+
+          .medium-2.columns.no-padding.battle-side-column.show-for-medium-up
+            - if current_user.voted_on_second_item?(battle)
+              .voted
+                = fa_icon('check-square-o 3x')
+                p Voted
+
+            - battle.opponent_passes.limit(1).each do |battle_pass|
+              = link_to user_path(battle_pass.user) do
+                = image_tag(battle_pass.user.avatar.url(:medium))
+              = battle_pass.amount
+            = opponent_spirit_label(battle)
+
+  = draw_panel(battle)
+
+  = render partial: '/battles/school_vs_school/spirit_meter', locals: { battle: battle }
+
+  - if battle.ends_at && (battle.ends_at.in_time_zone > Time.current)
+    .row
+      .small-12.columns
+        .text-center
+          = "This battle starts in #{distance_of_time_in_words battle.game_time.in_time_zone, Time.current}."
+
+  div id="myModal" class="reveal-modal" data-reveal=true
+
+  = render partial: 'battles/carrot_dropdown', locals: { battle: battle }
+  hr
+
+
+
+
+

@@ -1,0 +1,14 @@
+= render 'shared/back_to_activity_button'
+= render 'shared/back_to_flag_manager_button'
+
+- if @battle.hidden?
+  .alert-box.alert.text-center
+    p Battle Is Hidden
+    p However, battle items may still be visible.
+.row
+  .small-12.columns
+    = render partial: "battles/#{@battle.kind}/battle", locals: { battle: @battle }
+
+- unless @battle.kind == 'school_vs_school'
+  .spacer-top
+    = render partial: 'battles/comments'

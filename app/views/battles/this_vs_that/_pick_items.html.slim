@@ -1,0 +1,67 @@
+.panel
+  .row
+    .medium-9.small-12.columns
+      dl.sub-nav
+        = active_link_to 'My Photos', params.merge(items: 'photos', q: nil, page: 1), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=photos*/
+        = active_link_to 'My Videos', params.merge(items: 'videos', q: nil, page: 1), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=videos*/
+        = active_link_to 'My Documents', params.merge(items: 'documents', q: nil, page: 1), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /items=documents*/
+
+    .medium-3.small-12.columns
+      = form_tag params.merge(page: ''), method: :get do
+        = text_field_tag :q, params[:q], placeholder: 'Narrow Results'
+        = hidden_field_tag :items, params[:items]
+
+  hr
+  = simple_form_for @form, url: wizard_path, method: :put do |f|
+    .battle_thumbs
+      - if params[:items] == 'videos'
+        ul.medium-block-grid-5.small-block-grid-2
+          li= link_to(image_tag('new_video_logo.png'), new_battle_video_path(@battle, next_step: next_wizard_path, item_kind: item_kind), 'data-reveal-id' => 'myModal', 'data-reveal-ajax' => 'true')
+          = f.collection_radio_buttons item_id, @videos, :id, :id, :item_wrapper_tag => :li do |i|
+            = i.label(id: "video-id-#{i.object.id}", class: 'selectable-battle-thumb') { i.radio_button + image_tag(i.object.thumbnail_large) }
+          = f.hidden_field item_kind, value: 'videos'
+        - unless @videos.present?
+          h4 No Videos Found 
+      - elsif params[:items] == 'documents'
+        ul.medium-block-grid-5.small-block-grid-2
+          li= link_to(image_tag('new_document_logo.png'), new_battle_document_path(@battle, next_step: next_wizard_path, item_kind: item_kind), 'data-reveal-id' => 'myModal', 'data-reveal-ajax' => 'true')
+          = f.collection_radio_buttons item_id, @documents, :id, :id, :item_wrapper_tag => :li do |i|
+            = i.label(id: "document-id-#{i.object.id}", class: 'selectable-battle-thumb') { i.radio_button + image_tag(i.object.document_preview.url(:medium)) + sanitize("<p>#{i.object.name}</p") }
+          = f.hidden_field item_kind, value: 'documents'
+        - unless @documents.present?
+          h4 No Documents Found 
+
+      - else
+        ul.medium-block-grid-5.small-block-grid-2
+          li= link_to(image_tag('new_photo_logo.png'), new_battle_photo_path(@battle, next_step: next_wizard_path, item_kind: item_kind), 'data-reveal-id' => 'myModal', 'data-reveal-ajax' => 'true')
+          = f.collection_radio_buttons item_id, @photos, :id, :id, :item_wrapper_tag => :li do |i|
+            = i.label(id: "photo-id-#{i.object.id}", class: 'selectable-battle-thumb') { i.radio_button + image_tag(i.object.file.url(:medium)) }
+
+          = f.hidden_field item_kind, value: 'photos'
+        - unless @photos.present?
+          h4 No Photos Found
+
+    - if @videos.try(:total_pages) > 1 || @photos.try(:total_pages) > 1
+      .row
+        .medium-offset-4.medium-4.columns.small-12.columns
+          - if params[:items] == 'videos'
+            = paginate @videos
+          - elsif params[:items] == 'photos'
+            = paginate @photos
+          - elsif params[:items] == 'documents'
+            = paginate @documents
+
+    .row
+      .medium-12.columns
+        .pull-right
+          = f.button :submit, 'Next Step >', class: 'button radius small'
+        .pull-left
+          - if show_back_button == false
+            = link_to('< Cancel', new_battle_path, class: 'button radius button-blue tiny')
+
+          - else  
+            = link_to('< Back', previous_wizard_path(items: previous_item), class: 'button radius button-blue tiny')
+
+
+  div id="myModal" class="reveal-modal" data-reveal=true
+

@@ -1,0 +1,7 @@
+dl.sub-nav
+  = active_link_to 'Schoolies', friends_user_path(@user), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd
+  = active_link_to 'Schoolie Requests', pending_friend_requests_user_path(@user), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd
+  = active_link_to 'Sent', sent_friend_requests_user_path(@user), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd
+  = active_link_to 'Find More Schoolies', find_friends_path, class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd
+
+

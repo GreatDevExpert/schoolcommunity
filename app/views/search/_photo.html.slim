@@ -1,0 +1,26 @@
+.row
+  .small-9.columns
+    = link_to(image_tag(photo.file.url(:medium)), photo, class: 'th')
+    .left
+      = render partial: 'shared/item_flagged_notice', locals: {item: photo, icon_size: :medium}
+    h3= link_to photo.name, photo
+  .small-3.columns
+    .right.text-center
+      = link_to image_tag(photo.user.avatar.url(:small)), photo.user
+      br= link_to photo.user.full_name, photo.user
+
+
+.row
+  .medium-12.columns
+    - if policy(photo).destroy? || policy(photo).flag?
+      .spacer-top
+      .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "photo-#{photo.id}-dropdown", 'data-options' => 'align:left', class: 'left'
+      ul.f-dropdown.tiny id="photo-#{photo.id}-dropdown" data-dropdown-content='data-dropdown-content'
+        - if policy(photo).destroy?
+          li= link_to fa_icon('trash', text: 'Delete photo'), photo_path(photo), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this photo?'}
+
+        - if policy(photo).flag?
+          li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-photo-#{photo.id}"
+
+= render partial: 'photos/flag', locals: {photo: photo}
+

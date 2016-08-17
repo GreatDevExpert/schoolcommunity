@@ -1,0 +1,15 @@
+#battle_steps
+  .row
+    .medium-10.columns
+
+      h3 Edit Battle Pass
+      p= "You'll are currently supporting #{@battle.send(params[:kind]).name} and earn twice your battle pass value should they win."
+      = simple_form_for [@battle, @pass] do |f|
+        ul.medium-block-grid-3.small-block-grid-1
+          = f.collection_radio_buttons :amount, @amounts, :first, :first, :item_wrapper_tag => :li do |i|
+            = i.label(id: "photo-id-#{i.object.first}") { i.radio_button + image_tag("#{i.object.last}_battle_pass_logo.png") }
+            = f.input :kind, input_html: { value: params[:kind] }, as: :hidden
+        = f.button :submit, 'Update Battle Pass', class: 'button radius tiny'
+    .medium-2.columns
+      = image_tag(@battle.send(params[:kind]).avatar.url(:large))
+      = @battle.send(params[:kind]).name

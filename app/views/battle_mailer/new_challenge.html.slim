@@ -1,0 +1,22 @@
+css:
+  #header {
+    height: 60px;
+  }
+
+  #header img {
+    padding: 5px;
+  }
+
+
+#header
+  center
+    = link_to(image_tag('myschool_logo_blue_green.png'), root_url)
+
+p= "You've been challenged to a battle on myschool by #{@owner.full_name}."
+
+p= "The battle topic is: #{@battle.description}"
+
+= link_to('Accept Challenge', battle_me_vs_you_url(@battle, 'pick_that') , class: 'button radius')
+
+.panel 
+  h3 Maybe a preview down here?

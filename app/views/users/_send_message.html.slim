@@ -1,0 +1,4 @@
+.send-message id="send-message-#{user.id}" class="reveal-modal" data-reveal=true
+  h3 Pass a Note
+  = render partial: 'messages/form', locals: {user: user, message: Message.new}
+  a.close-reveal-modal &#215;

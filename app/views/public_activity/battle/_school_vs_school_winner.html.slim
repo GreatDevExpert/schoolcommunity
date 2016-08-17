@@ -1,0 +1,22 @@
+- unless activity.trackable.blank?
+  - battle = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = image_tag('battle-icon.png', class: 'th')
+      .medium-11.small-10.columns
+        h5
+          = link_to(battle.winner.name, battle.winner)
+          |  won a battle against 
+          = link_to(battle.loser.name, battle.loser)
+          |.
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        hr
+        = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+
+        = link_to 'View Full Results', battle, class: 'button button-default radius expand button-blue'
+
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }
+

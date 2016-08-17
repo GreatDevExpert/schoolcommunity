@@ -1,0 +1,13 @@
+= render @notifications
+
+.link-to-all
+  .row
+    - if @notifications.any?(&:unread?)
+      .medium-6.columns
+        p= link_to "Mark all as read", mark_all_as_read_notifications_path, method: :post, class: 'mark-all-as-read'
+      .medium-6.columns
+        p= link_to "View Recent", notifications_path(filter: 'recent'), class: 'view-all'
+    - else
+      .medium-12.columns
+        p= link_to "View Recent", notifications_path(filter: 'recent'), class: 'view-all'
+

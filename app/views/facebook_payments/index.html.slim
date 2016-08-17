@@ -1,0 +1,19 @@
+h1 Facebook Payment History
+
+ul.button-group.radius
+  li= link_to "Purchase Scrilla", new_facebook_payment_path, class: 'button small'
+  li= link_to "All transactions", user_scrilla_transfers_path(current_user), class: 'button small '
+
+table.facebook-payment-history
+  thead
+    tr
+      th.when When
+      th.amount Amount
+      th.status Status
+  tbody
+    - @facebook_payments.each do |facebook_payment|
+      tr
+        td.when =facebook_payment.created_at.to_s(:short_datetime)
+        td.amount =formatted_scrilla_balance(facebook_payment.amount)
+        td.status =facebook_payment.aasm_state.titleize
+

@@ -1,0 +1,19 @@
+- info ||= nil
+- include_friend_request_button ||= false
+
+li.text-center
+  .user-preview-box
+    .photo
+      = link_to user_path(user), class: 'th' do
+        = image_tag(user.avatar.url(:medium))
+    .grid-text
+      = link_to user.full_name, user_path(user)
+      - if info
+        div= info
+
+      - if include_friend_request_button
+        div= friend_request_button(user, class: 'tiny')
+
+      - if block_given?
+        div= yield
+

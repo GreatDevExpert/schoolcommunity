@@ -1,0 +1,10 @@
+dl.sub-sub-nav
+  = active_link_to 'Profile', videos_stuff_user_path(@user, filter: 'profile', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=profile/
+  = active_link_to 'School', videos_stuff_user_path(@user, filter: 'school', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=school/
+  = active_link_to 'Group', videos_stuff_user_path(@user, filter: 'group', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=group/
+  dd
+    = link_to fa_icon('search'), '#', class: 'search-icon'
+    .toggle
+      = form_tag params.merge(page: ''), method: :get do
+        = text_field_tag :q, @query, placeholder: 'Narrow Results'
+        = hidden_field_tag :filter, params[:filter]

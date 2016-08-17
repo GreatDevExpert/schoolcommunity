@@ -1,0 +1,19 @@
+.row
+  .small-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+    = render partial: 'groups/tabs', locals: {group: @group}
+    = render partial: 'group_details/stuff_sub_nav'
+.panel
+  .row
+    .small-12.columns
+      h3= "#{@group.name} Documents"
+  .row
+    .small-12.columns
+      - if policy(@group).show_content?
+        = render partial: 'group_details/document_sub_nav'
+        = render partial: 'user_details/query_controls', locals: {collection: @documents, query: @query}
+        = render partial: 'documents/list', locals: { documents: @documents, custom_new_document_path: new_group_document_path(@group), parent_object: @group } 
+      - else
+        p Must be a member to see this group's content
+
+= paginate @documents

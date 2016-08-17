@@ -1,0 +1,85 @@
+.profile-header.panel
+  .row data-equalizer=true
+    .medium-2.columns.small-4 data-equalizer-watch=true
+      .clearfix.text-center
+        = link_to image_tag(user.avatar.url(:medium)), user, class: 'th'
+      
+      / TODO we don't want to show the cog here, probably should make a show_cog? method or helper
+      - if  policy(user).remove_friendship? || current_user == user || (current_user != user && current_user.already_rival_people?(user)) || policy(user).adjust_scrilla_balance? ||  policy(user).send_scrilla?
+
+        = link_to fa_icon('cog 2x'), '#', class: 'left', 'data-dropdown' => "user-cog-#{user.id}", 'data-options' => 'align:bottom'
+        ul.f-dropdown.tiny id="user-cog-#{user.id}" data-dropdown-content= 'data-dropdown-content'
+          - if policy(user).remove_friendship?
+            li= link_to 'Stop being schoolies', friendship_path(user), method: :delete
+          - if user == current_user
+            li= link_to 'Edit My Profile', edit_user_registration_path
+          - if current_user != user && current_user.already_rival_people?(user)
+            li= link_to fa_icon('minus-circle', text: 'Unrival'), remove_rival_user_path(user), method: :post
+          - if policy(user).adjust_scrilla_balance?
+            li= link_to 'Adjust Scrilla', new_scrilla_adjustment_path(recipient_id: user.id) 
+          - if policy(user).send_scrilla?
+            li= link_to fa_icon('money', text: 'Send Scrilla'), new_scrilla_transfer_path(recipient_id: user.id)
+      - if policy(user).send_message?
+        .right
+          = link_to '#', 'data-reveal-id' => "send-message-#{user.id}" do
+            .has-tip.radius data={tooltip: 'user', options: 'disable_for_touch:true'} aria={haspopup: 'true'} title="Pass a note"
+              = retina_image(default: 'NoteIconBlue.png', retina: 'NoteIconBlue-retina.png', width: 19, height: 19)
+
+    .medium-10.columns.small-8 data-equalizer-watch=true
+
+      ul.button-group.radius.right
+        li= friend_request_button(user, class: 'tiny')
+        li= render partial: 'users/rival_button', locals: {user: user }
+
+      .name
+        .left
+          = render partial: 'shared/item_flagged_notice', locals: {item: user, icon_size: :medium}
+        h4
+          = link_to user.full_name, user
+          |  
+          span#user-profile-icons
+            - if current_user.super_admin? && user.super_admin?
+              = image_tag('admin-icon.png')
+            - if user.is_a_monitor? && user.public_monitored_groups_and_schools.present?
+              / = image_tag('monitor-icon.png')
+              = image_tag('monitor-icon.png', 'data-tooltip' => 'user-monitor', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "Active monitor for #{user.names_of_public_monitored_groups_and_schools} ")
+      .city-description= user.city_description
+
+      .member-of
+        = link_to(pluralize(user.friends.size, 'schoolie'), friends_user_path(user))
+        |  | 
+        = link_to(pluralize(user.groups.size, 'group'), groups_user_path(user))
+        |  | 
+        = link_to(pluralize(user.schools.size, 'school'), schools_user_path(user))
+        |  | 
+        = "#{user.age} years old"
+        p
+          = render partial: 'users/scrilla_balance', locals: { user: user }
+
+      - if user != current_user || current_user.super_admin?
+        .caret-wrapper
+          = link_to fa_icon('caret-square-o-down lg'), '#', 'data-dropdown' => "user-#{user.id}", 'data-options' => 'align:left', class: 'right'
+        ul.f-dropdown.tiny id="user-#{user.id}" data-dropdown-content= 'data-dropdown-content'
+          li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-user-#{user.id}"
+          - if current_user.super_admin? && user.suspended?
+            li= link_to(fa_icon('ban', text: 'Un-suspend User'), unsuspend_account_user_path(user))
+          - elsif current_user.super_admin? && current_user != user
+            li= link_to(fa_icon('ban', text: 'Suspend User'), suspend_account_user_path(user), data: { confirm: 'Are you sure you want to suspend this user? They will not be able to use Myschool anymore.'})
+          - if current_user.super_admin?
+            table role="grid"
+              tr
+                td colspan='2' Flag Summary
+              tr
+                td Reported
+                td= user.flags_reported.size
+              tr
+                td Offenses
+                td= user.flags_offenses.size
+              tr
+                td Confirmed Offenses
+                td= user.confirmed_flags_offenses.size
+
+
+= render partial: 'users/flag_user', locals: { user: user }
+- if policy(user).send_message?
+  = render partial: 'users/send_message', locals: { user: user }

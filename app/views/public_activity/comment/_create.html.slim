@@ -1,0 +1,73 @@
+- unless activity.trackable.blank?
+  - comment = activity.trackable
+  - commentable = activity.trackable.commentable
+
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+      .medium-11.small-10.columns
+        = link_to fa_icon('caret-square-o-down'), comment_path(comment), class: 'right', 'data-dropdown' => "drop-comment-id-#{comment.id}-activity-#{activity.id}", 'data-options' => 'align:left'
+        ul.f-dropdown.tiny id="drop-comment-id-#{comment.id}-activity-#{activity.id}" data-dropdown-content= 'data-dropdown-content'
+          - if policy(comment).destroy?
+            li= link_to fa_icon('trash', text: 'Delete'), comment_path(comment), method: :delete, data: { confirm: 'Remove your comment?'}
+          li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-comment-#{comment.id}", remote: true
+
+        - if commentable.is_a?(Battle)
+          h5
+            = link_to(activity.owner.full_name, activity.owner)
+            |  
+            = "commented on a #{commentable.human_battle_kind} #{commentable.class.to_s.downcase} titled "
+            = link_to commentable.description, commentable
+            br 
+            span = "#{time_ago_in_words(activity.created_at)} ago"
+        - elsif commentable.respond_to?(:name)
+          h5
+            = link_to(activity.owner.full_name, activity.owner)
+            |  commented on a 
+            = link_to commentable.class.to_s.downcase, commentable
+            |  named 
+            = link_to commentable.name, polymorphic_path(commentable)
+
+            br 
+            span = "#{time_ago_in_words(activity.created_at)} ago"
+
+        - elsif commentable.is_a?(Post)
+          h5
+            = link_to(activity.owner.full_name, activity.owner)
+            |  commented on 
+            = link_to commentable.user.first_name_possessive, commentable.user
+            |  "
+            = commentable.content
+            | " 
+            = link_to commentable.class.to_s.downcase, commentable
+            |.
+            br 
+            span = "#{time_ago_in_words(activity.created_at)} ago"
+
+        = auto_link(comment.content, html: {target: '_blank'})
+        .right
+          = render partial: 'shared/item_flagged_notice', locals: {item: comment, icon_size: :medium}
+
+  .flag-comment id="flag-activity-#{activity.id}-comment-#{comment.id}" class="reveal-modal" data-reveal=true
+
+    .row
+      .large-6.columns
+        = simple_form_for [comment, Flag.new] do |f|
+          = f.input :kind, collection: Flag::KINDS_ARRAY, prompt: 'Please select', label: 'Why are you flagging this content?'
+          = f.input :description, label: false, placeholder: "Optionally, provide an other detail related to this incident."
+          = f.button :submit, class: 'button radius tiny'
+      .large-6.columns
+        h5
+          | You're flagging a comment made by 
+          = comment.user.full_name
+
+        .row
+          .large-2.medium-2.small-4.columns
+            = image_tag(comment.user.avatar.url(:small))
+
+          .large-10.medium-10.small-8.columns
+            = auto_link(comment.content, :html => { :target => '_blank' })
+
+    a.close-reveal-modal &#215;
+

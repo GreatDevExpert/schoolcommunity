@@ -1,0 +1,13 @@
+.row
+  .medium-12.columns
+    h3= "All #{params[:tab].titleize} Flags"
+    = render partial: 'sub_nav'
+- if @flags.size == 0
+  .row
+    .medium-12.columns
+        p Hurray! There are no open flags for you to review.
+- else 
+  - @flags.each do |flag|
+    = render partial: 'flagged_items/index_preview', locals: { flag: flag }
+
+  = paginate @flags

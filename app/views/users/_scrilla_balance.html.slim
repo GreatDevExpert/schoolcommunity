@@ -1,0 +1,10 @@
+.scrilla-balance
+  h5
+    = formatted_scrilla_balance(user.scrilla_balance.try(:balance)) 
+    - if @user == current_user && user.scrilla_balance && user.scrilla_balance.balance < ScrillaBalance::NOTIFICATION_THRESHOLD
+      = link_to " (Purchase Scrilla)", new_facebook_payment_path
+
+- if ScrillaTransfersPolicy.new(current_user, user).index?
+  = link_to ' (Scrilla Account)', user_scrilla_transfers_path(user), class: 'scrilla-balance'
+    
+

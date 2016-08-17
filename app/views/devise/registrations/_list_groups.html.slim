@@ -1,0 +1,4 @@
+- if @user.groups.count > 0
+  .member-groups
+    h3 My Groups
+    = render partial: 'groups/quick_edit', collection: @user.groups, as: 'group'

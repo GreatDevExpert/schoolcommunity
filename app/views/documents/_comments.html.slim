@@ -1,0 +1,16 @@
+.panel
+  - if policy(Comment).create?
+    .row
+      .medium-2.small-2.large-1.columns.no-padding
+        = image_tag(current_user.avatar.url(:small), class: 'th')
+      .medium-10.small-10.large-11.columns
+        .comment-form
+          = simple_form_for [@commentable, @comment], remote: true do |f| 
+            = f.input :content, as: :string, placeholder: 'Share your thoughts', label: false, hint: 'Enter to post'
+            .hide
+              = f.button :submit, 'Post', class: 'button radius tiny right'
+    .row
+      .small-12.columns
+        .comments
+          .latest-comment
+          = render partial: 'comments/comment', collection: @comments

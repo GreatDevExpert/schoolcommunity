@@ -1,0 +1,41 @@
+- unless @query.blank?
+  .panel.callout
+    = "Your results have been filtered using the name: '#{@query}'"
+    |  
+    = link_to 'Reset Filters', params.merge(page: '', q: '')
+
+.panel
+  .row
+    .medium-6.columns
+      = form_tag params.merge(page: ''), method: :get do
+        = text_field_tag :q, @query, placeholder: 'Narrow Results'
+        = hidden_field_tag :filter, params[:filter]
+  .row
+    .medium-12.columns
+      h3 Select your child
+  - if @students.present?
+    .row
+      .medium-12.columns
+        - if @existing_children.present? || @pending_children.present?
+          p To add additional children at this school, select your child below.
+        - else
+          p In order to join this school as a parent, your child must be a student.  Select your child below.
+        = simple_form_for @relationship do |f|
+          .members.stylized-radios
+            ul.medium-block-grid-5.small-block-grid-2
+              = f.collection_radio_buttons :child_id, @students, :id, :id, :item_wrapper_tag => :li do |i|
+                = i.label(id: "user-id-#{i.object.id}", class: 'selectable-battle-thumb') { i.radio_button + image_tag(i.object.avatar.url(:medium)) + content_tag(:div, i.object.full_name, class: 'text-center') }
+          = f.submit "Select child", class: 'button radius right tiny'
+
+          = paginate @students
+  - elsif @students.blank? && @query.present?
+    .row
+      .medium-12.columns
+        p= "No matches for '#{@query}'"
+  - else
+    .row
+      .medium-12.columns
+        - if @existing_children.present? || @pending_children.present?
+          p There are not any additional eligible students at this school.
+        - else
+          p In order to join this school as a parent, your child must be a student.  This school does not currently have any eligible students.

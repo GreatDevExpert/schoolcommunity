@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    meta charset='utf-8'
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+    = display_meta_tags site: 'Myschool'
+    = favicon_link_tag 'myschool_favicon.png', rel: 'apple-touch-icon', type: 'image/png'
+    = favicon_link_tag 'myschool_favicon.png', type: 'image/png'
+    = javascript_include_tag "vendor/modernizr"
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => false
+    = csrf_meta_tags
+
+  body data-internet-accessible-url=Rails.application.config.internet_accessible_url
+    - if current_user.nil? || current_user.active? == false
+      = render 'layouts/public'
+    - else
+      = render 'layouts/member'
+    = render 'layouts/google_analytics'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => false
+    
+    #fb-root

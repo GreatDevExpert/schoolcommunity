@@ -1,0 +1,11 @@
+- custom_new_group_path ||= nil
+
+ul.medium-block-grid-5.small-block-grid-2
+  - if @user == current_user
+    li.text-center
+      = link_to(image_tag('search_logo.png'), '#', 'data-reveal-id' => "newSearch", remote: true)
+      p.grid-text= link_to('Find & Join', '#', 'data-reveal-id' => "newSearch", remote: true)
+
+  - unless custom_new_group_path.nil?
+    li= link_to(image_tag('new_group_logo.png'), custom_new_group_path)
+  = render partial: 'groups/preview_box', collection: groups, as: 'group'

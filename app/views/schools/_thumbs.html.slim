@@ -1,0 +1,15 @@
+ul.medium-block-grid-5.small-block-grid-2
+  - if @user == current_user
+    li.text-center
+      = link_to(image_tag('search_logo.png'), '#', 'data-reveal-id' => "newSearch", remote: true)
+      p.grid-text= link_to('Find & Join', '#', 'data-reveal-id' => "newSearch", remote: true)
+  = render partial: "schools/preview_box", collection: schools, as: 'school'
+
+.rival-search id="newSearch" class="reveal-modal" data-reveal=true
+  .row
+    .medium-12.columns
+      h3 Search and join a school
+      = form_tag search_schools_path, class: 'navbar-form', role: 'search', method: :get do
+        = text_field_tag :school_query, params[:school_query], placeholder: 'Search'
+        = submit_tag "Search", class: 'button radius'
+  a.close-reveal-modal &#215;

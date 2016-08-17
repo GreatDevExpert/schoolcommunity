@@ -1,0 +1,10 @@
+.panel
+  h3 Request Scrilla
+  - if current_user.friends.present?
+    = simple_form_for @scrilla_request do |f|
+      = f.association :recipient, label: 'Choose a schoolie', collection: current_user.friends, label_method: :full_name, input_html: {class: 'chosen-select'}
+      = f.input :amount, collection: SCRILLA_PLANS, input_html: {class: 'chosen-select'}
+      = f.input :message
+      = f.submit "Request Scrilla", class: 'button small radius', data: {confirm: 'Are you sure you want to request scrilla from this user?'}
+  - else
+    p Must be schoolies with a user in order to request scrilla.  You do not currently have any schoolies.

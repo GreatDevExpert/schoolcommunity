@@ -1,0 +1,18 @@
+ul.medium-block-grid-5.small-block-grid-2
+  - if policy(parent_object).new_post?
+    li.text-center
+      = link_to(image_tag('new_video_logo.png'), custom_new_video_path)
+      p.grid-text= link_to 'Upload', custom_new_video_path
+
+  - videos.each do |video|
+    li.text-center
+      .th
+        = link_to video do
+          = image_tag(video.thumbnail_medium)
+      .grid-text
+        .right= render partial: 'shared/item_flagged_notice', locals: { item: video, icon_size: :small }
+        = link_to truncate(video.title, length: 25), video
+
+        - if video.visibility_type == 'private'
+          '
+          = fa_icon('lock')

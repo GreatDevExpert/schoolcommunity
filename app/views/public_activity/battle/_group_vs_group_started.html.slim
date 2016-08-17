@@ -1,0 +1,23 @@
+- unless activity.trackable.blank?
+  - battle = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns.vertical-margin
+        = image_tag('battle-icon.png', class: 'th')
+
+      .medium-11.small-10.columns
+        h5
+          = link_to(battle.owner.full_name, battle.owner)
+          |  & 
+          = link_to(battle.opposing_user.full_name, battle.owner)
+          |  started a battle.
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        hr
+        = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+
+        - if battle.open_for_voting? == false
+          = link_to 'View Full Results', battle, class: 'button button-blue radius expand'
+
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }

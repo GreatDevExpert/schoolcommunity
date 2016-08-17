@@ -1,0 +1,44 @@
+.row
+  .medium-12.columns
+    .panel.clearfix
+      .row
+        .medium-6.columns
+          - if @user.schools.count == 0
+            h3 Find A School
+            h5 Please associated yourself with at least one school.
+          - else 
+            h3 Find More Schools
+            h5 Find more schools to associate with your account.
+        .medium-6.columns
+          .progress.large.round
+            span.meter style="width: 50%"
+          p.text-center Step 2 of 4 
+    = form_tag params.merge(page: ''), method: :get, class: 'navbar-form', role: 'search', method: :get do
+      = text_field_tag :school_query, @query, placeholder: 'Search for a school you currently attend or already graduated'
+
+    .panel.clearfix
+      .row
+        .medium-12.columns
+          - unless @query.blank?
+            .panel.callout
+              | Your results for schools have been filtered using the term: 
+              strong= "#{@query} "
+              = link_to 'Reset Filters', params.merge(page: 1, school_query: '')
+          h4 Suggested Schools
+          .spacer-top
+          ul.medium-block-grid-5.small-block-grid-2
+            - @schools.each do |school|
+              li
+                .text-center
+                  = image_tag(school.avatar.url(:medium), class: 'th')
+                  p.grid-text= school.name
+                  = link_to 'Join School', '#', class: 'button radius tiny', 'data-dropdown' => "drop-#{school.id}", 'data-options' => 'align:bottom'
+                ul.f-dropdown.tiny id="drop-#{school.id}" data-dropdown-content= 'data-dropdown-content'
+                  li= link_to 'Join As Student', next_wizard_path(school_id: school.id, role: 'student' )
+                  li= link_to 'Join As Alumni', next_wizard_path(school_id: school.id, role: 'alumni')
+
+      - if @user.schools.count > 0
+        = link_to 'Skip', wizard_path(:find_friends, find_friends: 'true'), class: 'button info radius tiny right'
+
+  = paginate @schools
+

@@ -1,0 +1,4 @@
+dl.sub-nav
+  = active_link_to 'Open Flags', admin_flagged_items_path(tab: 'open'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /tab=open*/
+  = active_link_to 'Closed Flags', admin_flagged_items_path(tab: 'closed'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /tab=closed*/
+  = active_link_to 'Stale Flags', admin_flagged_items_path(tab: 'stale'), class_active: 'tab-title active', class_inactive: 'tab-title', wrap_tag: :dd, active: /tab=stale*/

@@ -1,0 +1,9 @@
+.panel
+  center
+    = status_header(battle)
+  
+  - if battle.challenge_pending? && current_user.is_a_group_member_of?(battle.opponent)
+    br= link_to 'Accept Challenge', battle_group_vs_group_url(battle, 'pick_that'), class: 'button radius expand'
+
+.panel
+  = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }

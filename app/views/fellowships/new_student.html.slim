@@ -1,0 +1,14 @@
+- if current_user.minor? && current_user.schools.count > 0
+  .panel
+    .row
+      .medium-2.columns
+        = link_to image_tag(@school.avatar.url(:medium)), @school, class: 'th'
+      .medium-10.columns
+        h3= @school.full_name
+        p
+          = "You can not join #{@school.full_name} as a student because you are already a member of "
+          = link_to current_user.schools.first.full_name, current_user.schools.first
+          |.  If you are no longer a member of #{current_user.schools.first.full_name}, you must first leave it or change your status to alumni.
+
+- else
+  = render partial: 'fellowships/student_alumni_faculty_form', locals: {button_text: "Join school as #{@fellowship.role}"}

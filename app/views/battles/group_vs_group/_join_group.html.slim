@@ -1,0 +1,12 @@
+.row id= "group_id_#{group.id}"
+
+  .medium-1.small-6.columns.no-padding
+    = image_tag(group.avatar.url(:medium))
+  .medium-11.small-6.columns
+    .row
+      .medium-9.small-12.columns
+        h3= group.name
+      .medium-3.small-12.columns
+        = link_to "Join Group", '#', class: "button button-default small radius membership_type_select right", data: { group_id: group.id, membership_role: 'standard' }
+  .clearfix
+  hr

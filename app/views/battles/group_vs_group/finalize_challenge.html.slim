@@ -1,0 +1,95 @@
+#battle_steps
+  = display_base_errors (@battle)
+
+  div data-magellan-expedition="fixed"
+    .panel.mini-battle-preview
+      = display_base_errors (@battle)
+      .show-for-large-up
+        .row
+          .small-12.columns
+            .small-3.columns.mini-thumbs
+              .right
+                .th
+                  = image_tag(@battle.challenger.avatar.small.url)
+                .th
+                  = battle_item_preview(@battle.first_item, 'small')
+            .small-6.columns.no-padding
+              .text-center
+                = battle_logo(@battle.kind)
+            .small-3.columns.mini-thumbs
+              .th
+                = image_tag(@battle.opponent.avatar.small.url)
+              .th
+                = battle_item_preview(@battle.second_item, 'small')
+      .hide-for-large-up
+        .row
+          .small-3.columns
+            .th
+              = image_tag(@battle.challenger.avatar.small.url)
+            .th
+              = battle_item_preview(@battle.first_item, 'small')
+          .small-6.columns.no-padding
+            .text-center
+              = link_to(image_tag('group_vs_group_logo_stacked.png'), @battle)
+          .small-3.columns
+            .th
+              = image_tag(@battle.opponent.avatar.small.url, class: 'right')
+            .right.th
+              = battle_item_preview(@battle.second_item, 'small')
+
+.panel
+  = simple_form_for @form, url: wizard_path, method: :put  do |f|
+    .row
+      .small-12.columns
+        = f.input :description, placeholder: 'E.g. Who has the best group photo?', label: 'Give your battle a title:'
+    .row data-equalizer=true
+      .small-6.columns.panel.transparent data-equalizer-watch=true
+        .text-center
+          .th
+            = battle_item_preview(@battle.first_item).html_safe
+
+      .small-6.columns.panel.transparent data-equalizer-watch=true
+        .text-center
+          .th
+            = battle_item_preview(@battle.second_item).html_safe
+    .row
+      .small-12.medium-6.columns
+        .hide-for-large-up
+          p.text-center
+            | Someone from 
+            strong= @battle.opponent.full_name 
+            |  selects an item to compete against yours.
+            
+        = f.input :first_item_name, label: "Label your #{@battle.first_item.class.to_s.downcase}:"
+
+        = f.input :battle_length, label: 'Set your battle length:', collection: Battle::LENGTH_OPTIONS, prompt: 'How long can people vote?'
+
+      .small-12.medium-6.columns
+        .show-for-large-up
+          .text-center
+            | Someone from 
+            strong= @battle.opponent.full_name 
+            |  selects an item to compete against yours.
+
+    - if current_user.scrilla_balance.can_deduct?(50)
+      = link_to('< Back', previous_wizard_path(items: 'photos'), class: 'button left tiny radius button-blue')
+      = f.button :submit, "Start Battle >", class: 'button radius small right'
+      .row
+        .small-12.columns
+          .panel
+            | 50 scrilla will be deducted from your account. All members of 
+            = @battle.opponent.name
+            |  will be notified they have been challenged.
+    - else
+      .row
+        .small-12.columns
+
+          = link_to('< Back', previous_wizard_path(items: 'photos'), class: 'button left tiny radius button-blue')
+
+          = link_to '$ Buy Scrilla', new_facebook_payment_path, class: 'button small right radius'
+      .row
+        .small-12.columns
+
+
+          p.text-right= "You need at least 50 Scrilla to proceed, but you currently have just #{current_user.scrilla_balance.balance}."
+

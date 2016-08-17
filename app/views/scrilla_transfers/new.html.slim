@@ -1,0 +1,11 @@
+.panel
+  h3 Send Scrilla
+
+  - if current_user.friends.present?
+    = simple_form_for @scrilla_transfer do |f|
+      = f.input :recipient_id, collection: current_user.friends, label_method: :full_name, input_html: {class: 'chosen-select'}, label: 'To'
+      = f.input :amount, collection: SCRILLA_PLANS, input_html: {class: 'chosen-select'}
+      = f.input :message
+      = f.submit "Send Scrilla", class: 'button tiny radius', data: {confirm: 'Are you sure you want to send Scrilla to this user?'}
+  - else
+    p You must be schoolies in order to send scrilla to another user.  You do not currently have any schoolies.

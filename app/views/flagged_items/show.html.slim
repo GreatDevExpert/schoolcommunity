@@ -1,0 +1,100 @@
+= render 'shared/back_to_flag_manager_button'
+.panel.clearfix
+  .row
+    .medium-6.columns
+      h4= "Flag ##{@flag.id}"
+      p= " #{time_ago_in_words(@flag.created_at)} ago"
+
+    .medium-6.columns
+      .right
+        h4= "#{@flag.flaggable.try(:name)}"
+
+  .text-center
+    - if @flag.monitorable.present? && current_user.super_admin?
+      .panel.callout
+        h5 
+          = "This flag can also be seen by monitors of   "
+          = link_to(@flag.monitorable.name, polymorphic_url(@flag.monitorable) )
+          |.
+        p= "Currently #{@flag.monitorable.name} has #{pluralize(@flag.monitorable.monitors.size, 'monitor')}"
+
+  hr
+  .row.text-center
+    .large-4.columns.small-4.columns
+      h4 Reporter
+      = link_to(image_tag(@flag.reporting_user.avatar.url(:medium), class: 'th'), @flag.reporting_user)
+      p= link_to @flag.reporting_user.full_name, @flag.reporting_user
+    .large-4.columns.small-4.columns
+      h4 Details
+      hr
+      h5 Flag Status: 
+      p
+        - if @flag.is_open? 
+          | None
+        - else
+          = @flag.action_taken.titleize
+          |  by 
+          = link_to(@flag.resolving_user.full_name, @flag.resolving_user) 
+
+
+      / p= @flag.action_taken.titleize
+      hr
+      h5 Flag Type: 
+      p= @flag.kind.titleize
+      hr
+      - if @flag.description.present?
+        h5 Description:
+        p= @flag.description
+      - else
+        | No Description Provided
+    .large-4.columns.small-4.columns
+      h4 Offender
+      - if @flag.offending_user.present?
+        = link_to(image_tag(@flag.offending_user.avatar.url(:medium), class: 'th'), @flag.offending_user)
+        p= link_to @flag.offending_user.full_name, @flag.offending_user
+      - else
+       h3 N/A
+    
+.panel
+  .row
+    .medium-12.columns
+      h3 Relevant Content
+      = render partial: 'preview', locals: { flagged_object: @flagged_object, flag: @flag }
+
+  .row
+    .medium-12.columns
+      hr
+      - if @flag.confirmed?
+       h4.text-right Flag Was Already Confirmed
+      - elsif @flag.dismissed?
+       h4.text-right Flag Was Already Dismissed
+      - else
+       h4.text-right Action Items
+
+      ul.button-group.right
+        - if @flag.confirmed?
+          li= link_to 'Override And Dismiss', ignore_flagged_item_path(@flag), method: :post, class: 'button tiny button-blue radius', data: { confirm: 'Are you sure you want to dismiss this flag?'}
+        - if @flag.dismissed?
+          li= link_to 'Override And Confirm', hide_content_flagged_item_path(@flag), method: :post, class: 'button tiny button-default radius', data: { confirm: 'Are you sure you want to confirm this flag and hide content?'}
+        - if @flag.is_open?
+          li= link_to 'Confirm', hide_content_flagged_item_path(@flag), method: :post, class: 'button tiny button-default radius', data: { confirm: 'Are you sure you want to confirm this flag and hide content?'}
+          li= link_to 'Dismiss', ignore_flagged_item_path(@flag), method: :post, class: 'button tiny button-blue radius', data: { confirm: 'Are you sure you want to dismiss this flag?'}
+
+      ul.button-group
+        - unless @flag.offending_user.blank?
+          - if policy(@flag.offending_user).suspend_account?
+            li= link_to "Suspend #{@flag.offending_user.first_name}", suspend_account_user_path(@flag.offending_user), class: 'button tiny button-red radius', data: { confirm: 'Are you sure you want to suspend this user? They will not be able to use Myschool anymore.'}
+          - if policy(@flag.offending_user).unsuspend_account?
+            li= link_to "Unsuspend #{@flag.offending_user.first_name}", unsuspend_account_user_path(@flag.offending_user), class: 'button tiny button-red radius', data: { confirm: 'Are you sure you want to suspend this user? They will not be able to use Myschool anymore.'}
+
+.row
+  .medium-4.columns
+    = render 'shared/back_to_flag_manager_button'
+
+  .medium-8.columns
+    br
+    .panel.callout.text-center
+      h4 Questions?
+      p 
+        | Not sure how to best handle this? Contact the myschool monitor team for help anytime.
+      p= mail_to('support@myschool.com')

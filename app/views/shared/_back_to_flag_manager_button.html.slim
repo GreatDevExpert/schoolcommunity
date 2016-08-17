@@ -1,0 +1,12 @@
+- unless request.referer.blank?
+  - acceptable_referer_array = ['flagged_items?tab=open', 'flagged_items?tab=closed', 'flagged_items?tab=stale']
+
+  - if request.original_url == request.referer && acceptable_referer_array.include?('/flagged_items/')
+    / when performing an action on one of the flags we redirect them to the same page so this will help ensure the back button does not take them to the same page.
+    = link_to '< Back', admin_flagged_items_path, class: 'button button-blue tiny radius'
+  - elsif acceptable_referer_array.include?(request.referer.split('/').last)
+    = link_to '< Back', :back, class: 'button button-blue tiny radius'
+  - elsif acceptable_referer_array.include?(request.referer.split('/')[-2])
+    = link_to '< Back', :back, class: 'button button-blue tiny radius'
+  - elsif acceptable_referer_array.include?(request.original_url.split('/')[-2])
+    = link_to '< Back', admin_flagged_items_path, class: 'button button-blue tiny radius'

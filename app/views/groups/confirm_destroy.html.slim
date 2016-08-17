@@ -1,0 +1,15 @@
+.row
+  .small-12.columns
+    = render partial: 'groups/profile_header', locals: {group: @group}
+
+.panel
+  - if policy(@group).destroy?
+    h3 Delete #{@group.full_name}
+    p Are you sure you want to delete the group #{@group.full_name}?  This will permanently remove the group and all of its members, stuff, and posting history.
+    = link_to "Yes, delete this group", @group, method: :delete, class: 'button alert radius'
+  - elsif @group.visibility_type == 'public'
+    h3 This group can not be deleted.
+    p Public groups can not be deleted.  Only private and moderated groups can be deleted.
+  - elsif @group.monitors.count > 1
+    h3 This group can not be deleted
+    p This group has more than one monitor remaining. To delete a group, all other monitors must first resign.

@@ -1,0 +1,25 @@
+- unless activity.trackable.blank?
+  - battle = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: battle.owner}
+      .medium-11.small-10.columns
+        h5
+          = link_to(battle.owner.full_name, battle.owner)
+          |  has challenged 
+          = link_to(battle.opponent.name)
+          |  to a battle!
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        hr
+        .row
+          .small-12
+            = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+
+            - if battle.open_for_voting? && current_user.has_not_voted_on?(battle)
+              = link_to 'Vote Now', battle, class: 'button radius expand'
+            - elsif battle.challenge_pending?
+              = link_to 'Accept Challenge', battle_group_vs_group_url(battle, 'pick_that'), class: 'button radius expand'
+
+            = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }

@@ -1,0 +1,18 @@
+center
+  = battle_logo(battle.kind)
+
+.panel
+  h3.text-center= battle.try(:description)
+  .row
+    .medium-5.columns
+      .flex-video
+        = battle_item_preview(battle.first_item)
+      center
+        = battle.first_item_name
+    .medium-2.columns.no-padding
+      h2 VS
+    .medium-5.columns
+      .flex-video
+        = battle_item_preview(battle.second_item)
+      center
+        = battle.second_item_name

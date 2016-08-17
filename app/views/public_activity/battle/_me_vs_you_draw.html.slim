@@ -1,0 +1,23 @@
+- unless activity.trackable.blank?
+  - battle = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = image_tag('battle-icon.png', class: 'th')
+      .medium-11.small-10.columns
+        h5
+          | The battle between 
+          = link_to(battle.owner.name, battle.owner)
+          |  & 
+          = link_to(battle.opposing_user.name, battle.opposing_user)
+          |  ended in a draw.
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        hr
+        = render partial: "battles/#{battle.kind}/preview", locals: { battle: battle }
+
+        = link_to 'View Full Results', battle, class: 'button button-blue radius expand'
+
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }
+

@@ -1,0 +1,14 @@
+#footer
+  .row
+    .large-2.medium-4.columns
+      ul.inline-list
+        li= link_to about_path do
+          | &copy; 2015 myschool
+    .large-10.medium-8.columns
+      ul.inline-list.right
+        li= link_to('Data Use Policy', data_use_policy_path)
+        li= link_to('Cookie Policy', cookie_policy_path)
+        li= link_to('Privacy Policy', privacy_policy_path)
+        li= link_to('Terms of Service', tos_path)
+        li= link_to('COPPA', coppa_path)
+        li= link_to('DCMA', dcma_path)

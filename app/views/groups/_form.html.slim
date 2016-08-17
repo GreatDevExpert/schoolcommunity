@@ -1,0 +1,31 @@
+- school_id = params[:group_school_id] || @group.school.try(:id)
+
+.stuff-uploader
+  = simple_form_for(@group) do |f|
+    = f.input :existing_photo_id, as: :hidden, input_html: {class: 'existing-stuff'}
+
+    .form-inputs
+      .row
+        .medium-4.columns
+          = image_tag(@group.avatar.url(:large), class: 'th')
+          #image_cache_preview
+          br
+          | Update Group Logo
+          br
+          br
+          = f.input :avatar, label: false
+          label.supported-extensions
+            = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+          = link_to "Or choose from My Photos", "#", 'data-reveal-id' => 'existing-photo-target', 'data-reveal-ajax' => selector_photos_path
+        .medium-8.columns
+          = f.input :name
+          = f.input :description, label: 'Description (optional)'
+          - if @group.persisted?
+            = f.input :visibility_type, label: 'Group Type', collection: Group::VISIBILITY_TYPES, prompt: 'Select Privacy Level', disabled: true
+          - else
+            = f.input :visibility_type, label: 'Group Type', collection: Group::VISIBILITY_TYPES, prompt: 'Select Privacy Level'
+          = f.association :school, collection: current_user.schools, prompt: 'None', label: 'Related School (optional)', include_blank: false, selected: school_id, input_html: {class: 'chosen-select'} unless current_user.schools.blank?
+    .form-actions
+      = f.submit class: 'right button radius tiny'
+
+#existing-photo-target.stuff-target.reveal-modal data-reveal=true

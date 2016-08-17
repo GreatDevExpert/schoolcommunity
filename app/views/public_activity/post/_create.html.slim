@@ -1,0 +1,28 @@
+- unless activity.trackable.blank?
+  - post = activity.trackable
+  .activity
+    .row
+      .medium-1.small-2.columns
+        = render partial: 'public_activity/shared/owner_thumbnail', locals: {owner: activity.owner}
+      .medium-11.small-10.columns
+        = link_to fa_icon('caret-square-o-down'), post_path(post), class: 'right', 'data-dropdown' => "drop-post-id-#{post.id}", 'data-options' => 'align:left'
+        ul.f-dropdown.tiny id="drop-post-id-#{post.id}" data-dropdown-content= 'data-dropdown-content'
+          - if policy(post).destroy?
+            li= link_to fa_icon('trash', text: 'Delete'), post_path(post), method: :delete, data: { confirm: 'Delete your post permanently?'}
+          - if post.user != current_user || current_user.super_admin?
+            li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-post-#{post.id}", remote: true
+        h5
+          = link_to(activity.owner.full_name, activity.owner)
+          |  
+          = link_to 'posted', post
+          br
+          span = "#{time_ago_in_words(activity.created_at)} ago"
+        = auto_link(post.content, html: {target: '_blank'})
+        .right
+          = render partial: 'shared/item_flagged_notice', locals: {item: post, icon_size: :medium}
+        hr
+        = render partial: 'activities/comments', locals: { activity: activity, commentable: activity.trackable }
+
+
+  = render partial: 'posts/flag', locals: { post: post}
+

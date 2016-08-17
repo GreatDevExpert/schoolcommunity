@@ -1,0 +1,14 @@
+.row
+  .large-3.columns
+    = link_to(image_tag(user.avatar.url(:medium)), user, class: 'th')
+  .large-9.columns
+    h3= link_to(user.full_name, user)
+    table.no-border
+      tr
+        td= link_to(pluralize(hit.stored(:friend_count), 'schoolie'), friends_user_path(user))
+        td= link_to(pluralize(hit.stored(:group_count), 'group'), groups_user_path(user))
+        td= link_to(pluralize(hit.stored(:school_count), 'school'), schools_user_path(user))
+    hr
+    ul.button-group.radius
+      li= friend_request_button(user)
+      li= render partial: 'users/rival_button', locals: {user: user }

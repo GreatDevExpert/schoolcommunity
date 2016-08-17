@@ -1,0 +1,42 @@
+- if @kind == 'logo'
+  h3= "Suggest A New Logo for #{@suggestible.name}"
+  .panel
+    p
+      | Think you have a better logo for 
+      = link_to @suggestible.name, @suggestible
+      | ? Just upload it and we will alert the school monitors and request approval.
+
+    = simple_form_for [@suggestible, @suggestion] do |f|
+      .row
+        .small-4.columns
+          .stuff-uploader
+            = f.error_notification
+            = f.input :existing_photo_id, as: :hidden, input_html: {class: 'existing-stuff'}
+            = f.input :kind, as: :hidden, input_html: { value: @kind }
+            = f.input :avatar, label: 'Upload a School image or logo'
+            label.supported-extensions
+              = " (e.g., #{ImageUploader.extension_white_list.join(", ")})"
+            = link_to "Or choose from My Photos", "#", 'data-reveal-id' => 'existing-photo-target', 'data-reveal-ajax' => selector_photos_path
+            #image_cache_preview
+
+        .small-4.columns.text-center
+          h4 Current Logo
+          = image_tag(@suggestible.avatar.url(:medium), class: 'th')
+          p= @suggestible.name
+      .row
+        = f.submit "Submit", class: 'button radius tiny'
+
+- elsif @kind == 'about'
+  h3 Suggest An Update To About Page
+  .panel
+    p
+      | Update the about page for 
+      = link_to @suggestible.name, @suggestible
+      |. Include what you would like to add and we will alert the school monitors and request approval.
+      = simple_form_for [@suggestible, @suggestion] do |f|
+        = f.error_notification
+        = f.input :kind, as: :hidden, input_html: { value: @kind }
+        = f.input :content, as: :text, label: 'About', input_html: { rows: '20', value: @suggestible.description }
+        = f.submit "Submit", class: 'button radius tiny'
+
+#existing-photo-target.stuff-target.reveal-modal data-reveal=true

@@ -1,0 +1,58 @@
+= render 'shared/back_to_activity_button'
+
+- if @video.hidden?
+  .alert-box.alert
+    p.text-center Video Is Hidden
+
+#stuff_show.panel.clearfix
+  .row
+    .small-12.medium-6.columns
+      .left
+        = render partial: 'shared/item_flagged_notice', locals: {item: @video, icon_size: :medium}
+      h4= @video.title
+
+    .small-8.medium-4.columns
+      #stuff-avatars
+        = link_to(image_tag(@video.user.avatar.small.url, 'data-tooltip' => 'user', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "#{@video.user.full_name}"), @video.user)
+        = link_to image_tag(@group.avatar.small.url, 'data-tooltip' => 'group', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "#{@group.name}"), @group if @group.present?
+        = link_to image_tag(@school.avatar.small.url, 'data-tooltip' => 'school', 'aria-haspopup' => "true", 'data-options' =>"disable_for_touch:true", class: "has-tip radius", title: "#{@school.name}"), @school if @school.present?
+    .small-4.medium-2.columns
+      .right
+        = retina_image(default: 'my-videos-logo.png', retina: 'my-videos-logo-retina.png', width: 132, height: 40)
+
+  br
+  .row
+    .medium-12.columns
+      .flex-video
+        = VideoInfo.new(@video.url).embed_code(iframe_attributes: { width: '100%', height: '300'}, url_attributes: { autoplay: 1 }).html_safe
+      .row
+        .medium-6.columns
+          - if policy(@video).share?
+            = social_share_icons
+        .medium-6.columns
+          ul.button-group.radius.right
+            - if policy(@video).duplicate?
+              = link_to duplicate_video_path(@video), method: :post, class: 'button button-blue tiny' do
+                = "Save to my profile "
+                = fa_icon('plus-circle')
+
+            - if policy(@video).repost?
+              = link_to repost_video_path(@video), method: :post, class: 'button button-blue tiny' do
+                = fa_icon('retweet', text: 'Repost')
+
+  - if policy(@video).destroy? || policy(@video).flag?
+    .row
+      .medium-12.columns
+        .spacer-top
+        .caret-wrapper= link_to fa_icon('caret-square-o-down'), '#', 'data-dropdown' => "video-dropdown", 'data-options' => 'align:left'
+        ul.f-dropdown.tiny id="video-dropdown" data-dropdown-content='data-dropdown-content'
+          - if policy(@video).destroy?
+            li= link_to fa_icon('trash', text: 'Delete Video'), video_path(@video), method: :delete, data: {confirm: 'Are you sure you want to permanently remove this video?'}
+
+          - if policy(@video).flag?
+            li= link_to fa_icon('flag', text: 'Report'), '#', 'data-reveal-id' => "flag-video-#{@video.id}"
+
+= render partial: 'videos/flag', locals: {video: @video}
+
+.spacer-top
+  = render partial: 'comments'

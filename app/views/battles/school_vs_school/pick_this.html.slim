@@ -1,0 +1,16 @@
+#battle_steps
+  = display_base_errors (@battle)
+  hr
+  .row
+    .medium-8.columns
+      h3 Click to select your first item for battle.
+    .medium-4.columns
+      .row
+        .medium-3.columns.change-item-preview
+          = battle_item_preview(@battle.first_item, 'small')
+        .medium-6.columns
+          = battle_logo(@battle.kind)
+        .medium-3.columns
+          = battle_item_preview(@battle.second_item, 'small')
+
+  = render partial: 'battles/this_vs_that/pick_items', locals: { item_id: :first_object_id, item_kind: :first_object_type, show_back_button: true }

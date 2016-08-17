@@ -1,0 +1,28 @@
+#notifications-page
+  .panel
+    - if @notifications.any?(&:unread?)
+      .right
+        = link_to "Mark all as read", mark_all_as_read_notifications_path, class: 'button button-blue radius tiny', method: :post
+    h3= retina_image(default: 'my-notifications-logo.png', retina: 'my-notifications-logo-retina.png', width: 212, height: 40)
+
+
+    dl.sub-nav
+      = active_link_to 'Recent', notifications_path(@user, filter: 'recent', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=recent/
+      = active_link_to 'All', notifications_path(@user, filter: 'all', q: @query), class_active: 'tab-title active', class_inactive: 'tab-title', :wrap_tag => :dd, :active => /filter=all/
+
+    - unless @notifications.blank?
+      .notifications
+        = render @notifications
+
+      .row
+        .small-12.columns
+          = paginate @notifications
+
+      - if @notifications.any?(&:unread?)
+        .text-center
+          = link_to "Mark all as read", mark_all_as_read_notifications_path, class: 'button button-blue radius tiny', method: :post
+
+
+    - else
+      p You have no unread notifications. 
+

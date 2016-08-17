@@ -1,0 +1,17 @@
+.row
+  .small-12.columns
+    = render partial: 'users/profile_header', locals: {user: @user}
+    = render partial: 'users/tabs', locals: {user: @user}
+    .panel
+      - if @user == current_user
+        = render partial: 'schoolies_filter'
+
+      .friends
+        - if @requests.length > 0
+          ul.medium-block-grid-5.small-block-grid-2
+            - @requests.each do |request|
+              = render partial: 'users/preview_box', locals: {user: request.friend, info: 'Pending User Approval'}
+        - else
+          p You don't have any pending sent schoolie requests
+
+    = paginate @requests
